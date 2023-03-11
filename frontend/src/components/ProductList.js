@@ -32,6 +32,7 @@ const ProductList = () => {
         padding: 3vw;
       }
     `}</style>
+    
             
 
         <br />
@@ -61,6 +62,8 @@ const ProductList = () => {
                     
             </tbody>
         </table>
+        current price : {products[products.length-1].price}
+        <br />
         <button onClick={() => navigate('/add')}>ADD</button>
     </div>
     )
