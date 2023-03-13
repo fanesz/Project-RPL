@@ -2,8 +2,11 @@ backend (nodemon index) :
 install di folder backend
 npm install express mysql2 sequelize cors
 npm install -g nodemon (di C://)
+npm install --save-dev nodemon
 tambah "type": "module", ke package.json
 
 frontend (npm start):
-install di root
+install di root :
+npx create-react-app frontend
+install di frontend :
 npm install react-router-dom axios bulma
