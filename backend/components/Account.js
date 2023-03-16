@@ -1,4 +1,21 @@
-import Account from "../models/accountModel.js";
+import { Sequelize } from "sequelize";
+import db from "../config/database.js";
+ 
+const { DataTypes } = Sequelize;
+ 
+const Account = db.define('account',{
+    email:{
+        type: DataTypes.STRING
+    },
+    password:{
+        type: DataTypes.STRING
+    },
+
+},{
+    freezeTableName: true
+});
+
+//models
 
 export const getAllEmail = async (req, res) => {
     try {

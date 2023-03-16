@@ -4,7 +4,7 @@ import {
     createAccount,
     getAllEmail
 
-} from "../controllers/Account.js";
+} from "../components/Account.js";
  
 const router = express.Router();
  

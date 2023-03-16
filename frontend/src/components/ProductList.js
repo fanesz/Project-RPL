@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
+import { loginChecker } from "../utils/utils"
  
 const ProductList = () => {
+
+    loginChecker();
+
     const [products, setProduct] = useState([]);
     const navigate = useNavigate()
  

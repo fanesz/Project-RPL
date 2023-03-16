@@ -1,5 +1,24 @@
-import Product from "../models/productModel.js";
+import { Sequelize } from "sequelize";
+import db from "../config/database.js";
  
+const { DataTypes } = Sequelize;
+ 
+const Product = db.define('product',{
+    title:{
+        type: DataTypes.STRING
+    },
+    price:{
+        type: DataTypes.DOUBLE
+    },
+    stock:{
+        type: DataTypes.DOUBLE
+    }
+},{
+    freezeTableName: true
+});
+ 
+//models
+
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.findAll();
