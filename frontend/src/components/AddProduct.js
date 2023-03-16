@@ -6,13 +6,16 @@ const AddProduct = () => {
     const navigate = useNavigate()
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
+    const [stock, setStock] = useState('');
     const history = useNavigate();
  
     const saveProduct = async (e) => {
         e.preventDefault();
         await axios.post('http://localhost:5000/products',{
             title: title,
-            price: price
+            price: price,
+            stock: stock
+
         });
         history.push("/");
     }
@@ -45,6 +48,17 @@ const AddProduct = () => {
                         placeholder="Price"
                         value={ price }
                         onChange={ (e) => setPrice(e.target.value) }
+                    />
+                </div>
+
+                <div className="field">
+                    <label className="label">Stock</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="Stock"
+                        value={ stock }
+                        onChange={ (e) => setStock(e.target.value) }
                     />
                 </div>
  

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+
  
 const ProductList = () => {
     const [products, setProduct] = useState([]);
@@ -27,6 +28,7 @@ const ProductList = () => {
  
     return (
         <div>
+            
     <style jsx global>{`
       body {
         padding: 3vw;
@@ -37,6 +39,8 @@ const ProductList = () => {
 
         <br />
         {/* <Link to="/add" className="button is-primary mt-2">Add New</Link> */}
+        {/* <Button variant="primary">Click me</Button> */}
+
         <button onClick={refreshPage}>Click to reload!</button>
         <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
             <thead>
@@ -62,9 +66,10 @@ const ProductList = () => {
                     
             </tbody>
         </table>
-        {/* current price : {products[products.length-1].price} */}
+        {/* current price : {products[products.length-1].price == undefined ? products.price : products[products.length-1].price} */}
         <br />
         <button onClick={() => navigate('/add')}>ADD</button>
+        <button onClick={() => navigate('/catalog')}>catalog</button>
     </div>
     )
 }

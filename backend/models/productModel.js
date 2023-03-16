@@ -9,6 +9,9 @@ const Product = db.define('products',{
     },
     price:{
         type: DataTypes.DOUBLE
+    },
+    stock:{
+        type: DataTypes.DOUBLE
     }
 },{
     freezeTableName: true

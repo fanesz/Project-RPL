@@ -6,6 +6,7 @@ import { useNavigate , useParams } from 'react-router-dom';
 const EditProduct = () => {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
+    const [stock, setStock] = useState('');
     const history = useNavigate();
     const { id } = useParams();
  
@@ -13,7 +14,8 @@ const EditProduct = () => {
         e.preventDefault();
         await axios.patch(`http://localhost:5000/products/${id}`,{
             title: title,
-            price: price
+            price: price,
+            stock: stock
         });
         history.push("/");
     }
@@ -26,6 +28,7 @@ const EditProduct = () => {
         const response = await axios.get(`http://localhost:5000/products/${id}`);
         setTitle(response.data.title);
         setPrice(response.data.price);
+        setStock(response.data.stock);
     }
  
     return (
@@ -50,6 +53,17 @@ const EditProduct = () => {
                         placeholder="Price"
                         value={ price }
                         onChange={ (e) => setPrice(e.target.value) }
+                    />
+                </div>
+
+                <div className="field">
+                    <label className="label">Stock</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="Stock"
+                        value={ stock }
+                        onChange={ (e) => setStock(e.target.value) }
                     />
                 </div>
  
