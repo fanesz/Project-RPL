@@ -3,18 +3,16 @@ import db from "../config/database.js";
  
 const { DataTypes } = Sequelize;
  
-const Product = db.define('product',{
-    title:{
+const Account = db.define('account',{
+    email:{
         type: DataTypes.STRING
     },
-    price:{
-        type: DataTypes.DOUBLE
+    password:{
+        type: DataTypes.STRING
     },
-    stock:{
-        type: DataTypes.DOUBLE
-    }
+
 },{
     freezeTableName: true
 });
  
-export default Product;
+export default Account;

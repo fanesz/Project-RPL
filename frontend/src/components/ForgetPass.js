@@ -13,25 +13,8 @@ const sendVerificationCode = async (e) => {
         alert(res.data.message)
     })
     
-
-    // await fetch('http://localhost:5000/api/forgetpass', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data)
-    //   })
-    //   .then(response => {
-    //     console.log(response);
-    //     alert('Response:', response);
-    // })
-    // .catch(error => {
-    //       console.log(error);
-    //     alert('Error:', error);
-    //   });
 }
-
-  return (
+return (
     <div>
       <form onSubmit={ sendVerificationCode }>
         <div className="field">
@@ -42,7 +25,7 @@ const sendVerificationCode = async (e) => {
             placeholder="Your Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          />
+            />
         </div>
         <button type="submit">Send Verification Code</button>
       </form>

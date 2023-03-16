@@ -4,12 +4,12 @@ import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
 import Catalog from "./components/Catalog";
 import ForgetPass from "./components/ForgetPass";
-
+import Login from "./components/Login";
 
 
 function App() {
-  return (
-    <Router>
+    return (
+        <Router>
     <div className="container">
       
       <div className="columns">
@@ -20,6 +20,7 @@ function App() {
             <Route path="/edit/:id" element={<EditProduct/>} />
             <Route path="/catalog" element={<Catalog/>} />
             <Route path="/forgetpass" element={<ForgetPass/>} />
+            <Route path="/login" element={<Login/>} />
 
           </Routes>
         </div>
@@ -28,5 +29,5 @@ function App() {
     </Router>
   );
 }
- 
+
 export default App;

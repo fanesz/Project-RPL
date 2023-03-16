@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
- 
+
 const AddProduct = () => {
     const navigate = useNavigate()
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
-    const history = useNavigate();
- 
+    // const history = useNavigate();
+
     const saveProduct = async (e) => {
         e.preventDefault();
         await axios.post('http://localhost:5000/products',{
@@ -17,9 +17,9 @@ const AddProduct = () => {
             stock: stock
 
         });
-        history.push("/");
+        // history.push("/");
     }
- 
+
     return (
         <div>
             <style jsx global>{`
