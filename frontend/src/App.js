@@ -3,8 +3,8 @@ import ProductList from "./components/ProductList";
 import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
 import Catalog from "./components/Catalog";
-import ForgetPass from "./components/ForgetPass";
 import Login from "./components/Login";
+import ChangePass from "./components/ChangePass";
 
 
 function App() {
@@ -19,8 +19,8 @@ function App() {
             <Route path="/add" element={<AddProduct/>} />
             <Route path="/edit/:id" element={<EditProduct/>} />
             <Route path="/catalog" element={<Catalog/>} />
-            <Route path="/forgetpass" element={<ForgetPass/>} />
             <Route path="/login" element={<Login/>} />
+            <Route path="/account/forgetpass/:id" element={<ChangePass/>} />
 
           </Routes>
         </div>

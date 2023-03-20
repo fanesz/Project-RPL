@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { loginChecker } from "../utils/utils"
- 
-const ProductList = () => {
+import { loginChecker, logout } from "../utils/utils"
 
+const ProductList = () => {
     loginChecker();
+
 
     const [products, setProduct] = useState([]);
     const navigate = useNavigate()
@@ -73,6 +73,9 @@ const ProductList = () => {
         <br />
         <button onClick={() => navigate('/add')}>ADD</button>
         <button onClick={() => navigate('/catalog')}>catalog</button>
+        <br />
+        <br />
+        <button onClick={() => logout()}>Logout</button>
     </div>
     )
 }

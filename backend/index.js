@@ -5,7 +5,7 @@ import cors from "cors";
 
 import productRoutes from "./routes/productRoutes.js";
 import accountRoutes from "./routes/AccountRoutes.js"
-import mailer from "./config/mailer.js";
+// import mailer from "./config/mailer.js";
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use('/products', productRoutes);
 app.use('/account', accountRoutes)
-app.use('/api/forgetpass', mailer)
+// app.use('/api/forgetpass', mailer)
 
 
  
