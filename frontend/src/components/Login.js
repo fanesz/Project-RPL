@@ -62,20 +62,20 @@ const sendVerificationCode = async (e) => {
 const login = () => {
     setShowLoginPage(true);
     setShowForgetPassword(false);
-    setShowDaftar(false)
+    setShowDaftar(false);
 };
 
 const forgetPassword = () => {
     setShowForgetPassword(true);
     setShowLoginPage(false);
-    setShowDaftar(false)
+    setShowDaftar(false);
 };
 
 
 const register = () => {
     setShowForgetPassword(false);
     setShowLoginPage(false);
-    setShowDaftar(true)
+    setShowDaftar(true);
 
 }
 

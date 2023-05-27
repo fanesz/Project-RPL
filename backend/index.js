@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/products', productRoutes);
-app.use('/account', accountRoutes)
+app.use('/account', accountRoutes);
 // app.use('/api/forgetpass', mailer)
 
 
