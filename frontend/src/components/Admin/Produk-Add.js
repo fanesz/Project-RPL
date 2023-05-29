@@ -7,7 +7,6 @@ const AddProduct = () => {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
-    // const history = useNavigate();
 
     const saveProduct = async (e) => {
         e.preventDefault();
@@ -17,7 +16,6 @@ const AddProduct = () => {
             stock: stock
 
         });
-        // history.push("/");
     }
 
     return (

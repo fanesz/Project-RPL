@@ -80,7 +80,6 @@ export const sendVerificationCode = async (req, res) => {
             where: { email: req.body.email }
         });
 
-        // console.log(code[0].dataValues);
 
         if(code.length == 0){
             res.json({

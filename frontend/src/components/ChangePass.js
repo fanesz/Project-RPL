@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { isLogin } from '../utils/utils'
+import { isLogin } from './utils/utils'
 import { useParams } from 'react-router-dom';
 
 const Login = () => {

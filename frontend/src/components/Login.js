@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { isLogin, setLoginCookie } from '../utils/utils'
+import { isLogin, setLoginCookie } from './utils/utils'
 // import { useNavigate } from 'react-router-dom';
 
 
@@ -165,7 +165,7 @@ return (
                 onChange={(e) => setEmail3(e.target.value)}
                 />
         </div>
-        <p>Already have account?{" "}<a href="#" role="button" onClick={login}>Log in here</a>.</p>
+        <p>Already have account?{" "}<a href="#/" role="button" onClick={login}>Log in here</a>.</p>
         <button type="submit">Send Verification Code</button>
         </form>
         </div>
@@ -194,11 +194,11 @@ return (
                 onChange={(e) => setPassword2(e.target.value)}
               />
             </div>
-            <p>Forgot your password?{" "}<a href="#" role="button" onClick={forgetPassword}>Reset it here</a>.</p>
+            <p>Forgot your password?{" "}<a href="#/" role="button" onClick={forgetPassword}>Reset it here</a>.</p>
             <button type="submit">login</button>
           </form>
             <br></br>
-          <p>Dont Have Account?{" "}<a href="#" role="button" onClick={register}>Register here</a>.</p>
+          <p>Dont Have Account?{" "}<a href="#/" role="button" onClick={register}>Register here</a>.</p>
         </div>
       ) : ("")}
 
@@ -222,7 +222,7 @@ return (
                     onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <button type="submit">Create account</button>
-                <p>Already have account?{" "}<a href="#" role="button" onClick={login}>Log in here</a>.</p>
+                <p>Already have account?{" "}<a href="#/" role="button" onClick={login}>Log in here</a>.</p>
 
         </form>
         

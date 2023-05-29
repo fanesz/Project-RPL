@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
 // import { Link, useNavigate } from "react-router-dom";
-import img_anakAyam from "../img/anakayam.jpg"
+import img_anakAyam from "./img/anakayam.jpg"
 
 const Catalog = () => {
     const [products, setProduct] = useState([]);
@@ -104,18 +104,21 @@ a:link{text-decoration: none;}
       <br />
       <div class="product-catalog">
       { products.map((product, index) => (
+
+        <div class="container">
           <div class="product-card">
-              <div class="product-image">
-                  <img src={img_anakAyam} alt="ayam lucuk"/>
-              </div>
-              <div class="product-info">
-                  <h3 class="product-name">Product Name</h3>
-                  <p class="product-description">Product description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut sapien euismod, sodales elit a, efficitur velit.</p>
-                  <div class="product-stok">stok :  {product.stock}</div>
-                  <div class="product-price">Rp. {product.price}</div>
-                  <button class="add-to-cart-button">Add to Cart</button>
-              </div>
+            <div class="product-image">
+              <img src={img_anakAyam} alt="ayam lucuk"/>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Product Name</h3>
+              <p class="product-description">Product description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut sapien euismod, sodales elit a, efficitur velit.</p>
+              <div class="product-stok">stok :  {product.stock}</div>
+              <div class="product-price">Rp. {product.price}</div>
+              <button class="add-to-cart-button">Add to Cart</button>
+            </div>
           </div>
+      </div>
       )) }
       </div>
 
