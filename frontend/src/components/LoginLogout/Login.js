@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { isLogin, setLoginCookie } from './utils/utils'
+import { isLogin, setLoginCookie } from '../utils/utils'
 // import { useNavigate } from 'react-router-dom';
 
 

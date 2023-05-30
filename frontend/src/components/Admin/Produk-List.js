@@ -4,7 +4,7 @@ import axios from "axios";
 import { loginChecker, logout } from "../utils/utils"
 import ReactModal from 'react-modal';
 
-ReactModal.setAppElement('#root');
+// ReactModal.setAppElement('#root');
 
 const ProductList = () => {
     loginChecker();
@@ -13,7 +13,6 @@ const ProductList = () => {
     const [modalEdit, setModalEdit] = useState(false);
     
     const [products, setProduct] = useState([]);
-    // const navigate = useNavigate()
 
     const [title, setTitle] = useState(''); const [title2, setTitle2] = useState('');
     const [price, setPrice] = useState(''); const [price2, setPrice2] = useState('');
@@ -54,7 +53,7 @@ const ProductList = () => {
 
     const getProductById = (async (ids) => {
         setId(ids);
-        const response = await axios.get(`http://localhost:5000/products/${ids}`);
+        const response = await axios.get(`http://localhost:5000/produk/${ids}`);
         setTitle2(response.data.title);
         setPrice2(response.data.price);
         setStock2(response.data.stock);
@@ -66,7 +65,7 @@ const ProductList = () => {
  
     
     const getProducts = async () => {
-        const response = await axios.get('http://localhost:5000/products');
+        const response = await axios.get('http://localhost:5000/produk');
         setProduct(response.data);
     }
     
@@ -76,7 +75,7 @@ const ProductList = () => {
         }, []);
  
     const deleteProduct = async (id) => {
-        await axios.delete(`http://localhost:5000/products/${id}`);
+        await axios.delete(`http://localhost:5000/produk/${id}`);
         getProducts();
     }
 
@@ -228,37 +227,33 @@ const ProductList = () => {
             </form>
         </div>
     </ReactModal>
-            
 
-    
-            
+    <br />
 
-        <br />
-
-        <button onClick={refreshPage}>Click to reload!</button>
-        <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Title</th>
-                    <th>Price</th>
-                    <th>stok</th>
-                    <th>Actions</th>
+    <button onClick={refreshPage}>Click to reload!</button>
+    <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>stok</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            { products.map((product, index) => (
+                <tr key={ product.id }>
+                    <td>{ index + 1 }</td>
+                    <td>{ product.kode }</td>
+                    <td>{ product.nama }</td>
+                    <td>{ product.stok }</td>
+                    <td>
+                        <button onClick={ () => setModalEditHelper(product.id) }>Edit</button>
+                        <button onClick={ () => deleteProduct(product.id) } className="button is-small is-danger">Delete</button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                { products.map((product, index) => (
-                    <tr key={ product.id }>
-                        <td>{ index + 1 }</td>
-                        <td>{ product.title }</td>
-                        <td>{ product.price }</td>
-                        <td>{ product.stock }</td>
-                        <td>
-                            <button onClick={ () => setModalEditHelper(product.id) }>Edit</button>
-                            <button onClick={ () => deleteProduct(product.id) } className="button is-small is-danger">Delete</button>
-                        </td>
-                    </tr>
-                )) }
+            )) }
                     
             </tbody>
         </table>

@@ -3,7 +3,7 @@ import db from "./config/database.js";
 import cors from "cors";
 
 
-import productRoutes from "./routes/productRoutes.js";
+import ProdukRoutes from "./routes/ProdukRoutes.js";
 import accountRoutes from "./routes/AccountRoutes.js"
 // import mailer from "./config/mailer.js";
 
@@ -19,7 +19,7 @@ try {
 app.use(cors());
 app.use(express.json());
 
-app.use('/products', productRoutes);
+app.use('/produk', ProdukRoutes);
 app.use('/account', accountRoutes);
 // app.use('/api/forgetpass', mailer)
 

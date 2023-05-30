@@ -1,4 +1,4 @@
-import "./css/Home.css";
+import "./Public.css";
 
 const PUBLIC_FOOTER = () => {
     return (

@@ -1,14 +1,15 @@
 import "./css/Home.css";
-import PUBLIC_NAVBAR from './Public-Navbar';
-import PUBLIC_FOOTER from './Public-Footer';
+import PUBLIC_NAVBAR from '../_public/Public-Navbar';
+import PUBLIC_FOOTER from '../_public/Public-Footer';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
 
+    const navigate = useNavigate();
 
-
-  return (
+    return (
     <div>
-            
+
 <style jsx global>{`
 
 `}
@@ -22,7 +23,8 @@ const Home = () => {
             <section className="main">
                 <h1>Welcome to Baby Chicken</h1>
                 <p>Buy the cutest baby chickens in town!</p>
-                <a href="#/" className="btn">Shop Now</a>
+                {/* <a href="#/" className="btn">Shop Now</a> */}
+                <button className="btn" onClick={() => navigate('/catalog')}>Shop Now</button>
             </section>
             <section className="features">
                 <div className="feature-box" id="section-1">
@@ -43,7 +45,7 @@ const Home = () => {
             </section>
             <section className="cta">
                 <h2>Order Your Baby Chickens Today!</h2>
-                <a href="#/" className="btn">Shop Now</a>
+                <button className="btn" onClick={() => navigate('/catalog')}>Shop Now</button>
             </section>
         </main>
                 
