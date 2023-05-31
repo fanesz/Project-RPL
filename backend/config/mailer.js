@@ -13,7 +13,7 @@ export default function sendMail(emails, verificationCode){
   const target = emails;
 
   // const verificationCode = generateVerificationCode(15);
-  const changepwLink = `http://localhost:3000/account/forgetpass/${verificationCode}`
+  const changepwLink = `http://localhost:3000/akun/forgetpass/${verificationCode}`
   
   
   const email = 'ptayamkeren@gmail.com'

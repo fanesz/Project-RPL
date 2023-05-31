@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
-import { loginChecker, logout } from "../utils/utils"
+import { logout } from "../utils/utils"
 import ReactModal from 'react-modal';
 
 // ReactModal.setAppElement('#root');
 
 const ProductList = () => {
-    loginChecker();
+    // loginChecker();
 
     const [modalTambah, setModalTambah] = useState(false);
     const [modalEdit, setModalEdit] = useState(false);

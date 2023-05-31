@@ -4,8 +4,9 @@ import cors from "cors";
 
 
 import ProdukRoutes from "./routes/ProdukRoutes.js";
-import accountRoutes from "./routes/AccountRoutes.js"
-// import mailer from "./config/mailer.js";
+import AkunRoutes from "./routes/AkunRoutes.js"
+import DetailAkunRoutes from "./routes/DetailAkunRoutes.js"
+
 
 const app = express();
 
@@ -20,8 +21,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/produk', ProdukRoutes);
-app.use('/account', accountRoutes);
-// app.use('/api/forgetpass', mailer)
+app.use('/akun', AkunRoutes);
+app.use('/detailakun', DetailAkunRoutes);
+
 
 
  

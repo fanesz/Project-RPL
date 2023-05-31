@@ -23,4 +23,14 @@ const logout = () => {
     }
 }
 
-export { isLogin, loginChecker, setLoginCookie, unsetLoginCookie, logout }
+const setLocalStorage = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+const getLocalStorage = (key) => {
+    let value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+}
+
+
+export { isLogin, loginChecker, setLoginCookie, unsetLoginCookie, logout, setLocalStorage, getLocalStorage }

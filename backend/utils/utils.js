@@ -1,9 +1,10 @@
 import crypto from 'crypto';
+import { UUIDV4 } from 'sequelize';
+
 
 const generateVerificationCode = (len) => {
   const code = crypto.randomBytes(len).toString('hex');
   return code;
-
 };
 
 const generateVerificationCode2 = (len=6, letter=false, num=true) => {
@@ -25,8 +26,11 @@ const generateVerificationCode2 = (len=6, letter=false, num=true) => {
     return code;
 }
 
+const generateUUID = () => {
+    const uuid = UUIDV4;
+    return uuid;
+}
 
 
-
-export { generateVerificationCode, generateVerificationCode2  }
+export { generateVerificationCode, generateVerificationCode2, generateUUID  }
   

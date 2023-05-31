@@ -2,19 +2,31 @@ import { Sequelize } from "sequelize";
 import db from "../config/database.js";
 import { generateVerificationCode } from "../utils/utils.js";
 import sendMail from "../config/mailer.js"
+import { generateUUID } from "../utils/utils.js";
 const { DataTypes } = Sequelize;
  
-const Account = db.define('account',{
+const Akun = db.define('akun',{
+    // id:{
+    //     type: DataTypes.INT,
+    //     autoIncrement: true,
+    //     allowNull: false
+    // },
+    idAkun:{
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+    },
     email:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     password:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     changepwCode:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
     }
-
 },{
     freezeTableName: true
 });
@@ -23,8 +35,8 @@ const Account = db.define('account',{
 
 export const getAllUserAccount = async (req, res) => {
     try {
-        const userAccount = await Account.findAll({
-            attributes: ['email', 'password', 'changepwCode']
+        const userAccount = await Akun.findAll({
+            attributes: ['id', 'idAkun', 'email', 'password', 'changepwCode']
         });
         res.json(userAccount);
     } catch (error) {
@@ -34,18 +46,24 @@ export const getAllUserAccount = async (req, res) => {
 
 export const createAccount = async (req, res) => {
     try {
-        await Account.create(req.body);
+        
+        await Akun.create({
+            // idAkun: res.data.uuid,
+            email: res.data.email,
+            password: res.data.password,
+        });
         res.json({
-            "message": "Account Created"
+            "message": "Account Created",
+            "status": 400
         });
     } catch (error) {
-        res.json({ message: error.message });
+        res.json({ message: error.message, status: 400 });
     }
 }
 
 export const loginAccount = async (req, res) => {
     try {
-        const userPassword = await Account.findAll({
+        const userPassword = await Akun.findAll({
             attributes: ['password'],
             where: {
                 email: req.body.email
@@ -75,7 +93,7 @@ export const loginAccount = async (req, res) => {
 
 export const sendVerificationCode = async (req, res) => {
     try {
-        const code = await Account.findAll({
+        const code = await Akun.findAll({
             attributes: ['email', 'changepwCode'],
             where: { email: req.body.email }
         });
@@ -89,7 +107,7 @@ export const sendVerificationCode = async (req, res) => {
         } else if(code[0].dataValues.changepwCode != null) {
             const changepwCode = generateVerificationCode(15);
             sendMail(req.body.email, changepwCode);
-            await Account.update(
+            await Akun.update(
                 { changepwCode: changepwCode },
                 { where: { email: req.body.email } }
             );
@@ -100,7 +118,7 @@ export const sendVerificationCode = async (req, res) => {
         } else {
             const changepwCode = generateVerificationCode(15);
             sendMail(req.body.email, changepwCode);
-            await Account.update(
+            await Akun.update(
                 { changepwCode: changepwCode },
                 { where: { email: req.body.email } }
             );
@@ -119,7 +137,7 @@ export const sendVerificationCode = async (req, res) => {
 
 export const changePasswordPage = async (req, res) => {
     try {
-        const result = await Account.findAll({
+        const result = await Akun.findAll({
             where: {
                 id: req.params.id
             }
@@ -143,7 +161,7 @@ export const changePasswordPage = async (req, res) => {
 export const changePassword = async (req, res) => {
     try {
         console.log(req);
-        const result = await Account.update(
+        const result = await Akun.update(
             { password: req.body.newPassword,
               changepwCode: null },
             { where: { changepwCode: req.body.id } }

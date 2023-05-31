@@ -2,7 +2,8 @@ import { Sequelize } from "sequelize";
  
 const db = new Sequelize('dbayamku', 'root', '', {
     host: "localhost",
-    dialect: "mysql"
+    dialect: "mysql",
+    logging: console.log
 });
  
 export default db;

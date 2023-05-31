@@ -49,7 +49,7 @@ const Product = db.define('produk',{
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.findAll({
-            attributes: ['kode','nama','deskripsi','stok','harga','berat','warna','gambar']
+            attributes: ['id','kode','nama','deskripsi','stok','harga','berat','warna','gambar']
         });
         res.json(products);
     } catch (error) {
