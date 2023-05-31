@@ -3,13 +3,13 @@ import db from "../config/database.js";
  
 const { DataTypes } = Sequelize;
  
-const Product = db.define('produk',{
-    id:{
-        type: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false
-    },
-    kode:{
+const Produk = db.define('produk',{
+    // id:{
+    //     type: DataTypes.STRING,
+    //     primaryKey: true,
+    //     allowNull: false
+    // },
+    idProduk:{
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -19,15 +19,9 @@ const Product = db.define('produk',{
     },
     deskripsi:{
         type: DataTypes.STRING,
-        allowNull: false
     },
     berat:{
         type: DataTypes.DOUBLE,
-        allowNull: false
-    },
-    warna:{
-        type: DataTypes.STRING,
-        allowNull: false
     },
     stok:{
         type: DataTypes.STRING,
@@ -39,7 +33,6 @@ const Product = db.define('produk',{
     },
     gambar:{
         type: DataTypes.BLOB,
-        allowNull: false
     }
 },{
     freezeTableName: true
@@ -48,8 +41,8 @@ const Product = db.define('produk',{
 //models
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.findAll({
-            attributes: ['id','kode','nama','deskripsi','stok','harga','berat','warna','gambar']
+        const products = await Produk.findAll({
+            attributes: ['id','idProduk','nama','deskripsi','stok','harga','berat','gambar']
         });
         res.json(products);
     } catch (error) {
@@ -59,7 +52,7 @@ export const getAllProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
     try {
-        const product = await Product.findAll({
+        const product = await Produk.findAll({
             where: {
                 id: req.params.id
             }
@@ -72,41 +65,42 @@ export const getProductById = async (req, res) => {
  
 export const createProduct = async (req, res) => {
     try {
-        await Product.create(req.body);
+        await Produk.create(req.body);
         res.json({
-            "message": "Product Created"
+            "message": "Product Created",
+            "status": true
+        });
+    } catch (error) {
+        res.json({ message: error.message, "status": false });
+    }  
+}
+ 
+export const updateProduct = async (req, res) => {
+    try {
+        await Produk.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json({
+            "message": "Product Updated"
         });
     } catch (error) {
         res.json({ message: error.message });
     }  
 }
  
-// export const updateProduct = async (req, res) => {
-//     try {
-//         await Product.update(req.body, {
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//         res.json({
-//             "message": "Product Updated"
-//         });
-//     } catch (error) {
-//         res.json({ message: error.message });
-//     }  
-// }
- 
-// export const deleteProduct = async (req, res) => {
-//     try {
-//         await Product.destroy({
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//         res.json({
-//             "message": "Product Deleted"
-//         });
-//     } catch (error) {
-//         res.json({ message: error.message });
-//     }  
-// }
+export const deleteProduct = async (req, res) => {
+    try {
+        await Produk.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json({
+            "message": "Product Deleted"
+        });
+    } catch (error) {
+        res.json({ message: error.message });
+    }  
+}

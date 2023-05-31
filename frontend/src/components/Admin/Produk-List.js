@@ -12,35 +12,54 @@ const ProductList = () => {
     const [modalTambah, setModalTambah] = useState(false);
     const [modalEdit, setModalEdit] = useState(false);
     
+    const [id, setId] = useState(null);
     const [products, setProduct] = useState([]);
 
-    const [title, setTitle] = useState(''); const [title2, setTitle2] = useState('');
-    const [price, setPrice] = useState(''); const [price2, setPrice2] = useState('');
-    const [stock, setStock] = useState(''); const [stock2, setStock2] = useState('');
-    const [id, setId] = useState(null);
+    // tambah
+    const [tambah_idProduk, tambah_setIdProduk] = useState(''); 
+    const [tambah_nama, tambah_setName] = useState(''); 
+    const [tambah_deskripsi, tambah_setDeskripsi] = useState(''); 
+    const [tambah_stok, tambah_setStok] = useState(''); 
+    const [tambah_harga, tambah_setHarga] = useState(''); 
+    const [tambah_berat, tambah_setBerat] = useState('');
+
+    // edit
+    const [edit_idProduk, edit_setIdProduk] = useState(''); 
+    const [edit_nama, edit_setName] = useState(''); 
+    const [edit_deskripsi, edit_setDeskripsi] = useState(''); 
+    const [edit_stok, edit_setStok] = useState(''); 
+    const [edit_harga, edit_setHarga] = useState(''); 
+    const [edit_berat, edit_setBerat] = useState('');
+
+
 
     //tambah 
     const saveProduct = async (e) => {
         e.preventDefault();
-        let res = await axios.post('http://localhost:5000/products',{
-            title: title,
-            price: price,
-            stock: stock
+        let res = await axios.post('http://localhost:5000/produk',{
+            idProduk: tambah_idProduk,
+            nama: tambah_nama,
+            deskripsi: tambah_deskripsi,
+            stok: tambah_stok,
+            harga: tambah_harga,
+            berat: tambah_berat
         });
-        if(res.status === 200){
+        alert(res.data.message);
+        if(res.data.status){
             refreshPage();
-        } else {
-            alert(res.message);
         }
     }
 
-
+    //edit
     const updateProduct = async (e) => {
         e.preventDefault();
-        let res = await axios.patch(`http://localhost:5000/products/${id}`, {
-            title: title2,
-            price: price2,
-            stock: stock2
+        let res = await axios.patch(`http://localhost:5000/produk/${id}`, {
+            idProduk: edit_idProduk,
+            nama: edit_nama,
+            deskripsi: edit_deskripsi,
+            stok: edit_stok,
+            harga: edit_harga,
+            berat: edit_berat
         });
         if(res.status === 200){
             refreshPage();
@@ -48,41 +67,41 @@ const ProductList = () => {
             alert(res.message);
         }
     };
-      
- 
+
 
     const getProductById = (async (ids) => {
         setId(ids);
         const response = await axios.get(`http://localhost:5000/produk/${ids}`);
-        setTitle2(response.data.title);
-        setPrice2(response.data.price);
-        setStock2(response.data.stock);
+        edit_setIdProduk(response.data.idProduk);
+        edit_setName(response.data.nama);
+        edit_setDeskripsi(response.data.deskripsi);
+        edit_setStok(response.data.stok);
+        edit_setHarga(response.data.harga);
+        edit_setBerat(response.data.berat);
     });
 
     useEffect(() => {
         getProductById();
     }, []);
  
-    
     const getProducts = async () => {
         const response = await axios.get('http://localhost:5000/produk');
         setProduct(response.data);
     }
     
-    
-        useEffect(() => {
-            getProducts();
-        }, []);
+    useEffect(() => {
+        getProducts();
+    }, []);
  
     const deleteProduct = async (id) => {
-        await axios.delete(`http://localhost:5000/produk/${id}`);
+        const res = await axios.delete(`http://localhost:5000/produk/${id}`);
+        console.log(res.data.message);
         getProducts();
     }
 
     function refreshPage() {
         window.location.reload(false);
     }
-
 
     const closeModal = (modal) => {
         if(modal === "tambah"){
@@ -137,45 +156,71 @@ const ProductList = () => {
         onRequestClose={closeModal.bind(null, "tambah")}
         className="custom-modal">
         <button class="float-end" id="modal-produk-closebutton" onClick={() => closeModal("tambah")}>X</button>
-
         <div class="container" id="modal-produk">
             <h2>Tambah Menu</h2>
             <form onSubmit={ saveProduct }>
-                <div className="field">
-                    <label className="label">Title</label>
+            <div className="field">
+                    <label className="label">Kode</label>
                     <input 
                         className="input"
                         type="text"
                         placeholder="Title"
-                        value={ title }
-                        onChange={ (e) => setTitle(e.target.value) }
-                        />
+                        value={ tambah_idProduk }
+                        onChange={ (e) => tambah_setIdProduk(e.target.value) }
+                    />
                 </div>
-
                 <div className="field">
-                    <label className="label">Price</label>
+                    <label className="label">Nama</label>
                     <input 
                         className="input"
                         type="text"
                         placeholder="Price"
-                        value={ price }
-                        onChange={ (e) => setPrice(e.target.value) }
+                        value={ tambah_nama }
+                        onChange={ (e) => tambah_setName(e.target.value) }
                     />
                 </div>
-
                 <div className="field">
-                    <label className="label">Stock</label>
+                    <label className="label">deskripsi</label>
                     <input 
                         className="input"
                         type="text"
                         placeholder="Stock"
-                        value={ stock }
-                        onChange={ (e) => setStock(e.target.value) }
+                        value={ tambah_deskripsi }
+                        onChange={ (e) => tambah_setDeskripsi(e.target.value) }
                     />
                 </div>
-
                 <div className="field">
-                    <button className="button is-primary">Save</button>
+                    <label className="label">Stok</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="Stock"
+                        value={ tambah_stok }
+                        onChange={ (e) => tambah_setStok(e.target.value) }
+                    />
+                </div>
+                <div className="field">
+                    <label className="label">Harga</label>
+                    <input 
+                        className="input"
+                        type="number"
+                        placeholder="Stock"
+                        value={ tambah_harga }
+                        onChange={ (e) => tambah_setHarga(e.target.value) }
+                    />
+                </div>
+                <div className="field">
+                    <label className="label">Berat</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="Stock"
+                        value={ tambah_berat }
+                        onChange={ (e) => tambah_setBerat(e.target.value) }
+                    />
+                </div>
+                <div className="field">
+                    <button>Tambah</button>
                 </div>
             </form>
         </div>
@@ -189,35 +234,68 @@ const ProductList = () => {
         <div>
             <form onSubmit={ updateProduct }>
                 <div className="field">
-                    <label className="label">Title</label>
+                    <label className="label">Kode</label>
                     <input 
                         className="input"
                         type="text"
                         placeholder="Title"
-                        value={ title2 }
-                        onChange={ (e) => setTitle2(e.target.value) }
+                        value={ edit_idProduk }
+                        onChange={ (e) => edit_setIdProduk(e.target.value) }
                     />
                 </div>
  
                 <div className="field">
-                    <label className="label">Price</label>
+                    <label className="label">Nama</label>
                     <input 
                         className="input"
                         type="text"
                         placeholder="Price"
-                        value={ price2 }
-                        onChange={ (e) => setPrice2(e.target.value) }
+                        value={ edit_nama }
+                        onChange={ (e) => edit_setName(e.target.value) }
                     />
                 </div>
 
                 <div className="field">
-                    <label className="label">Stock</label>
+                    <label className="label">deskripsi</label>
                     <input 
                         className="input"
                         type="text"
                         placeholder="Stock"
-                        value={ stock2 }
-                        onChange={ (e) => setStock2(e.target.value) }
+                        value={ edit_deskripsi }
+                        onChange={ (e) => edit_setDeskripsi(e.target.value) }
+                    />
+                </div>
+
+                <div className="field">
+                    <label className="label">Stok</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="Stock"
+                        value={ edit_stok }
+                        onChange={ (e) => edit_setStok(e.target.value) }
+                    />
+                </div>
+
+                <div className="field">
+                    <label className="label">Harga</label>
+                    <input 
+                        className="input"
+                        type="number"
+                        placeholder="Stock"
+                        value={ edit_harga }
+                        onChange={ (e) => edit_setHarga(e.target.value) }
+                    />
+                </div>
+
+                <div className="field">
+                    <label className="label">Berat</label>
+                    <input 
+                        className="input"
+                        type="text"
+                        placeholder="Stock"
+                        value={ edit_berat }
+                        onChange={ (e) => edit_setBerat(e.target.value) }
                     />
                 </div>
  
@@ -235,19 +313,20 @@ const ProductList = () => {
         <thead>
             <tr>
                 <th>No</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>stok</th>
-                <th>Actions</th>
+                <th>idProduk</th>
+                <th>Nama</th>
+                <th>Stok</th>
+                <th>Harga</th>
             </tr>
         </thead>
         <tbody>
             { products.map((product, index) => (
                 <tr key={ product.id }>
                     <td>{ index + 1 }</td>
-                    <td>{ product.kode }</td>
+                    <td>{ product.idProduk }</td>
                     <td>{ product.nama }</td>
                     <td>{ product.stok }</td>
+                    <td>{ product.harga }</td>
                     <td>
                         <button onClick={ () => setModalEditHelper(product.id) }>Edit</button>
                         <button onClick={ () => deleteProduct(product.id) } className="button is-small is-danger">Delete</button>

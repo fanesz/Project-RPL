@@ -24,25 +24,7 @@ const Login = () => {
       email: email,
       password: password,
     });
-    if(res.data.status === 200){
-        const res2 = await axios.post("http://localhost:5000/akun", {
-            email: email,
-            password: password,
-        });
-        if(res2.data.status === 200){
-            console.log(res);
-            console.log(res2);
-            alert("Success mendaftar!");
-        } else {
-            console.log("ERR: akun");
-            console.log(res.data.message);
-            alert(res.data.message);
-        }
-    }else {
-        console.log("ERR: detailakun");
-        console.log(res.data.message);
-        alert(res.data.message);
-    }
+    alert(res.data.message)
     // login();
   };
 
