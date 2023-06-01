@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`produk` (
   `berat` INT(2) NOT NULL,
   `stok` INT(11) NOT NULL,
   `harga` DECIMAL(10,2) NOT NULL,
-  `gambar` LONGBLOB,
+--   `gambar` LONGBLOB,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   unique (`idProduk`))
@@ -68,16 +68,16 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 select*from produk;
-insert into produk (idProduk,nama,deskripsi,berat,stok,harga,gambar) values
-('P0001','Bibit','Lorem Ipsum',50,40,75000,'ayam.jpg'),
-('P0002','Makanan','Lorem Ipsum',10,0,16000,'makanan.jpg'),
-('P0003','Bibit','Lorem Ipsum',50,7,75000,'ayam.jpg'),
-('P0004','Bibit','Lorem Ipsum',15,10,13000,'ayam.jpg'),
-('P0005','Makanan','Lorem Ipsum',5,43,16000,'makanan.jpg'),
-('P0006','Makanan','Lorem Ipsum',15,9,13000,'makanan.jpg'),
-('P0007','Makanan','Lorem Ipsum',15,-1,16000,'makanan.jpg');
 
-CREATE TABLE IF NOT EXISTS `dbAyamku`.`stok` (
+
+insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
+('P0001','Bibit','Lorem Ipsum',50,40,75000),
+('P0002','Makanan','Lorem Ipsum',10,41,16000),
+('P0003','Bibit','Lorem Ipsum',50,42,75000),
+('P0004','Makanan','Lorem Ipsum',5,43,16000),
+('P0005','Makanan','Lorem Ipsum',15,44,16000);
+
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`Stock` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idProduk` CHAR(5) NOT NULL,
   `tanggal` DATE NOT NULL,
@@ -94,8 +94,8 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`stok` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-select*from stok;
-insert into stok (idProduk,tanggal,stokReady,stokGagal) values 
+select*from Stock;
+insert into stock (idProduk,tanggal,stokReady,stokGagal) values 
 ('P0001',curdate(),44,11),
 ('P0002',curdate(),45,8),
 ('P0003',curdate(),55,9),
@@ -125,33 +125,29 @@ insert into stok (idProduk,tanggal,stokReady,stokGagal) values
 -- ('P0004',10000),
 -- ('P0005',65000);
 
-CREATE TABLE IF NOT EXISTS `dbAyamku`.`penjualan` (
+
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`Penjualan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `idPenjualan` CHAR(10) NOT NULL,
-  `idAkun` CHAR(36) NOT NULL,
   `tanggal` DATE NOT NULL,
-  CONSTRAINT `idAkunDiDetailPenjualan`
-    FOREIGN KEY (`idAkun`)
-    REFERENCES `dbAyamku`.`akun` (`idAkun`)
-	ON DELETE RESTRICT
-    ON UPDATE CASCADE,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   unique(`idPenjualan`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-INSERT INTO penjualan (`idPenjualan`,`idAkun`, `tanggal`) VALUES
-('ORD0000001', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), '2023/05/01'),
-('ORD0000002', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), '2023/05/25'),
-('ORD0000003', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), '2023/05/31'),
-('ORD0000004', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), '2023/05/24'),
-('ORD0000005', (select idAkun from detailAkun where email = 'hoho77@gmail.com'),'2023/05/05');
-select * from penjualan;
+INSERT INTO penjualan (`idPenjualan`, `tanggal`) VALUES
+('ORD0000001', '2023/05/01'),
+('ORD0000002', '2023/05/02'),
+('ORD0000003', '2023/05/03'),
+('ORD0000004', '2023/05/04'),
+('ORD0000005', '2023/05/05');
+select * from Penjualan;
 
 select * from detailPenjualan;
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPenjualan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `idPenjualan` CHAR(10) NOT NULL,
+  `idAkun` CHAR(36) NOT NULL,
   `idProduk` CHAR(5) NOT NULL,
   `status` VARCHAR(15) NOT NULL,
   `jumlah` INT(11) NOT NULL,
@@ -163,6 +159,11 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPenjualan` (
     REFERENCES `dbAyamku`.`Penjualan` (`idPenjualan`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
+  CONSTRAINT `idAkunDiDetailPenjualan`
+    FOREIGN KEY (`idAkun`)
+    REFERENCES `dbAyamku`.`akun` (`idAkun`)
+	ON DELETE RESTRICT
+    ON UPDATE CASCADE,
   CONSTRAINT `idProdukDiDetailPenjualan`
     FOREIGN KEY (`idProduk`)
     REFERENCES `dbAyamku`.`produk` (`idProduk`)
@@ -171,15 +172,15 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPenjualan` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-INSERT INTO detailPenjualan (`idPenjualan`,`idProduk`,`status`,`jumlah`,`totalHarga`) VALUES
-    ('ORD0000001', 'P0001', 'Completed', 5, 10000.00),
-    ('ORD0000002', 'P0002', 'Completed', 3, 15000.00),
-    ('ORD0000003', 'P0003', 'Completed', 2, 8000.00),
-    ('ORD0000004', 'P0004', 'Completed', 4, 12000.00),
-    ('ORD0000005', 'P0005', 'Completed', 1, 9000.00);
-select * from detailPenjualan;
+INSERT INTO detailPenjualan (`idPenjualan`,`idAkun`,`idProduk`,`status`,`jumlah`,`totalHarga`) VALUES
+    ('ORD0000001', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0001', 'Completed', 5, 10000.00),
+    ('ORD0000002', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0002', 'Completed', 3, 15000.00),
+    ('ORD0000003', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0003', 'Completed', 2, 8000.00),
+    ('ORD0000004', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0004', 'Completed', 4, 12000.00),
+    ('ORD0000005', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0005', 'Completed', 1, 9000.00);
+select * from detailakun;
 
-CREATE TABLE IF NOT EXISTS `dbAyamku`.`pengiriman` (
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`Pengiriman` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `idPenjualan` CHAR(10) NOT NULL,
     `idAkun` CHAR(36) NOT NULL,
@@ -195,15 +196,16 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`pengiriman` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+drop table Pengiriman;
 
-INSERT INTO pengiriman (`idPenjualan`,`idAkun`,`kurir`,`totalHarga`,`status`,`alamat`)
+INSERT INTO Pengiriman (`idPenjualan`,`idAkun`,`kurir`,`totalHarga`,`status`,`alamat`)
 VALUES
-    ('ORD0000001', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'JNE', 50000, 'Delivered', 'Jl. Merdeka No. 123'),
-    ('ORD0000002', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'TIKI', 35000, 'In Transit', 'Jl. Jenderal Sudirman No. 456'),
-    ('ORD0000003', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'Pos Indonesia', 40000, 'Shipped', 'Jl. Ahmad Yani No. 789'),
-    ('ORD0000004', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'Gojek', 25000, 'Processing', 'Jl. Pahlawan No. 101'),
-    ('ORD0000005', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'Grab', 30000, 'Pending', 'Jl. Gatot Subroto No. 555');
-select * from pengiriman;
+    ('ORD0000001', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'JNE', 50000, 'Delivered', 'Jl. Merdeka No. 123'),
+    ('ORD0000002', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'TIKI', 35000, 'In Transit', 'Jl. Jenderal Sudirman No. 456'),
+    ('ORD0000003', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'Pos Indonesia', 40000, 'Shipped', 'Jl. Ahmad Yani No. 789'),
+    ('ORD0000004', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'Gojek', 25000, 'Processing', 'Jl. Pahlawan No. 101'),
+    ('ORD0000005', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'Grab', 30000, 'Pending', 'Jl. Gatot Subroto No. 555');
+select * from Pengiriman;
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`Review` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -227,60 +229,6 @@ DEFAULT CHARACTER SET = utf8;
 
 INSERT INTO review (`idPenjualan`,`idAkun`,`rating`,`ulasan`)
 VALUES
-    ('ORD0000001', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 4, 'Great product and fast delivery!'),
-    ('ORD0000002', (select idAkun from detailAkun where email = 'hoho77@gmail.com'), 3, 'Average quality, but good service.');
+    ('ORD0000001', '08596f80-ffa8-11ed-bbc0-047c160aa273', 4, 'Great product and fast delivery!'),
+    ('ORD0000002', '08596f80-ffa8-11ed-bbc0-047c160aa273', 3, 'Average quality, but good service.');
 select * from review;
-
-SELECT
-    ROW_NUMBER() OVER (ORDER BY tanggal) AS id,
-    tanggal,
-    COUNT(*) AS total_penjualan,
-    SUM(omset) AS omset
-FROM (
-	SELECT
-		tanggal,
-		COUNT(*) AS omset FROM Penjualan
-        WHERE tanggal >= CURDATE() - INTERVAL 7 DAY
-        GROUP BY tanggal
-    ) AS subquery
-GROUP BY tanggal
-ORDER BY tanggal;
-
-SELECT
-    dp.id,
-    da.nama AS nama_pembeli,
-    pr.nama AS nama_produk,
-    dp.jumlah
-FROM
-    detailPenjualan dp
-    INNER JOIN detailAkun da ON dp.idAkun = da.idAkun
-    INNER JOIN produk pr ON dp.idProduk = pr.idProduk
-ORDER BY
-    dp.created_at DESC
-LIMIT 10;
-
--- omset bulan ini
-select*from penjualan;
-select*from detailpenjualan;
-delimiter <>
-create or replace procedure omsetBulanIni(bulan int,tahun int)
-begin
-declare omset decimal(10,2);
-set omset=(select sum(jumlah*totalHarga) from penjualan,detailPenjualan where 
-detailPenjualan.idPenjualan=penjualan.idPenjualan and month(tanggal)=bulan and year(tanggal)=tahun);
-select bulan as `Bulan`, tahun as `Tahun`, coalesce(omset,'-') as `totalOmset`;
-end <>
-delimiter ;
-call omsetBulanIni(5,2023);
-
--- tampil produk sekarat
-select*from produk;
-delimiter <>
-create or replace procedure cekStokSekarat()
-begin
-declare `status` varchar(255);
-select id, idProduk, stok, (select if(stok<0,'Negatif',if(stok=0,'Habis','Hampir Habis'))) from produk where stok<10;
-end <>
-delimiter ;
-call cekStokSekarat();
-select stok,if(stok<10,'Hampir Habis',if(stok=0,'Habis','Negatif')) from produk;

@@ -2,6 +2,31 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+/* 
+.notif_modal{
+    background-color:grey;
+    width: 40%;
+    height: 40vh;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+}
+
+.notif_overlay{
+    background-color: #000000; 
+}
+
+.notif_title{
+    font-size: 1.5rem;
+    
+}
+
+.notif_wrapper{
+    padding-left: 1rem;
+} */
+
 
 
 .image{
@@ -150,4 +175,13 @@ input::-webkit-inner-spin-button {
 .basket_subtotal{
     font-size: 1.4rem;
     margin-right: -0.5rem;
+}
+
+
+.alamat_section{
+    
+}
+
+.alamat_section .title{
+    font-size: 1.1rem;
 }

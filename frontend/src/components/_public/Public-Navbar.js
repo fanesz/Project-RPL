@@ -18,7 +18,7 @@ const PUBLIC_NAVBAR = () => {
                                 <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#/" role="button" data-bs-toggle="dropdown" aria-expanded="false">Order</a>
                                 <ul className="dropdown-menu">
-                                    <a className="dropdown-item" href="#/">Current Order</a>
+                                    <a className="dropdown-item" href="/keranjang">Current Order</a>
                                     <a className="dropdown-item" href="#/">History</a>
                                 </ul>
                                 </li>

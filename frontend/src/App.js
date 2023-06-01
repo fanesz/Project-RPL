@@ -6,6 +6,8 @@ import ProdukList from "./components/Admin/Produk-List"
 import Home from "./components/Homepage/Home";
 import Katalog from "./components/Homepage/Katalog";
 import Produk from "./components/Homepage/Produk";
+import Keranjang from "./components/Homepage/Keranjang";
+import Checkout from "./components/Homepage/Checkout";
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
             <Route path="/katalog" element={<Katalog/>} />
             <Route path="/produk" element={<Katalog/>} />
             <Route path="/produk/:id" element={<Produk/>} />
+            <Route path="/keranjang" element={<Keranjang/>} />
+            <Route path="/checkout" element={<Checkout/>} />
 
             {/* admin */}
             <Route path="/admin" element={<MainMenu/>} />
@@ -32,7 +36,7 @@ function App() {
 
 
             <Route path="/login" element={<Login/>} />
-            <Route path="/account/forgetpass/:id" element={<ChangePass/>} />
+            <Route path="/akun/forgetpass/:id" element={<ChangePass/>} />
 
 
           </Routes>

@@ -47,9 +47,10 @@ const Login = () => {
   const sendVerificationCode = async (e) => {
     e.preventDefault();
     const data = { email: email3 };
-    await axios.post("http://localhost:5000/akun/forgetpass", data).then((res) => {
-      alert(res.data.message);
-    });
+    const res = await axios.post("http://localhost:5000/akun/forgetpass", data)
+    
+    alert(res.data.message);
+
   };
 
   const login = () => {
@@ -104,9 +105,9 @@ const Login = () => {
             <form method="POST" className="needs-validation" autocomplete="off" onSubmit={ loginAccount }>
                 <div className="field">
                     <label className="label mb-2">Email</label>
-                    <input id="email" name="email" className="input form-control  mb-3" type="email" placeholder="Enter Your Email" value={email2} onChange={(e) => setEmail2(e.target.value)} required autofocus />
+                    <input className="input form-control  mb-3" type="email" placeholder="Enter Your Email" value={email2} onChange={(e) => setEmail2(e.target.value)} required autofocus />
                     <label className="label mb-2" for="password">Password</label>
-                    <input name="password" id="password" className="input form-control  mb-2" type="password" placeholder="Your Password" value={password2} onChange={(e) => setPassword2(e.target.value)} required />
+                    <input className="input form-control  mb-2" type="password" placeholder="Your Password" value={password2} onChange={(e) => setPassword2(e.target.value)} required />
                 </div>
                 <p>Forgot your password? <a href="#/" role="button" onClick={ forgetPassword }> Forgot Password</a>.</p>
                 <button type="submit" className="btn btn-primary mb-4">Login</button>

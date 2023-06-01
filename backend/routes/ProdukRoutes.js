@@ -7,7 +7,8 @@ import {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductByIdProduk
 } from "../components/Produk.js";
  
 const router = express.Router();
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.get('/', getAllProducts);
 router.get('/:id', getProductById);
+router.post('/keranjang', getProductByIdProduk);
 router.post('/', createProduct);
 router.patch('/:id', updateProduct);
 router.delete('/:id', deleteProduct);

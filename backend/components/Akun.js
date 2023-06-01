@@ -48,7 +48,6 @@ export const createAccount = async (req, res) => {
     try {
         
         await Akun.create({
-            // idAkun: res.data.uuid,
             email: res.data.email,
             password: res.data.password,
         });
@@ -101,8 +100,8 @@ export const sendVerificationCode = async (req, res) => {
 
         if(code.length == 0){
             res.json({
-                "message": "Email not terdaftar!",
-                "result": false
+                message: "Email not terdaftar!",
+                status: false
             });
         } else if(code[0].dataValues.changepwCode != null) {
             const changepwCode = generateVerificationCode(15);
@@ -112,8 +111,8 @@ export const sendVerificationCode = async (req, res) => {
                 { where: { email: req.body.email } }
             );
             res.json({
-                "message": "Link verifikasi baru sudah terkirim!",
-                "result": false
+                message: "Link verifikasi baru sudah terkirim!",
+                status: false
             });
         } else {
             const changepwCode = generateVerificationCode(15);
@@ -123,14 +122,15 @@ export const sendVerificationCode = async (req, res) => {
                 { where: { email: req.body.email } }
             );
             res.json({
-                "message": "Link ganti password terkirim!",
-                "result": true
+                message: "Link ganti password terkirim!",
+                status: true
             });
         }
     } catch (error) {
+        // console.log(error);
         res.json({
-            "message": "Error Occured!",
-            "result": false
+            message: "Error Occured!",
+            status: false
         });
     }  
 }
@@ -139,21 +139,25 @@ export const changePasswordPage = async (req, res) => {
     try {
         const result = await Akun.findAll({
             where: {
-                id: req.params.id
+                changepwCode: req.params.id
             }
         });
-        if (result != null){
+        if (result.length != 0){
             res.json({
-                "message": "Verification Link Detected!",
-                "result": true,
-                "email": result[0].dataValues.email
+                message: "Verification Link Detected!",
+                status: true,
+            });
+        }else {
+            res.json({
+                message: "Wrong Verification Link!",
+                status: false,
             });
         }
 
     } catch (error) {
         res.json({
-            "message": "Error Occured!",
-            "result": false
+            message: "Not Found!",
+            status: false
         });
     }
 }
@@ -168,20 +172,21 @@ export const changePassword = async (req, res) => {
         );
         if (result != null){
             res.json({
-                "message": "Password Changed!",
-                "result": true
+                message: "Password Changed!",
+                status: true
             });
         } else {
             res.json({
-                "message": "Link Expired!",
-                "result": false
+                message: "Link Expired!",
+                status: false
             });
         }
 
     } catch (error) {
+        console.log(error);
         res.json({
-            "message": "Error Occured!",
-            "result": false
+            message: "Error Occured!",
+            status: false
         });
     }
 }

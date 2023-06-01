@@ -134,8 +134,9 @@ const ProductList = () => {
     }, []);
  
     const getProducts = async () => {
-        const response = await axios.get('http://localhost:5000/produk');
-        setProduct(response.data);
+        const res = await axios.get('http://localhost:5000/produk');
+        setProduct(res.data);
+        console.log(products);
     }
     
     useEffect(() => {

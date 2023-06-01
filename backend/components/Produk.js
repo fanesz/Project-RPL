@@ -90,7 +90,47 @@ export const getProductById = async (req, res) => {
         status: false,
       });
     }
-  }
+}
+
+export const getProductByIdProduk = async (req, res) => {
+    try {
+      const product = await Produk.findAll({
+        where: {
+          idProduk: req.body.idProduk
+        }
+      });
+      product[0].dataValues["gambar"] = null;
+      try {
+        const imagePath = `./gambar/${product[0].dataValues.idProduk}.png`;
+        const readFilePromise = new Promise((resolve, reject) => {
+          fs.readFile(imagePath, (err, data) => {
+            if (err) {
+              return reject('Image not found');
+            }
+            const imageBase64 = data.toString('base64');
+            const imageData = `data:image/jpeg;base64,${imageBase64}`;
+            product[0].dataValues["gambar"] = imageData;
+            resolve();
+          });
+        });
+        await readFilePromise;
+      } catch (error) {
+        console.log(error);
+      }
+
+      product[0]["message"] = "Product Created";
+      product[0]["status"] = true;
+      
+      res.json(product[0]);
+
+    } catch (error) {
+      console.log(error);
+      res.json({
+        message: error.message,
+        status: false,
+      });
+    }
+}
   
 
 export const createProduct = async (req, res) => {
