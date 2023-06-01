@@ -1,0 +1,39 @@
+.modal_closebutton{
+    background-color: red;
+    width: 3rem;
+    float: right;
+}
+
+.modal_produk{
+    padding: 3rem;
+}
+
+.custom_modal{
+    background-color:grey;
+    width: 60%;
+    height: 80vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dropzone_wrapper{
+}
+
+.dropzone{
+    background-color: aliceblue;
+    width: 17rem;
+    height: 12rem;
+    display: flex;
+    align-items: center;
+}
+.dropzone_img{
+    width: 100%;
+    height: 100%;
+}
+.dropzone_text{
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2rem;
+}

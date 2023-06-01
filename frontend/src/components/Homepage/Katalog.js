@@ -24,16 +24,9 @@ const Katalog = () => {
     }
     
     
-    const addCart = (id, jumlah) => {
-        let cart = getLocalStorage("cart") || {}; 
-        cart[id] = jumlah;
-        setLocalStorage("cart", cart);
-    
-        if (cart[id]) {
-            const button = document.getElementById(`cart-button-${id}`);
-            button.innerHTML = "Go to Cart";
-            button.addEventListener("click", navigate("/produk/id")); 
-        }
+    const addCart = (id) => {
+        navigate(`/produk/${id}`);
+
     }
     
 
@@ -94,7 +87,7 @@ const Katalog = () => {
                                 <button 
                                     id={`cart-button-${product.id}`} 
                                     className={s.add_to_cart_button} 
-                                    onClick={() => addCart(product.id, 1)}>
+                                    onClick={() => addCart(product.id)}>
                                     {
                                         setButtonName(product.id)
                                     }

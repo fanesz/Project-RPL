@@ -5,6 +5,7 @@ import MainMenu from "./components/Admin/MainMenu"
 import ProdukList from "./components/Admin/Produk-List"
 import Home from "./components/Homepage/Home";
 import Katalog from "./components/Homepage/Katalog";
+import Produk from "./components/Homepage/Produk";
 
 
 function App() {
@@ -22,13 +23,16 @@ function App() {
             {/* home n produk */}
             <Route path="/" element={<Home/>} />
             <Route path="/katalog" element={<Katalog/>} />
-            <Route path="/login" element={<Login/>} />
-            <Route path="/account/forgetpass/:id" element={<ChangePass/>} />
+            <Route path="/produk" element={<Katalog/>} />
+            <Route path="/produk/:id" element={<Produk/>} />
 
             {/* admin */}
             <Route path="/admin" element={<MainMenu/>} />
             <Route path="/admin/produk" element={<ProdukList/>} />
 
+
+            <Route path="/login" element={<Login/>} />
+            <Route path="/account/forgetpass/:id" element={<ChangePass/>} />
 
 
           </Routes>

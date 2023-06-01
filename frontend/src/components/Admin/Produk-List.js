@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
+import s from "./css/Produk-List.module.css";
 import { logout } from "../utils/utils"
 import ReactModal from 'react-modal';
-
-// ReactModal.setAppElement('#root');
+import Dropzone from 'react-dropzone';
 
 const ProductList = () => {
     // loginChecker();
@@ -22,6 +22,7 @@ const ProductList = () => {
     const [tambah_stok, tambah_setStok] = useState(''); 
     const [tambah_harga, tambah_setHarga] = useState(''); 
     const [tambah_berat, tambah_setBerat] = useState('');
+    const [tambah_gambar, tambah_setGambar] = useState(null);
 
     // edit
     const [edit_idProduk, edit_setIdProduk] = useState(''); 
@@ -30,55 +31,103 @@ const ProductList = () => {
     const [edit_stok, edit_setStok] = useState(''); 
     const [edit_harga, edit_setHarga] = useState(''); 
     const [edit_berat, edit_setBerat] = useState('');
+    const [edit_gambar, edit_setGambar] = useState('');
 
 
 
     //tambah 
+
     const saveProduct = async (e) => {
         e.preventDefault();
-        let res = await axios.post('http://localhost:5000/produk',{
-            idProduk: tambah_idProduk,
-            nama: tambah_nama,
-            deskripsi: tambah_deskripsi,
-            stok: tambah_stok,
-            harga: tambah_harga,
-            berat: tambah_berat
-        });
-        alert(res.data.message);
-        if(res.data.status){
-            refreshPage();
+        try {
+            const res = await axios.post(`http://localhost:5000/produk`, {
+                idProduk: tambah_idProduk,
+                nama: tambah_nama,
+                deskripsi: tambah_deskripsi,
+                stok: tambah_stok,
+                harga: tambah_harga,
+                berat: tambah_berat,
+                gambar: tambah_gambar
+            });
+            if(res.data.status){
+                closeModal("tambah");
+                getProducts();
+            } else {
+                alert(res.data.message);
+            }
+
+        
+        } catch (error) {
+          console.error('Error saving product', error);
         }
-    }
+      };
+      
+    const handleDrop = (acceptedFiles) => {
+
+        const file = acceptedFiles[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+            if(modalEdit){
+                edit_setGambar(reader.result);
+            } else {
+                tambah_setGambar(reader.result);
+            }
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    };
+    
+    
 
     //edit
     const updateProduct = async (e) => {
         e.preventDefault();
-        let res = await axios.patch(`http://localhost:5000/produk/${id}`, {
+      
+        try {
+          const res = await axios.patch(`http://localhost:5000/produk/${id}`, {
             idProduk: edit_idProduk,
             nama: edit_nama,
             deskripsi: edit_deskripsi,
             stok: edit_stok,
             harga: edit_harga,
-            berat: edit_berat
-        });
-        if(res.status === 200){
-            refreshPage();
+            berat: edit_berat,
+            gambar: edit_gambar
+          });
+
+        if(res.data.status){
+            closeModal("edit");
+            getProducts();
         } else {
-            alert(res.message);
+            alert(res.data.message);
         }
-    };
+
+        } catch (error) {
+          console.error('Error updating product', error);
+        }
+      };
+      
 
 
-    const getProductById = (async (ids) => {
-        setId(ids);
-        const response = await axios.get(`http://localhost:5000/produk/${ids}`);
-        edit_setIdProduk(response.data.idProduk);
-        edit_setName(response.data.nama);
-        edit_setDeskripsi(response.data.deskripsi);
-        edit_setStok(response.data.stok);
-        edit_setHarga(response.data.harga);
-        edit_setBerat(response.data.berat);
-    });
+    const getProductById = async (ids) => {
+        try {
+          setId(ids);
+          const res = await axios.get(`http://localhost:5000/produk/${ids}`);
+          edit_setIdProduk(res.data.idProduk);
+          edit_setName(res.data.nama);
+          edit_setDeskripsi(res.data.deskripsi);
+          edit_setStok(res.data.stok);
+          edit_setHarga(res.data.harga);
+          edit_setBerat(res.data.berat);
+          edit_setGambar(res.data.gambar);
+        } catch (error) {
+          console.error('Error retrieving product', error);
+        }
+      };
+      
+      
 
     useEffect(() => {
         getProductById();
@@ -121,107 +170,64 @@ const ProductList = () => {
     return (
         <div>
 
-    <style jsx global>{`
-    body {
-        padding: 3vw;
-    }
-
-    .custom-modal {
-        background-color:grey;
-        width: 60%;
-        height: 80vh;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    
-    #modal-produk{
-        padding: 3rem;
-
-    }
-
-    #modal-produk-closebutton{
-        background-color: red;
-        width: 3rem;
-    }
-      
-      
-
-      
-    `}</style>
+    <div className={s.container_produk_list}>
 
     <ReactModal 
         isOpen={modalTambah}
         onRequestClose={closeModal.bind(null, "tambah")}
-        className="custom-modal">
-        <button class="float-end" id="modal-produk-closebutton" onClick={() => closeModal("tambah")}>X</button>
-        <div class="container" id="modal-produk">
+        className={s.custom_modal}>
+        <button className={s.modal_closebutton} onClick={() => closeModal("tambah")}>X</button>
+        <div className={s.modal_produk}>
             <h2>Tambah Menu</h2>
             <form onSubmit={ saveProduct }>
             <div className="field">
                     <label className="label">Kode</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Title"
-                        value={ tambah_idProduk }
-                        onChange={ (e) => tambah_setIdProduk(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Title" value={ tambah_idProduk }
+                    onChange={ (e) => tambah_setIdProduk(e.target.value) }/>
                 </div>
                 <div className="field">
                     <label className="label">Nama</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Price"
-                        value={ tambah_nama }
-                        onChange={ (e) => tambah_setName(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Price" value={ tambah_nama }
+                    onChange={ (e) => tambah_setName(e.target.value) }/>
                 </div>
                 <div className="field">
                     <label className="label">deskripsi</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Stock"
-                        value={ tambah_deskripsi }
-                        onChange={ (e) => tambah_setDeskripsi(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Stock" value={ tambah_deskripsi }
+                    onChange={ (e) => tambah_setDeskripsi(e.target.value) }/>
                 </div>
                 <div className="field">
                     <label className="label">Stok</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Stock"
-                        value={ tambah_stok }
-                        onChange={ (e) => tambah_setStok(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Stock" value={ tambah_stok }
+                    onChange={ (e) => tambah_setStok(e.target.value) }/>
                 </div>
                 <div className="field">
                     <label className="label">Harga</label>
-                    <input 
-                        className="input"
-                        type="number"
-                        placeholder="Stock"
-                        value={ tambah_harga }
-                        onChange={ (e) => tambah_setHarga(e.target.value) }
-                    />
+                    <input className="input" type="number" placeholder="Stock" value={ tambah_harga }
+                        onChange={ (e) => tambah_setHarga(e.target.value) }/>
                 </div>
                 <div className="field">
                     <label className="label">Berat</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Stock"
-                        value={ tambah_berat }
-                        onChange={ (e) => tambah_setBerat(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Stock" value={ tambah_berat } 
+                        onChange={ (e) => tambah_setBerat(e.target.value) }/>
                 </div>
+                <div className={s.dropzone_wrapper}>
+                    <Dropzone onDrop={handleDrop}>
+                        {({ getRootProps, getInputProps }) => (
+                        <div className={s.dropzone} {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        { tambah_gambar ? 
+                        (<img className={s.dropzone_img} src={tambah_gambar}></img>) : 
+                        (<span className={s.dropzone_text}>Upload Image</span>) }
+                        </div>
+                        )}
+                    </Dropzone>
+                </div>
+                <button>Upload</button>
+
                 <div className="field">
                     <button>Tambah</button>
                 </div>
+
             </form>
         </div>
     </ReactModal>
@@ -229,76 +235,55 @@ const ProductList = () => {
     <ReactModal 
         isOpen={modalEdit}
         onRequestClose={closeModal.bind(null, "edit")}
-        className="custom-modal">
-        <button class="float-end" id="modal-produk-closebutton" onClick={() => closeModal("edit")}>X</button>
+        className={s.custom_modal}>
+       <button className={s.modal_closebutton} onClick={() => closeModal("edit")}>X</button>
         <div>
             <form onSubmit={ updateProduct }>
                 <div className="field">
                     <label className="label">Kode</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Title"
-                        value={ edit_idProduk }
-                        onChange={ (e) => edit_setIdProduk(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Title" value={ edit_idProduk }
+                    onChange={ (e) => edit_setIdProduk(e.target.value) }/>
                 </div>
- 
                 <div className="field">
                     <label className="label">Nama</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Price"
-                        value={ edit_nama }
-                        onChange={ (e) => edit_setName(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Price" value={ edit_nama }
+                    onChange={ (e) => edit_setName(e.target.value) }/>
                 </div>
-
                 <div className="field">
                     <label className="label">deskripsi</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Stock"
-                        value={ edit_deskripsi }
-                        onChange={ (e) => edit_setDeskripsi(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Stock" value={ edit_deskripsi } 
+                    onChange={ (e) => edit_setDeskripsi(e.target.value) }/>
                 </div>
-
                 <div className="field">
                     <label className="label">Stok</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Stock"
-                        value={ edit_stok }
-                        onChange={ (e) => edit_setStok(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Stock" value={ edit_stok }
+                    onChange={ (e) => edit_setStok(e.target.value) }/>
                 </div>
 
                 <div className="field">
                     <label className="label">Harga</label>
-                    <input 
-                        className="input"
-                        type="number"
-                        placeholder="Stock"
-                        value={ edit_harga }
-                        onChange={ (e) => edit_setHarga(e.target.value) }
-                    />
+                    <input className="input" type="number" placeholder="Stock" value={ edit_harga }
+                    onChange={ (e) => edit_setHarga(e.target.value) }/>
                 </div>
-
                 <div className="field">
                     <label className="label">Berat</label>
-                    <input 
-                        className="input"
-                        type="text"
-                        placeholder="Stock"
-                        value={ edit_berat }
-                        onChange={ (e) => edit_setBerat(e.target.value) }
-                    />
+                    <input className="input" type="text" placeholder="Stock" value={ edit_berat }
+                    onChange={ (e) => edit_setBerat(e.target.value) }/>
                 </div>
- 
+                <div className={s.dropzone_wrapper}>
+                    <Dropzone onDrop={handleDrop}>
+                    {({ getRootProps, getInputProps }) => (
+                    <div className={s.dropzone} {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        { edit_gambar ? 
+                        (<img className={s.dropzone_img} src={edit_gambar}></img>) : 
+                        (<span className={s.dropzone_text}>Upload Image</span>) }
+                        
+                    </div>
+                    )}
+                    </Dropzone>
+                </div>
+                <button>Upload</button>
                 <div className="field">
                     <button>Update</button>
                 </div>
@@ -345,6 +330,8 @@ const ProductList = () => {
         <br />
         <br />
         <button onClick={() => logout()}>Logout</button>
+    </div>
+
     </div>
     
     )

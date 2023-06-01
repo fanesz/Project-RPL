@@ -1,5 +1,7 @@
 import express from "express";
- 
+import bodyParser from "body-parser";
+
+
 import { 
     getAllProducts,
     getProductById,
@@ -9,7 +11,8 @@ import {
 } from "../components/Produk.js";
  
 const router = express.Router();
- 
+
+
 router.get('/', getAllProducts);
 router.get('/:id', getProductById);
 router.post('/', createProduct);

@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { UUIDV4 } from 'sequelize';
-
+import fs from "fs";
+import base64Img from 'base64-img';
 
 const generateVerificationCode = (len) => {
   const code = crypto.randomBytes(len).toString('hex');
@@ -31,6 +32,21 @@ const generateUUID = () => {
     return uuid;
 }
 
+const saveImages = (base64Data, outputPath) => {
+    const base64Image = base64Data.split(';base64,').pop();
+    const imageBuffer = Buffer.from(base64Image, 'base64');
+  
+    fs.writeFile(outputPath, imageBuffer, (err) => {
+      if (err) {
+        console.error(err);
+        return false;
+      } else {
+        return true;
+    }
+    });
+};
+  
 
-export { generateVerificationCode, generateVerificationCode2, generateUUID  }
+
+export { generateVerificationCode, generateVerificationCode2, generateUUID, saveImages  }
   
