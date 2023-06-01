@@ -32,11 +32,11 @@ const generateUUID = () => {
     return uuid;
 }
 
-const saveImages = (base64Data, outputPath) => {
+const saveImage = (base64Data, outputPath) => {
     const base64Image = base64Data.split(';base64,').pop();
     const imageBuffer = Buffer.from(base64Image, 'base64');
   
-    fs.writeFile(outputPath, imageBuffer, (err) => {
+    fs.writeFile('./gambar/'+outputPath, imageBuffer, (err) => {
       if (err) {
         console.error(err);
         return false;
@@ -45,8 +45,19 @@ const saveImages = (base64Data, outputPath) => {
     }
     });
 };
+
+const deleteImage = (file) => {
+    const imagePath = `./gambar/${file}.png`;
+    fs.unlink(imagePath, (err) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log('Image file deleted:', imagePath);
+        }
+    });
+}
   
 
 
-export { generateVerificationCode, generateVerificationCode2, generateUUID, saveImages  }
+export { generateVerificationCode, generateVerificationCode2, generateUUID, saveImage, deleteImage  }
   

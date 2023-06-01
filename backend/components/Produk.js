@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/database.js";
-import { saveImages } from "../utils/utils.js";
+import { saveImage, deleteImage } from "../utils/utils.js";
 import fs from "fs";
 const { DataTypes } = Sequelize;
 
@@ -59,7 +59,6 @@ export const getProductById = async (req, res) => {
           id: req.params.id
         }
       });
-    //   console.log(product[0]);
       product[0].dataValues["gambar"] = null;
       try {
         const imagePath = `./gambar/${product[0].dataValues.idProduk}.png`;
@@ -95,25 +94,25 @@ export const getProductById = async (req, res) => {
   
 
 export const createProduct = async (req, res) => {
-  try {
-    await Produk.create({
-      idProduk: req.body.idProduk,
-      nama: req.body.nama,
-      deskripsi: req.body.deskripsi,
-      stok: req.body.stok,
-      harga: req.body.harga,
-      berat: req.body.berat,
-    });
-    saveImages(req.body.gambar, `./gambar/${req.body.idProduk}.png`);
-    res.json({
-      message: 'Product Created',
-      status: true,
-    });
-  } catch (error) {
-    console.log(error);
-    res.json({
-      message: error.message,
-      status: false,
+    try {
+        await Produk.create({
+            idProduk: req.body.idProduk,
+            nama: req.body.nama,
+            deskripsi: req.body.deskripsi,
+            stok: req.body.stok,
+            harga: req.body.harga,
+            berat: req.body.berat,
+        });
+        saveImage(req.body.gambar, `./gambar/${req.body.idProduk}.png`);
+        res.json({
+            message: 'Product Created',
+            status: true,
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: error.message,
+            status: false,
     });
   }
 };
@@ -133,12 +132,12 @@ export const updateProduct = async (req, res) => {
                 id: req.params.id
             }
         });
-        saveImages(req.body.gambar, `./gambar/${req.body.idProduk}.png`);
+        saveImage(req.body.gambar, `${req.body.idProduk}.png`);
         
 
         res.json({
-            "message": "Product Updated",
-            "status": true
+            message: "Product Updated",
+            status: true
         });
     } catch (error) {
         res.json({ message: error.message });
@@ -149,15 +148,26 @@ export const updateProduct = async (req, res) => {
  
 export const deleteProduct = async (req, res) => {
     try {
+        const product = await Produk.findAll({
+            where: {
+              id: req.params.id
+            }
+        });
+        deleteImage(product[0].dataValues.idProduk);
         await Produk.destroy({
             where: {
-                id: req.params.id
+              id: req.params.id
             }
         });
         res.json({
-            "message": "Product Deleted"
+            message: "Product Deleted",
+            status: true
         });
     } catch (error) {
-        res.json({ message: error.message });
+        console.log(error);
+        res.json({ 
+            message: error.message ,
+            status: false
+        });
     }  
 }
