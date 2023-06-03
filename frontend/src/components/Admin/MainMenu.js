@@ -2,41 +2,32 @@
 // import axios from "axios";
 
 const MainMenu = () => {
-
-
-
-
-
   return (
     <div>
-        <style jsx global>{`
+      <style jsx global>{`
         * {
-            margin: 0;
-            padding: 0;
-            outline: 0;
-            font-family: "Open Sans", sans-serif;
+          margin: 0;
+          padding: 0;
+          outline: 0;
+          font-family: "Open Sans", sans-serif;
         }
-        .container{
-            padding: 1rem;
+        .container {
+          padding: 1rem;
         }
-        #produkList{
-            height: 5rem;
+        #produkList {
+          height: 5rem;
         }
-        
-        `}</style>
+      `}</style>
 
-        <div className="container">
-
-            <a href="/admin/produk">
-                <button className="btn btn-primary" id="produkList">Produk List</button>
-            </a>
-
-
-        </div>
-    
+      <div className="container">
+        <a href="/admin/produk">
+          <button className="btn btn-primary" id="produkList">
+            Produk List
+          </button>
+        </a>
+      </div>
     </div>
+  );
+};
 
-    )
-}
- 
-export default MainMenu
+export default MainMenu;
