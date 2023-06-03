@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, getLoginCookie } from "../utils/utils";
 
 const Checkout = () => {
     const [notif, setNotif] = useState(false);
@@ -24,10 +24,12 @@ const Checkout = () => {
         const datas = getLocalStorage("cart");
         const datasKey = Object.keys(datas)
 
+        let result = [];
         for (let i = 0; i < datasKey.length; i++) {
-            const res = await axios.get(`http://localhost:5000/produk/`, { idProduk: datasKey[i] });
-            setProduct(res.data);
-        }
+            const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: datasKey[i] });
+            result.push(res.data)
+          }
+          setProduct(result);
         setJumlah(Object.values(datas))
 
     });
@@ -36,24 +38,37 @@ const Checkout = () => {
         setShopingCart();
     }, []);
 
+
     const bayar = () => {
 
     }
 
     const handleCloseModal = () => {
-        setNotif(false);
+      setNotif(false);
     }
 
     const sudahBayar = async() => {
-        const datas = {}; let idProdukList = []; let jumlahList = [];
-        for(const data in product){
-            datas[data] = { idProduk:product[data].idProduk, jumlah:jumlah[data] }; 
+      if(product.length === 0) return;
+      const datas = {};
+      for(const data in product){
+          datas[data] = { 
+              idAkun:getLoginCookie(), 
+              idProduk:product[data].idProduk, 
+              jumlah: jumlah[data], 
+              harga: product[data].harga 
+          }; 
 
-        }
-        console.log(datas);
-        const res = await axios.post('https://localhost:5000/transaksi/', datas);
-        console.log(res);
+      }
+      const res = await axios.post('http://localhost:5000/pesanan/', datas);
+      if(res.data.status){
+          // selesai bayar
+          setLocalStorage("cart", {});
+          setShopingCart();
+      } else {
+          alert(res.data.message);
+      }
     }
+
 
 
     return (
@@ -103,11 +118,9 @@ const Checkout = () => {
                             <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
                                 <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>idProduk</th>
                                     <th>Nama</th>
-                                    <th>Stok</th>
                                     <th>Harga</th>
+                                    <th>Jumlah</th>
                                 </tr>
                                 </thead>
                                 <tbody>

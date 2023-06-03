@@ -2,25 +2,25 @@ import { Sequelize } from "sequelize";
 import db from "../config/database.js";
 
 const query_select = async(sql) => {
-    let res = '';
+    let res;
     await db.query(sql, { type: Sequelize.QueryTypes.CALL })
     .then((results) => {
-        res = "Account Created!";
+        res = results[0]
     })
     .catch((error) => {
-        res = "Email Already Registered!";
+        res = false;
     });
     return res;
 }
 
 const query_call = async(sql) => {
-    let res = '';
+    let res;
     await db.query(sql, { type: Sequelize.QueryTypes.CALL })
     .then((results) => {
-        res = "Account Created!";
+        res = true;
     })
     .catch((error) => {
-        res = "Email Already Registered!";
+        res = false;
     });
     return res;
 }

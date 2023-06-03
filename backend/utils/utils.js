@@ -56,8 +56,46 @@ const deleteImage = (file) => {
         }
     });
 }
+function generateIdPesanan(currentId) {
+    const maxId = 'PZZ9999999';
+    if (currentId === maxId) {
+      return 'Maximum ID reached';
+    }
+    const prefix = currentId.slice(0, 3);
+    const numberPart = parseInt(currentId.slice(3), 10);
+    if (numberPart === 9999999) {
+      let nextPrefix = prefix;
+      let newNumberPart = '0000001';
   
+      if (prefix !== 'PZZ') {
+        const nextCharCode = prefix.charCodeAt(2) + 1;
+        nextPrefix = prefix.slice(0, 2) + String.fromCharCode(nextCharCode);
+      } else {
+        return 'Maximum ID reached';
+      }
+      return nextPrefix + newNumberPart;
+    }
+    const newNumberPart = (numberPart + 1).toString().padStart(7, '0');
+    return prefix + newNumberPart;
+}
+
+const convertTimestamp = (timestamp) => {
+  const date = new Date(timestamp);
+  const hour = date.getHours().toString().padStart(2, '0');
+  const minute = date.getMinutes().toString().padStart(2, '0');
+  const month = new Intl.DateTimeFormat('id-ID', { month: 'long' }).format(date);
+  const day = date.getDate();
+  return `${hour}:${minute}, ${day} ${month} ${date.getFullYear()}`;
+};
 
 
-export { generateVerificationCode, generateVerificationCode2, generateUUID, saveImage, deleteImage  }
+export { 
+    generateVerificationCode, 
+    generateVerificationCode2, 
+    generateUUID, 
+    saveImage, 
+    deleteImage,
+    generateIdPesanan,
+    convertTimestamp
+}
   

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { isLogin, setLoginCookie } from "../utils/utils";
+import { isLogin, setLoginCookie, unsetLoginCookie } from "../utils/utils";
 import gambar from "../img/green-farm-blur.jpg";
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
 //   if (isLogin()) {
 //     window.location.href = "/";
 //   }
@@ -24,33 +25,39 @@ const Login = () => {
       email: email,
       password: password,
     });
-    alert(res.data.message)
-    // login();
+    if(res.data.status){
+        alert(res.data.message);
+        login();
+    } else {
+        alert(res.data.message);
+    }
   };
 
   const loginAccount = async (e) => {
     e.preventDefault();
-
-    await axios.post("http://localhost:5000/akun/login", {
+    const res = await axios.post("http://localhost:5000/akun/login", {
         email: email2,
         password: password2,
-      })
-      .then((res) => {
-        if (res.data.result) {
-          setLoginCookie();
-          window.location.href = "/";
-        } else {
-            alert(res.data.message);
-        }
-      });
+    })
+    if(res.data.status){
+        unsetLoginCookie();
+        setLoginCookie(res.data.sessionId);
+        navigate('/');
+    } else {
+        alert(res.data.message);
+    }
   };
+
   const sendVerificationCode = async (e) => {
     e.preventDefault();
     const data = { email: email3 };
     const res = await axios.post("http://localhost:5000/akun/forgetpass", data)
-    
-    alert(res.data.message);
-
+    if(res.data.status){
+        alert(res.data.message);
+        navigate('/');
+    } else {
+        alert(res.data.message);
+    }
   };
 
   const login = () => {
@@ -116,9 +123,7 @@ const Login = () => {
                 Don't Have Account? <a href="#/" role="button" onClick={ register }>Register here</a>.
             </div>
         </div>
-        ) : (
-          ""
-        )}
+        ) : ("")}
 
        {showForgetPassword ? (
           <div className="container_login card shadow-lg card-body p-5">
@@ -132,9 +137,7 @@ const Login = () => {
                 <button type="submit" class="btn btn-primary mb-4">Send Verification Code</button>
               </form>
           </div>
-        ) : (
-          ""
-        )}
+        ) : ("")}
 
 
 
@@ -152,11 +155,8 @@ const Login = () => {
                 <button type="submit" className="btn btn-primary mb-4">Create account</button>
             </form>
           </div>
-        ) : (
-          ""
-        )}
+        ) : ("")}
       </>
-
     </div>
   );
 };

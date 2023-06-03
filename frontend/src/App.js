@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/LoginLogout/Login";
 import ChangePass from "./components/LoginLogout/ChangePass";
 import MainMenu from "./components/Admin/MainMenu"
+import MainMenuSeller from "./components/Seller/MainMenu"
 import ProdukList from "./components/Admin/Produk-List"
 import Home from "./components/Homepage/Home";
 import Katalog from "./components/Homepage/Katalog";
@@ -34,7 +35,10 @@ function App() {
             <Route path="/admin" element={<MainMenu/>} />
             <Route path="/admin/produk" element={<ProdukList/>} />
 
+            {/* seller */}
+            <Route path="/seller" element={<MainMenuSeller/>} />
 
+            {/* login */}
             <Route path="/login" element={<Login/>} />
             <Route path="/akun/forgetpass/:id" element={<ChangePass/>} />
 

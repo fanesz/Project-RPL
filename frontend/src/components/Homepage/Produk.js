@@ -46,6 +46,7 @@ const Produk = () => {
     
     const addCart = () => {
         let cart = getLocalStorage("cart") || {}; 
+        cart[idProduk] = cart[idProduk] == undefined ? cart[idProduk] = 0 : cart[idProduk];
         cart[idProduk] += jumlah;
         setLocalStorage("cart", cart);
         // setNotif(true);

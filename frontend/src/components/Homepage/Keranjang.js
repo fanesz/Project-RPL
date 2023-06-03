@@ -39,7 +39,7 @@ const Keranjang = () => {
     }, []);
 
     const buyNow = () => {
-        navigate('/pesanan')
+        navigate('/checkout')
     }
 
     const handleCloseModal = () => {

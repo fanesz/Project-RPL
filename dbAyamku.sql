@@ -5,6 +5,7 @@ use dbAyamku;
 
 
 
+
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idAkun` char(36) NOT NULL,
@@ -21,7 +22,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hoho','penjual','082131948573','Jl. Beo no. 77','hoho77@gmail.com');
 insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hihi','admin','053059309509','Jl. Merpati no. 456','fanes@gmail.com');
-insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hehe','pelanggan','024929404304','Jl. Dara no. 788','aguss@gmail.com');
+insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hehe','pelanggan','024929404304','Jl. Dara no. 788','pratama14.f@gmail.com');
 select * from detailAkun;
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`akun` (
@@ -40,7 +41,7 @@ DEFAULT CHARACTER SET = utf8;
 INSERT INTO akun (`idAkun`, `email`, `password`) VALUES
 ((select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'hoho77@gmail.com', 'admin123'),
 ((select idAkun from detailAkun where email = 'fanes@gmail.com'), 'fanes@gmail.com', 'admin123'),
-((select idAkun from detailAkun where email = 'aguss@gmail.com'), 'aguss@gmail.com', 'admin123');
+((select idAkun from detailAkun where email = 'pratama14.f@gmail.com'), 'pratama14.f@gmail.com', 'admin123');
 select * from akun;
 
 DELIMITER //
@@ -60,7 +61,6 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`produk` (
   `berat` INT(2) NOT NULL,
   `stok` INT(11) NOT NULL,
   `harga` DECIMAL(10,2) NOT NULL,
---   `gambar` LONGBLOB,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   unique (`idProduk`))
@@ -70,6 +70,7 @@ DEFAULT CHARACTER SET = utf8;
 select*from produk;
 
 
+
 insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
 ('P0001','Bibit','Lorem Ipsum',50,40,75000),
 ('P0002','Makanan','Lorem Ipsum',10,41,16000),
@@ -77,30 +78,30 @@ insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
 ('P0004','Makanan','Lorem Ipsum',5,43,16000),
 ('P0005','Makanan','Lorem Ipsum',15,44,16000);
 
-CREATE TABLE IF NOT EXISTS `dbAyamku`.`Stock` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `idProduk` CHAR(5) NOT NULL,
-  `tanggal` DATE NOT NULL,
-  `stokReady` INT(11) NOT NULL,
-  `stokGagal` INT(11) NOT NULL,
-  `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `idProdukDiStok`
-    FOREIGN KEY (`idProduk`)
-    REFERENCES `dbAyamku`.`produk` (`idProduk`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+-- CREATE TABLE IF NOT EXISTS `dbAyamku`.`Stock` (
+--   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+--   `idProduk` CHAR(5) NOT NULL,
+--   `tanggal` DATE NOT NULL,
+--   `stokReady` INT(11) NOT NULL,
+--   `stokGagal` INT(11) NOT NULL,
+--   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`id`),
+--   CONSTRAINT `idProdukDiStok`
+--     FOREIGN KEY (`idProduk`)
+--     REFERENCES `dbAyamku`.`produk` (`idProduk`)
+--     ON DELETE RESTRICT
+--     ON UPDATE CASCADE)
+-- ENGINE = InnoDB
+-- DEFAULT CHARACTER SET = utf8;
 
-select*from Stock;
-insert into stock (idProduk,tanggal,stokReady,stokGagal) values 
-('P0001',curdate(),44,11),
-('P0002',curdate(),45,8),
-('P0003',curdate(),55,9),
-('P0004',curdate(),56,6),
-('P0005',curdate(),52,10);
+-- select*from Stock;
+-- insert into stock (idProduk,tanggal,stokReady,stokGagal) values 
+-- ('P0001',curdate(),44,11),
+-- ('P0002',curdate(),45,8),
+-- ('P0003',curdate(),55,9),
+-- ('P0004',curdate(),56,6),
+-- ('P0005',curdate(),52,10);
 
 -- CREATE TABLE IF NOT EXISTS `dbAyamku`.`Harga` (
 --   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -125,52 +126,59 @@ insert into stock (idProduk,tanggal,stokReady,stokGagal) values
 -- ('P0004',10000),
 -- ('P0005',65000);
 
+SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, pesanan.waktuPesan, detailPesanan.idProduk, produk.nama, detailPesanan.harga, detailPesanan.jumlah 
+FROM detailpesanan, pesanan, detailAkun, produk
+WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = 'PAA0000001';
 
-CREATE TABLE IF NOT EXISTS `dbAyamku`.`Penjualan` (
+
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`pesanan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `idPenjualan` CHAR(10) NOT NULL,
-  `tanggal` DATE NOT NULL,
+  `idPesanan` CHAR(10) NOT NULL,
+  `idAkun` CHAR(36) NOT NULL,
+  `status` VARCHAR(15) NOT NULL,
+  `waktuPesan` TIMESTAMP NOT NULL,
+  `alamat` VARCHAR(255),
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  unique(`idPenjualan`))
+  unique(`idPesanan`),
+  CONSTRAINT `idAkunDiDetailPenjualan`
+  FOREIGN KEY (`idAkun`)
+  REFERENCES `dbAyamku`.`akun` (`idAkun`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 INSERT INTO penjualan (`idPenjualan`, `tanggal`) VALUES
-('ORD0000001', '2023/05/01'),
-('ORD0000002', '2023/05/02'),
-('ORD0000003', '2023/05/03'),
-('ORD0000004', '2023/05/04'),
-('ORD0000005', '2023/05/05');
-select * from Penjualan;
+('PAA0000001', '2023/05/01'),
+('PAA0000002', '2023/05/02'),
+('PAA0000003', '2023/05/03'),
+('PAA0000004', '2023/05/04'),
+('PAA0000005', '2023/05/05');
 
-select * from detailPenjualan;
-CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPenjualan` (
+drop table detailpesanan;
+drop table pesanan;
+update pesanan set waktupesan = (select createdat from pesanan where id=2) where id=2;
+select * from pesanan;
+select * from detailpesanan;
+
+SELECT idPesanan, idProduk, jumlah, harga FROM detailpesanan where idPesanan = 'PAA0000001';
+
+
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPesanan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `idPenjualan` CHAR(10) NOT NULL,
-  `idAkun` CHAR(36) NOT NULL,
+  `idPesanan` CHAR(10) NOT NULL,
   `idProduk` CHAR(5) NOT NULL,
-  `status` VARCHAR(15) NOT NULL,
   `jumlah` INT(11) NOT NULL,
-  `totalHarga` DECIMAL(10,2) NOT NULL,
+  `harga` DOUBLE NOT NULL,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `idOrderDiDetailPenjualan`
-    FOREIGN KEY (`idPenjualan`)
-    REFERENCES `dbAyamku`.`Penjualan` (`idPenjualan`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT `idAkunDiDetailPenjualan`
-    FOREIGN KEY (`idAkun`)
-    REFERENCES `dbAyamku`.`akun` (`idAkun`)
-	ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT `idProdukDiDetailPenjualan`
+    FOREIGN KEY (`idPesanan`)
+    REFERENCES `dbAyamku`.`pesanan` (`idPesanan`),
+  CONSTRAINT `idProdukDiDetailPesanan`
     FOREIGN KEY (`idProduk`)
-    REFERENCES `dbAyamku`.`produk` (`idProduk`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
+    REFERENCES `dbAyamku`.`produk` (`idProduk`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
 
 INSERT INTO detailPenjualan (`idPenjualan`,`idAkun`,`idProduk`,`status`,`jumlah`,`totalHarga`) VALUES
     ('ORD0000001', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0001', 'Completed', 5, 10000.00),

@@ -233,7 +233,7 @@ const ProductList = () => {
         </div>
     </ReactModal>
 
-    <ReactModal 
+    <ReactModal
         isOpen={modalEdit}
         onRequestClose={closeModal.bind(null, "edit")}
         className={s.custom_modal}>

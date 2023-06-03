@@ -64,6 +64,31 @@ nav div a {
     border-radius: 5px;
 }
 
+.dropdown_profile {
+    margin-right: 5rem;
+}
+
+.dropdown_profile .dropdown-item::after{
+    display: none;
+}
+.nav-link-profile a{
+    display: none;
+}
+.dropdown_profile .dropdown-item{
+    padding-right: -1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1.2rem;
+}
+.profile_picture{
+    width: 75%;
+}
+
+.nav-link-profile{
+    max-width: 3.5rem;
+    height: 5vh;
+}
+
 nav ul li:first-child {
 	margin-left: 0;
 }
@@ -100,6 +125,14 @@ footer {
     text-align: center;
     font-size: 1rem;
 }
+
+
+
+
+.profile-dropdown{
+    margin-right: 2rem;
+}
+
 
 @media screen and (max-width: 992px) {
 
@@ -140,6 +173,12 @@ footer {
     }
     #navbarSupportedContent{
         padding-left: 3rem;
+    }
+    .profile_picture{
+        display: none;
+    }
+    .profile_picture_text{
+        display: block;
     }
 }
 

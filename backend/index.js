@@ -6,6 +6,7 @@ import cors from "cors";
 import ProdukRoutes from "./routes/ProdukRoutes.js";
 import AkunRoutes from "./routes/AkunRoutes.js"
 import DetailAkunRoutes from "./routes/DetailAkunRoutes.js"
+import PesananRoutes from "./routes/PesananRoutes.js"
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use('/produk', ProdukRoutes);
 app.use('/akun', AkunRoutes);
 app.use('/detailakun', DetailAkunRoutes);
+app.use('/pesanan', PesananRoutes);
 
 
 

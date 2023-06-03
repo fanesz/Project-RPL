@@ -2,15 +2,9 @@ import { Sequelize } from "sequelize";
 import db from "../config/database.js";
 import { generateVerificationCode } from "../utils/utils.js";
 import sendMail from "../config/mailer.js"
-import { generateUUID } from "../utils/utils.js";
 const { DataTypes } = Sequelize;
  
 const Akun = db.define('akun',{
-    // id:{
-    //     type: DataTypes.INT,
-    //     autoIncrement: true,
-    //     allowNull: false
-    // },
     idAkun:{
         type: DataTypes.STRING,
         primaryKey: true,
@@ -40,7 +34,7 @@ export const getAllUserAccount = async (req, res) => {
         });
         res.json(userAccount);
     } catch (error) {
-        res.json({ message: error.message });
+        res.json({ message: error.message, status: false });
     }
 }
 
@@ -52,36 +46,37 @@ export const createAccount = async (req, res) => {
             password: res.data.password,
         });
         res.json({
-            "message": "Account Created",
-            "status": 400
+            message: "Account Created",
+            status: true
         });
     } catch (error) {
-        res.json({ message: error.message, status: 400 });
+        res.json({ message: error.message, status: false });
     }
 }
 
 export const loginAccount = async (req, res) => {
     try {
         const userPassword = await Akun.findAll({
-            attributes: ['password'],
+            attributes: ['idAkun','password'],
             where: {
                 email: req.body.email
             }
         });
-        if(userPassword.length == 0) {
+        if(userPassword[0].length == 0) {
             res.json({
-                "message": "Failed Login, Wrong Email!",
-                "result": false
+                message: "Failed Login, Wrong Email!",
+                status: false
             })
         } else if(userPassword[0].dataValues.password == req.body.password){
             res.json({
-                "message": "Successful Login",
-                "result": true
+                sessionId: userPassword[0].dataValues.idAkun,
+                message: "Successful Login",
+                status: true
             })
         } else {
             res.json({
-                "message": "Failed Login, Wrong Password!",
-                "result": false
+                message: "Failed Login, Wrong Password!",
+                status: false
             })
         }
 
@@ -100,7 +95,7 @@ export const sendVerificationCode = async (req, res) => {
 
         if(code.length == 0){
             res.json({
-                message: "Email not terdaftar!",
+                message: "Email tidak terdaftar!",
                 status: false
             });
         } else if(code[0].dataValues.changepwCode != null) {
@@ -111,7 +106,7 @@ export const sendVerificationCode = async (req, res) => {
                 { where: { email: req.body.email } }
             );
             res.json({
-                message: "Link verifikasi baru sudah terkirim!",
+                message: "Link ubah password baru sudah terkirim!",
                 status: false
             });
         } else {
@@ -122,7 +117,7 @@ export const sendVerificationCode = async (req, res) => {
                 { where: { email: req.body.email } }
             );
             res.json({
-                message: "Link ganti password terkirim!",
+                message: "Link ubah password terkirim!",
                 status: true
             });
         }

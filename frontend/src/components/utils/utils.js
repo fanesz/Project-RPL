@@ -8,12 +8,16 @@ const loginChecker = () => {
     }
 }
 
-const setLoginCookie = () => {
-    document.cookie = "loggedIn=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+const setLoginCookie = (id) => {
+    document.cookie = `loginId=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
 }
 
 const unsetLoginCookie = () => {
-    document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "loginId=null; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+const getLoginCookie = () => {
+    return ((document.cookie).split('='))[1]
 }
 
 const logout = () => {
@@ -33,4 +37,13 @@ const getLocalStorage = (key) => {
 }
 
 
-export { isLogin, loginChecker, setLoginCookie, unsetLoginCookie, logout, setLocalStorage, getLocalStorage }
+export { 
+    isLogin, 
+    loginChecker, 
+    setLoginCookie, 
+    unsetLoginCookie, 
+    logout, 
+    setLocalStorage, 
+    getLocalStorage,
+    getLoginCookie
+}

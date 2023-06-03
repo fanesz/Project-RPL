@@ -118,7 +118,6 @@ export const getProductByIdProduk = async (req, res) => {
         console.log(error);
       }
 
-      product[0]["message"] = "Product Created";
       product[0]["status"] = true;
       
       res.json(product[0]);
@@ -131,6 +130,7 @@ export const getProductByIdProduk = async (req, res) => {
       });
     }
 }
+
   
 
 export const createProduct = async (req, res) => {
