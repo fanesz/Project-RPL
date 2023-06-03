@@ -9,6 +9,7 @@ const { DataTypes } = Sequelize;
 const Pesanan = db.define('pesanan',{
     idPesanan:{type: DataTypes.STRING,allowNull: false},
     idAkun:{type: DataTypes.STRING,allowNull: false},
+    total:{type: DataTypes.DOUBLE,allowNull: false},
     status:{type: DataTypes.STRING,allowNull: false},
     waktuPesan:{type: DataTypes.DATE,allowNull: false},
     alamat:{type: DataTypes.STRING,allowNull: false}
@@ -38,9 +39,9 @@ export const getAllPesanan = async (req, res) => {
 
 export const getPesananById = async (req, res) => {
     try {
-      const query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, pesanan.waktuPesan, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.body.idPesanan}';`));
+      const query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.body.idPesanan}';`));
 
-      console.log(query);
+      // console.log(query);
 
       let result = []
       const pesanan = query.reduce((acc, detailPesanan) => {
@@ -70,6 +71,7 @@ export const createPesanan = async (req, res) => {
         await Pesanan.create({
             idPesanan: GENERATED_ID_PESANAN,
             idAkun: req.body[0].idAkun,
+            total: req.body[0].total,
             status: "Sudah Bayar",
             waktuPesan: new Date(),
             alamat: (await query_select(`SELECT alamat FROM detailAkun WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0].alamat

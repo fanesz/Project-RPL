@@ -55,7 +55,8 @@ const Checkout = () => {
               idAkun:getLoginCookie(), 
               idProduk:product[data].idProduk, 
               jumlah: jumlah[data], 
-              harga: product[data].harga 
+              harga: product[data].harga,
+              total: parseFloat(jumlah[data])*parseFloat(product[data].harga)
           }; 
 
       }

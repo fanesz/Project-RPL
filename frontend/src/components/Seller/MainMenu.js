@@ -10,16 +10,18 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 const MainMenu = () => {
 
+  ReactModal.setAppElement('#root')
+
   const [pesanan, setPesanan] = useState([]);
+  const [showPesanan, setShowPesanan] = useState([]);
   const [listPesanan, setlistPesanan] = useState({});
   const [modalDetailPesanan, setModalDetailPesanan] = useState(false);
 
   const getPesanan = (async () => {
-
     const res = await axios.get('http://localhost:5000/pesanan');
     setPesanan(res.data);
-
-  
+    if(res.data.length != 0 && !showPesanan) getPesananById(res.data[0].idPesanan);
+    console.log(res.data);
   })
 
   useEffect(() => {
@@ -27,28 +29,33 @@ const MainMenu = () => {
   }, []);
 
 
-
   const getPesananById = (async (idPesanan) => {
     const res = await axios.post('http://localhost:5000/pesanan/id', {
       idPesanan: idPesanan
     });
+    setShowPesanan({ [res.data[0].idPesanan]: res.data })
     setlistPesanan((prevState) => {
       return { ...prevState, [res.data[0].idPesanan]: res.data };
     });
-
   });
 
-  const detailPesanan = (async (idPesanan) => {
-    setModalDetailPesanan(true);
-    if (listPesanan[idPesanan]) {
-      console.log(listPesanan[idPesanan]);
-      return listPesanan[idPesanan];
-    } else {
-      console.log("replaced");
-      const res = await getPesananById(idPesanan);
 
-      console.log(res);
+  const detailPesanan = (async (idPesanan) => {
+    if (!listPesanan[idPesanan]) {
+      console.log("replace");
+      await getPesananById(idPesanan);
+    } else {
+      setShowPesanan({ [idPesanan]: listPesanan[idPesanan] })
     }
+    console.log(showPesanan);
+
+    // showPesanan[Object.keys(showPesanan)].map((data, index) => {
+    //   console.log(data.idPesanan);
+    // })
+
+
+    setModalDetailPesanan(true);
+
   })
 
 
@@ -60,20 +67,66 @@ const MainMenu = () => {
 
 
 
-
-
-
-
-
-
   return (
     <div>
     <ReactModal
       isOpen={ modalDetailPesanan }
       onRequestClose={ closeModal }
-      className="custom_modal">
-      <button className="modal_closebutton" onClick={() => closeModal()}>X</button>
+      className="custom_modal card card-body bg-light">
       <div className='modal_content'>
+        
+      {showPesanan[Object.keys(showPesanan)] && (
+      <div class="card card-title mb-3 p-2 pb-1 ps-3 pe-3 d-inline-block w-auto">
+        <h5 class="card-title">
+          <span class="bi bi-cart4 me-2"></span>
+          {showPesanan[Object.keys(showPesanan)][0].idPesanan}
+        </h5>
+      </div>
+      )}
+
+      <div class="card card-body mb-2">
+      <table className='table table-striped'>
+        <tr>
+          <th>Kode</th>
+          <th>Nama Produk</th>
+          <th>Jumlah</th>
+          <th>Harga</th>
+        </tr>
+      {Object.keys(showPesanan).length > 0 && showPesanan[Object.keys(showPesanan)].map((data, index) => (
+          <tr>
+            <td>{data.idProduk}</td>
+            <td>{data.namaProduk}</td>
+            <td>{data.jumlah}</td>
+            <td>{data.harga}</td>
+          </tr>
+      ))}
+      </table>
+      </div>
+
+      <div class="card card-body">
+        <div class="card_title mb-1"><i class="bi bi-house-door me-2" />Alamat</div>
+
+        {showPesanan[Object.keys(showPesanan)] && (
+          <div>
+            <div className='alamat'>{showPesanan[Object.keys(showPesanan)][0].nama} | {showPesanan[Object.keys(showPesanan)][0].noTelp}</div>
+            <div className='alamat'>{showPesanan[Object.keys(showPesanan)][0].email}</div>
+            <div className='alamat'>{showPesanan[Object.keys(showPesanan)][0].alamat}</div>
+
+          </div>
+        )}
+      </div>
+
+      <div class="card card-body mt-3">
+        <div className='row'>
+          <div className='col d-flex justify-content-center'>
+            <button className='btn btn-primary w-100 me-4 ms-4'>Verifikasi Pembayaran</button>
+          </div>
+          <div className='col d-flex justify-content-center'>
+            <button className='btn btn-danger w-100 me-4 ms-4'>Batalkan Pesanan</button>
+          </div>
+        </div>
+
+      </div>
         
       </div>
     </ReactModal>
@@ -133,7 +186,7 @@ const MainMenu = () => {
                                 <h5 class="card-title">Pesanan#{data.idPesanan}</h5>
                                 <div class="card-text mb-2">
                                 <div className="idProduk">{data.waktuPesan}</div>
-                                <div className="harga">Rp{}</div>
+                                <div className="harga">Rp {(data.total).toLocaleString('en-US', { minimumFractionDigits: 0 })}</div>
                                 </div>
                                 <button onClick={ () => detailPesanan(data.idPesanan) } href="#" class="btn btn-secondary">Detail Pesanan</button>
                             </div>

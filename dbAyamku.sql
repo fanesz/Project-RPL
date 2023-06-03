@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`pesanan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `idPesanan` CHAR(10) NOT NULL,
   `idAkun` CHAR(36) NOT NULL,
+  `total` DOUBLE NOT NULL,
   `status` VARCHAR(15) NOT NULL,
   `waktuPesan` TIMESTAMP NOT NULL,
   `alamat` VARCHAR(255),
@@ -146,12 +147,12 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`pesanan` (
   REFERENCES `dbAyamku`.`akun` (`idAkun`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-INSERT INTO penjualan (`idPenjualan`, `tanggal`) VALUES
-('PAA0000001', '2023/05/01'),
-('PAA0000002', '2023/05/02'),
-('PAA0000003', '2023/05/03'),
-('PAA0000004', '2023/05/04'),
-('PAA0000005', '2023/05/05');
+-- INSERT INTO penjualan (`idPenjualan`, `tanggal`) VALUES
+-- ('PAA0000001', '2023/05/01'),
+-- ('PAA0000002', '2023/05/02'),
+-- ('PAA0000003', '2023/05/03'),
+-- ('PAA0000004', '2023/05/04'),
+-- ('PAA0000005', '2023/05/05');
 
 drop table detailpesanan;
 drop table pesanan;
@@ -180,13 +181,13 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
-INSERT INTO detailPenjualan (`idPenjualan`,`idAkun`,`idProduk`,`status`,`jumlah`,`totalHarga`) VALUES
-    ('ORD0000001', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0001', 'Completed', 5, 10000.00),
-    ('ORD0000002', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0002', 'Completed', 3, 15000.00),
-    ('ORD0000003', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0003', 'Completed', 2, 8000.00),
-    ('ORD0000004', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0004', 'Completed', 4, 12000.00),
-    ('ORD0000005', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0005', 'Completed', 1, 9000.00);
-select * from detailakun;
+-- INSERT INTO detailPenjualan (`idPenjualan`,`idAkun`,`idProduk`,`status`,`jumlah`,`totalHarga`) VALUES
+--     ('ORD0000001', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0001', 'Completed', 5, 10000.00),
+--     ('ORD0000002', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0002', 'Completed', 3, 15000.00),
+--     ('ORD0000003', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0003', 'Completed', 2, 8000.00),
+--     ('ORD0000004', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0004', 'Completed', 4, 12000.00),
+--     ('ORD0000005', '08596f80-ffa8-11ed-bbc0-047c160aa273', 'P0005', 'Completed', 1, 9000.00);
+-- select * from detailakun;
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`Pengiriman` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
