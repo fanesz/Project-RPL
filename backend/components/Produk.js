@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import db from "../config/database.js";
 import { saveImage, deleteImage } from "../utils/utils.js";
 import fs from "fs";
+import { query_select } from "../utils/query.js";
 const { DataTypes } = Sequelize;
 
  
@@ -94,33 +95,34 @@ export const getProductById = async (req, res) => {
 
 export const getProductByIdProduk = async (req, res) => {
     try {
-      const product = await Produk.findAll({
-        where: {
-          idProduk: req.body.idProduk
-        }
-      });
-      product[0].dataValues["gambar"] = null;
-      try {
-        const imagePath = `./gambar/${product[0].dataValues.idProduk}.png`;
-        const readFilePromise = new Promise((resolve, reject) => {
-          fs.readFile(imagePath, (err, data) => {
-            if (err) {
-              return reject('Image not found');
-            }
-            const imageBase64 = data.toString('base64');
-            const imageData = `data:image/jpeg;base64,${imageBase64}`;
-            product[0].dataValues["gambar"] = imageData;
-            resolve();
+      let whereClause = "";
+      for(let id in req.body.idProduk){
+        whereClause += ` idProduk='${req.body.idProduk[id]}' OR`
+      }
+      whereClause = whereClause.slice(0, -2)
+      const product = await (query_select("SELECT * FROM produk WHERE"+whereClause))
+
+
+      for (let i = 0; i < product.length; i++) {
+        product[i]["gambar"] = null;
+        try {
+          const imagePath = `./gambar/${product[i].idProduk}.png`;
+          const readFilePromise = new Promise((resolve, reject) => {
+            fs.readFile(imagePath, (err, data) => {
+              if (err) { return reject(""); }
+              const imageBase64 = data.toString('base64');
+              const imageData = `data:image/jpeg;base64,${imageBase64}`;
+              product[i]["gambar"] = imageData;
+              resolve();
+            });
           });
-        });
-        await readFilePromise;
-      } catch (error) {
-        console.log(error);
+          await readFilePromise;
+        } catch (error) {
+          // console.log(error);
+        }
       }
 
-      product[0]["status"] = true;
-      
-      res.json(product[0]);
+      res.json(product);
 
     } catch (error) {
       console.log(error);

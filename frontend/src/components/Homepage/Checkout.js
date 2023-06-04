@@ -8,29 +8,37 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage, getLoginCookie } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, getLoginCookie, unsetLocalStorage } from "../utils/utils";
 
 const Checkout = () => {
     const [notif, setNotif] = useState(false);
     const [product, setProduct] = useState([]);
+    const [modalBayar, setModalBayar] = useState(false);
+    const [atasNama, setAtasNama] = useState('');
 
-    // const [idProduk, setIdProduk] = useState([]); 
-    // const [nama, setName] = useState([]); 
-    // const [stok, setStok] = useState([]);
-    // const [harga, setHarga] = useState([]); 
     const [jumlah, setJumlah] = useState([]);
 
     const setShopingCart = (async () => {
-        const datas = getLocalStorage("cart");
-        const datasKey = Object.keys(datas)
+      const getBuyNow = getLocalStorage("buynow");
+      const getCart = getLocalStorage("cart");
 
-        let result = [];
-        for (let i = 0; i < datasKey.length; i++) {
-            const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: datasKey[i] });
-            result.push(res.data)
-          }
-          setProduct(result);
-        setJumlah(Object.values(datas))
+      let listProduct;
+      if(getBuyNow) {
+        listProduct = [getBuyNow[0]];
+        setJumlah([getBuyNow[1]])
+      } else {
+        listProduct = Object.keys(getCart);
+        setJumlah(Object.values(getCart))
+      }
+
+
+      let result = [];
+      const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: listProduct });
+      result.push(res.data)
+      // for (let i = 0; i < listProduct.length; i++) {
+      // }
+      setProduct(result);
+      unsetLocalStorage("buynow");
 
     });
 
@@ -40,15 +48,20 @@ const Checkout = () => {
 
 
     const bayar = () => {
-
+      setModalBayar(true);
     }
 
     const handleCloseModal = () => {
       setNotif(false);
+      setModalBayar(false);
     }
 
     const sudahBayar = async() => {
       if(product.length === 0) return;
+      if(atasNama.trim() === ''){
+        document.querySelector("form input").focus();
+        return;
+      }
       const datas = {};
       for(const data in product){
           datas[data] = { 
@@ -56,7 +69,8 @@ const Checkout = () => {
               idProduk:product[data].idProduk, 
               jumlah: jumlah[data], 
               harga: product[data].harga,
-              total: parseFloat(jumlah[data])*parseFloat(product[data].harga)
+              total: parseFloat(jumlah[data])*parseFloat(product[data].harga),
+              atasNama: atasNama
           }; 
 
       }
@@ -74,17 +88,45 @@ const Checkout = () => {
 
     return (
     <div>
-
     <div className={s.container_produk} style={{ backgroundImage: `url(${background})`}}>
-{/* 
-    <ReactModal isOpen={notif} onRequestClose={handleCloseModal} className={s.notif_modal} overlayClassName={s.notif_overlay}> 
 
-    
-        <div className={s.notif_wrapper}>
-            <div className={s.notif_title}>Berhasil Ditambahkan</div>
-            <button onClick={handleCloseModal}>Yes</button>
+    <ReactModal
+      isOpen={ modalBayar }
+      onRequestClose={ handleCloseModal }
+      className="custom_modal card card-body bg-light">
+      
+      <div className="container-wrapper ms-3">
+        <div className="accordian_title"><strong>Metode Pembayaran</strong></div>
+        <div class="accordion" id="perlu_diproses">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_perlu_diproses" aria-expanded="true" aria-controls="collapseOne">Lihat Detail</button>
+            </h2>
+            <div id="collapse_perlu_diproses" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#perlu_diproses">
+              <div class="accordion-body">
+                <div class="row">
+                  Bank : Rekening <br />
+                  Bank : Rekening
+
+
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </ReactModal> */}
+        
+        <div className={s.atas_nama}>
+          <form onSubmit={ sudahBayar }>
+            <input className="form-control shadow-none mt-2 mb-3" type="text" placeholder="Atas Nama" value={atasNama} onChange={(e) => setAtasNama(e.target.value)} required/>
+            <button onClick={ sudahBayar } type="button" class="btn btn-success mb-1" style={{minWidth:"100%"}}>Sudah Bayar</button>
+          </form>
+        </div>
+      </div>
+
+
+
+
+    </ReactModal>
 
     <PUBLIC_NAVBAR />
 
@@ -173,10 +215,8 @@ const Checkout = () => {
                             </div>
                         </div>
                         
-                        <div className="container">
+                        <div className="container mt-3">
                             <button onClick={ bayar } type="button" class="btn btn-success" style={{minWidth:"100%"}}>Bayar</button>
-                            <button onClick={ sudahBayar } type="button" class="btn btn-success" style={{minWidth:"100%"}}>Sudah Bayar</button>
-                            
                         </div>
                     </div>
                 </div>

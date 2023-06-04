@@ -12,6 +12,7 @@ const Pesanan = db.define('pesanan',{
     total:{type: DataTypes.DOUBLE,allowNull: false},
     status:{type: DataTypes.STRING,allowNull: false},
     waktuPesan:{type: DataTypes.DATE,allowNull: false},
+    atasNama:{type: DataTypes.STRING,allowNull: false},
     alamat:{type: DataTypes.STRING,allowNull: false}
 },{freezeTableName: true});
 
@@ -39,7 +40,7 @@ export const getAllPesanan = async (req, res) => {
 
 export const getPesananById = async (req, res) => {
     try {
-      const query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.body.idPesanan}';`));
+      const query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.body.idPesanan}';`));
 
       // console.log(query);
 
@@ -50,19 +51,12 @@ export const getPesananById = async (req, res) => {
         return acc = result
       }, {});
 
-      console.log(pesanan);
-
-
-
       res.json(pesanan);
     } catch (error) {
       console.log(error);
         res.json({ message: error.message });
     }  
 }
-
-
-  
 
 export const createPesanan = async (req, res) => {
     try {
@@ -74,6 +68,7 @@ export const createPesanan = async (req, res) => {
             total: req.body[0].total,
             status: "Sudah Bayar",
             waktuPesan: new Date(),
+            atasNama: req.body[0].atasNama,
             alamat: (await query_select(`SELECT alamat FROM detailAkun WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0].alamat
         });
         for(let data in req.body){
@@ -96,3 +91,26 @@ export const createPesanan = async (req, res) => {
     });
   }
 };
+
+export const changeStatusPesanan = async (req, res) => {
+  try {
+    await Pesanan.update({
+      status: req.body.status
+    }, {
+      where: {
+        idPesanan: req.body.idPesanan
+      }
+    });
+    res.json({
+        message: 'Status berhasil diubah!',
+        status: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      message: error.message,
+      status: false,
+  });
+}
+};
+

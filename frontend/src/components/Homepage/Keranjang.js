@@ -1,6 +1,7 @@
 import s from "./css/Produk.module.css";
 import anakAyam from "../img/anakayam.jpg";
 import anakAyam2 from "../img/anakayam2.jpg";
+import blank_image from "../img/blank-image.png";
 import PUBLIC_NAVBAR from '../_public/Public-Navbar';
 import PUBLIC_FOOTER from '../_public/Public-Footer';
 import background from "../img/green-farm-blur.jpg";
@@ -20,31 +21,54 @@ const Keranjang = () => {
     const [harga, setHarga] = useState([]); 
     const [jumlah, setJumlah] = useState([]);
 
+
+    
+
     const navigate = useNavigate();
 
     const setShopingCart = (async () => {
         const datas = getLocalStorage("cart");
         const datasKey = Object.keys(datas)
-
-        for (let i = 0; i < datasKey.length; i++) {
-            const res = await axios.get(`http://localhost:5000/produk/`, { idProduk: datasKey[i] });
-            setProduct(res.data);
-        }
         setJumlah(Object.values(datas))
 
+        const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: datasKey });
+        console.log(res.data);
+        setProduct(res.data)
+        
     });
 
     useEffect(() => {
         setShopingCart();
     }, []);
 
-    const buyNow = () => {
+    const refreshShopingCart = () => {
+    }
+
+
+    console.log(product);
+
+
+    const checkout = () => {
         navigate('/checkout')
     }
 
     const handleCloseModal = () => {
         setNotif(false);
     }
+
+    const hapusProduk = (idProduk) => {
+      let cart = getLocalStorage("cart") || {}; 
+      delete cart[idProduk];
+      setLocalStorage("cart", cart);
+      setProduct(product.filter(obj => obj.idProduk!== idProduk));
+
+    }
+
+
+    const maxStok = () => {
+
+    }
+    
 
 
     return (
@@ -65,83 +89,102 @@ const Keranjang = () => {
 
     <main className={s.main}>
 
-        <div className="container d-flex flex-wrap justify-content-center">
+      <div className="container">
+        <div className="row">
 
-            <div class="feuture-box" className={s.feuture_box}>
-                <div class="transaction-card d-flex" className={s.transaction_card1}>
-                    <img src={anakAyam2} style={{width:"20rem"}} alt="ayam lucuk" />
-                </div>
-            </div>
-
-            <div className="feuture-box ">
-                <div className="container d-flex flex-wrap justify-content-center">
-                    <div className={s.transaction_card2}>
-                        <div className={s.product_info}>
-                            <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
-                                <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>idProduk</th>
-                                    <th>Nama</th>
-                                    <th>Stok</th>
-                                    <th>Harga</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                { product.map((produk, index) => (
-                                    <tr key={ produk.id }>
-                                        <td>{ produk.nama }</td>
-                                        <td>{ produk.harga }</td>
-                                        <td>{ jumlah[index] }</td>
-                                    </tr>
-                                )) }
-                                            
-                                </tbody>
-                            </table>
-                            <div className="mb-4" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div className="col-md-8 mb-4">
             <div className="feuture-box">
-                <div class="transaction-card d-flex" className={s.transaction_card3}>
-                    <div class="basket-info" className={s.basket_info}>
-                        <h6>Set amount</h6>
-                        {/* <div className="container d-flex align-items-center mt-4">
-                            <div class="checkout-card" className={s.checkout_card}>
-                                <button onClick={ () => jumlah > 1 ? setJumlah(jumlah-1) : "" } className={s.plus_minus_button}>-</button>
-                                <input type="text" className={s.input_quantity} value={jumlah} />
-                                <button onClick={ () => setJumlah(jumlah+1) } className={s.plus_minus_button}>+</button>
-                            </div>
-                            <span className="ms-2">stok: {stok}</span>
-                        </div> */}
+              <div className="container d-flex flex-wrap justify-content-end">
+                <div className={s.keranjang_wrapper}>
+                <div className="card card-body">
+                  <div className={s.keranjang_title}><strong>Keranjang Anda</strong></div>
 
-                        <div className="container mt-4 pt-3">
-                            <div className="row align-items-center">
-                                <div class="col-md-1 mt-2">
-                                    <div className={s.basket_subtotal_text}>
-                                        <strong>Subtotal</strong>
-                                    </div>
-                                </div>
-                                <div class="col d-flex justify-content-end">
-                                    <div className={s.basket_subtotal}>
-                                        <strong>
-                                            Rp{ Object.values(product).reduce((acc, curr, index) => {
-                                                const hargaFloat = parseFloat(curr.harga);
-                                                return parseFloat(acc + hargaFloat * jumlah[index]);
-                                            }, 0).toLocaleString('en-US', { minimumFractionDigits: 0 })}
-                                        </strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="container">
-                            <button onClick={  buyNow } type="button" class="btn btn-success" style={{minWidth:"100%"}}>Buy Now</button>
-                        </div>
+                    <div className="card card-body">
+
+                    { product.length != 0 ? (
+                      <table className="table is-striped">
+
+                        <tbody>
+                        { product.map((produk, index) => (
+                            <tr key={ produk.id }>
+                                <td><img src={produk.gambar === null ? blank_image : produk.gambar} className="card card-image" /></td>
+                                <td>{ produk.stok }</td>
+                                <td>Rp { (parseFloat(produk.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 }) }</td>
+                                <td>
+                                  <div className={s.checkout_card}>
+                                    <button className={s.plus_minus_button}
+                                      onClick={ 
+                                        () => jumlah[index] > 1 ? setJumlah(prevJumlah=>prevJumlah.map((value, idx)=>(idx===index?value-1:value))) : hapusProduk(produk.idProduk) 
+                                      }>-</button>
+                                    <input type="number" className={s.input_quantity} value={jumlah[index]} 
+                                      onChange={
+                                        (e) => setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? Math.max(1, Math.min(Number(e.target.value), produk.stok)) : value)))
+                                      } />
+                                    <button className={s.plus_minus_button}
+                                      onClick={ 
+                                        () => jumlah[index] < produk.stok ? tambahProduk(produk.idProduk) : hapusProduk(produk.idProduk) 
+                                      }>+</button>
+                                  </div>
+                                  <button onClick={ () => hapusProduk(produk.idProduk) } class="btn btn-danger btn-sm mb-1 ms-3"><i class="bi bi-trash3" /></button>
+                              </td>
+                            </tr>
+                        )) }
+                                    
+                        </tbody>
+                      </table>
+                    ) : (
+                      <div className="opacity-50">Keranjang Anda Kosong~</div>
+                    ) }
+
                     </div>
+                    
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
+          <div className="col-md-2">
+            <div className="feuture-box">
+              <div class="transaction-card d-flex" className={s.transaction_card3}>
+                  <div class="basket-info" className={s.basket_info}>
+                      <h6>Checkout</h6>
+
+
+                      <div className="container mt-4 pt-3">
+                          <div className="row align-items-center">
+                              <div class="col-md-1 mt-2">
+                                  <div className={s.basket_subtotal_text}>
+                                      <strong>Subtotal</strong>
+                                  </div>
+                              </div>
+                              <div class="col d-flex justify-content-end">
+                                  <div className={s.basket_subtotal}>
+                                      <strong>
+                                          Rp{ Object.values(product).reduce((acc, curr, index) => {
+                                              const hargaFloat = parseFloat(curr.harga);
+                                              return parseFloat(acc + hargaFloat * jumlah[index]);
+                                          }, 0).toLocaleString('en-US', { minimumFractionDigits: 0 })}
+                                      </strong>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div className="container">
+                        { product.length != 0 ? (
+                          <button onClick={ checkout } type="button" class="btn btn-success mt-3" style={{minWidth:"100%"}}>Checkout</button>
+                        ) : (
+                          <button type="button" class="btn btn-secondary mt-3" style={{minWidth:"100%"}}>Checkout</button>
+                        )}
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
         </div>
 
 

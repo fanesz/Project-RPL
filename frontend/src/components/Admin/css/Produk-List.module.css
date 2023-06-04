@@ -24,7 +24,6 @@
 .dropzone {
   background-color: rgb(126, 193, 149);
   width: 17rem;
-  height: 2px;
   display: flex;
   align-items: center;
 }

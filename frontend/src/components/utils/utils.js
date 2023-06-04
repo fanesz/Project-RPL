@@ -28,12 +28,16 @@ const logout = () => {
 }
 
 const setLocalStorage = (key, value) => {
-    localStorage.setItem(key, JSON.stringify(value));
+  localStorage.setItem(key, JSON.stringify(value));
+}
+const unsetLocalStorage = (key) => {
+  localStorage.removeItem(key);
 }
 
+
 const getLocalStorage = (key) => {
-    let value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : null;
+  let value = localStorage.getItem(key);
+  return value ? JSON.parse(value) : null;
 }
 
 
@@ -41,9 +45,10 @@ export {
     isLogin, 
     loginChecker, 
     setLoginCookie, 
-    unsetLoginCookie, 
+    unsetLoginCookie,
     logout, 
-    setLocalStorage, 
+    setLocalStorage,
+    unsetLocalStorage,
     getLocalStorage,
     getLoginCookie
 }

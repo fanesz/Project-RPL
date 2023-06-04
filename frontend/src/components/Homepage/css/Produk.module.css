@@ -2,30 +2,21 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
-/* 
-.notif_modal{
-    background-color:grey;
-    width: 40%;
-    height: 40vh;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1rem;
+
+.custom_modal{
+  width: 35%;
+  /* height: 60%; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.modal_closebutton{
+  background-color: red;
+  width: 3rem;
+  float: right;
 }
 
-.notif_overlay{
-    background-color: #000000; 
-}
-
-.notif_title{
-    font-size: 1.5rem;
-    
-}
-
-.notif_wrapper{
-    padding-left: 1rem;
-} */
 
 
 
@@ -57,14 +48,17 @@
 }
 
 .checkout_card{
-    -webkit-box-align: center;
-    align-items: center;
-    border: solid 1px var(--NN300,#BFC9D9);
+    border: solid 1px #BFC9D9;
     border-radius: 8px;
     display: inline-flex;
     transition: border 120ms cubic-bezier(0.2, 0.64, 0.21, 1) 0s;
     min-width: 70px;
-    width: 100px;
+    width: 6rem;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 
@@ -79,10 +73,7 @@
     
 }
 
-.product_info {
-    padding-left: 1.2rem;
-    padding-right: 2rem;
-}
+
 
 .product_name{
     font-size: 1.7rem;
@@ -143,7 +134,7 @@
     outline: none;
     text-align: center;
     flex-shrink: 2;
-    -webkit-box-flex: 2;
+    /* -webkit-box-flex: 2; */
     flex-grow: 2;
     width: 100%;
 }
@@ -153,8 +144,8 @@
     border: none;
     border-radius: 4px;
     flex-shrink: 0;
-    padding: 0.5rem;
-    min-width: 2rem;
+    padding: 0.4rem;
+    min-width: 1.8rem;
     appearance: none;
 }
 
@@ -162,14 +153,9 @@
     background-color: #bad3b8;
 }
 
-/* input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-} */
-
 .basket_subtotal_text{
     color: rgb(94, 94, 94);
+    margin-left: -0.5rem;
 }
 
 .basket_subtotal{
@@ -178,10 +164,33 @@ input::-webkit-inner-spin-button {
 }
 
 
-.alamat_section{
-    
+.keranjang_wrapper{
+  width: 50rem;
 }
+
+
+
+
+.keranjang_wrapper table td{
+  width: 9rem;
+  vertical-align: middle;
+}
+
+
+.keranjang_wrapper img{
+  height: 4rem;
+  width: 5rem;
+  object-fit: cover;
+}
+
 
 .alamat_section .title{
     font-size: 1.1rem;
+}
+
+.keranjang_title{
+  font-size: 1.3rem;
+  font-weight: 500;
+  padding: 1rem;
+  margin-top: -0.5rem;
 }

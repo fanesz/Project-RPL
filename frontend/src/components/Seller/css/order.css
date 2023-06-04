@@ -83,7 +83,6 @@ span.judul{
 /* modal */
 
 .custom_modal{
-  background-color:grey;
   width: 35%;
   /* height: 60%; */
   position: absolute;
@@ -111,7 +110,7 @@ td{
   width: 2rem;
 }
 
-.alamat{
+.alamat, .pembayaran{
   margin-bottom: -0.1rem;
 }
 

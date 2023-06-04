@@ -126,7 +126,9 @@ insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
 -- ('P0004',10000),
 -- ('P0005',65000);
 
-SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, pesanan.waktuPesan, detailPesanan.idProduk, produk.nama, detailPesanan.harga, detailPesanan.jumlah 
+select * from detailakun;
+
+SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama, detailPesanan.harga, detailPesanan.jumlah 
 FROM detailpesanan, pesanan, detailAkun, produk
 WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = 'PAA0000001';
 
@@ -138,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`pesanan` (
   `total` DOUBLE NOT NULL,
   `status` VARCHAR(15) NOT NULL,
   `waktuPesan` TIMESTAMP NOT NULL,
+  `atasNama` VARCHAR(255) NOT NULL,
   `alamat` VARCHAR(255),
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

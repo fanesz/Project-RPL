@@ -13,6 +13,7 @@ import { setLocalStorage, getLocalStorage } from "../utils/utils";
 const Produk = () => {
     const [products, setProduct] = useState([]);
     const [notif, setNotif] = useState(false);
+    const [modalBayar, setModalBayar] = useState(false);
 
     const [idProduk, setIdProduk] = useState(''); 
     const [nama, setName] = useState(''); 
@@ -44,24 +45,26 @@ const Produk = () => {
 
     
     
-    const addCart = () => {
+    const addCart = (isAlert=true) => {
         let cart = getLocalStorage("cart") || {}; 
         cart[idProduk] = cart[idProduk] == undefined ? cart[idProduk] = 0 : cart[idProduk];
         cart[idProduk] += jumlah;
         setLocalStorage("cart", cart);
         // setNotif(true);
-        alert("Produk Berhasil Ditambahkan!")
-        
+        if(isAlert) alert("Produk Berhasil Ditambahkan!")
     }
     
     const buyNow = () => {
-        navigate('/checkout')
+      addCart(false);
+      setLocalStorage("buynow", [idProduk, jumlah])
+      navigate('/checkout')
     }
 
 
 
     const handleCloseModal = () => {
-        setNotif(false);
+      setNotif(false);
+      setModalBayar(false);
     }
 
 
@@ -70,17 +73,17 @@ const Produk = () => {
     <div>
 
     <div className={s.container_produk} style={{ backgroundImage: `url(${background})`}}>
-{/* 
-    <ReactModal isOpen={notif} onRequestClose={handleCloseModal} className={s.notif_modal} overlayClassName={s.notif_overlay}> 
+    <ReactModal
+      isOpen={ modalBayar }
+      onRequestClose={ handleCloseModal }
+      className="custom_modal card card-body bg-light">
+      
 
-    
-        <div className={s.notif_wrapper}>
-            <div className={s.notif_title}>Berhasil Ditambahkan</div>
-            <button onClick={handleCloseModal}>Yes</button>
-        </div>
-    </ReactModal> */}
+
+    </ReactModal>
 
     <PUBLIC_NAVBAR />
+
 
     <main className={s.main}>
 
