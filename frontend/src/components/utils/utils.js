@@ -30,11 +30,14 @@ const logout = () => {
 const setLocalStorage = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 }
+const updateLocalStorage = (key, valueKey, newValue) => {
+  const cartItems = JSON.parse(localStorage.getItem(key)) || {};
+  cartItems[valueKey] = newValue;
+  localStorage.setItem(key, JSON.stringify(cartItems));
+}
 const unsetLocalStorage = (key) => {
   localStorage.removeItem(key);
 }
-
-
 const getLocalStorage = (key) => {
   let value = localStorage.getItem(key);
   return value ? JSON.parse(value) : null;
@@ -46,9 +49,11 @@ export {
     loginChecker, 
     setLoginCookie, 
     unsetLoginCookie,
+    getLoginCookie,
     logout, 
     setLocalStorage,
     unsetLocalStorage,
     getLocalStorage,
-    getLoginCookie
+    updateLocalStorage,
+    
 }

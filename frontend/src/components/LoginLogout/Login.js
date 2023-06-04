@@ -21,7 +21,7 @@ const Login = () => {
 
   const createAccount = async (e) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:5000/detailakun", {
+    const res = await axios.post("http://localhost:5000/detailakun/create", {
       email: email,
       password: password,
     });

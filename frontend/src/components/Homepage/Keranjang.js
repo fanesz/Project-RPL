@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, updateLocalStorage } from "../utils/utils";
 
 const Keranjang = () => {
     const [notif, setNotif] = useState(false);
@@ -32,7 +32,6 @@ const Keranjang = () => {
         setJumlah(Object.values(datas))
 
         const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: datasKey });
-        console.log(res.data);
         setProduct(res.data)
         
     });
@@ -43,9 +42,6 @@ const Keranjang = () => {
 
     const refreshShopingCart = () => {
     }
-
-
-    console.log(product);
 
 
     const checkout = () => {
@@ -66,7 +62,7 @@ const Keranjang = () => {
 
 
     const maxStok = () => {
-
+      
     }
     
 
@@ -101,29 +97,43 @@ const Keranjang = () => {
 
                     <div className="card card-body">
 
-                    { product.length != 0 ? (
+                    { product && product.length != 0 ? (
                       <table className="table is-striped">
 
                         <tbody>
                         { product.map((produk, index) => (
                             <tr key={ produk.id }>
                                 <td><img src={produk.gambar === null ? blank_image : produk.gambar} className="card card-image" /></td>
-                                <td>{ produk.stok }</td>
+                                <td>{ produk.nama }</td>
                                 <td>Rp { (parseFloat(produk.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 }) }</td>
                                 <td>
                                   <div className={s.checkout_card}>
+
                                     <button className={s.plus_minus_button}
-                                      onClick={ 
-                                        () => jumlah[index] > 1 ? setJumlah(prevJumlah=>prevJumlah.map((value, idx)=>(idx===index?value-1:value))) : hapusProduk(produk.idProduk) 
-                                      }>-</button>
+                                      onClick={ () => {
+                                        if(jumlah[index] > 1){
+                                          setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? value - 1 : value)));
+                                          updateLocalStorage("cart", produk.idProduk, jumlah[index]-1);
+                                        } else {
+                                          hapusProduk(produk.idProduk) 
+                                        }
+                                      }}>-</button>
+                                    
                                     <input type="number" className={s.input_quantity} value={jumlah[index]} 
-                                      onChange={
-                                        (e) => setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? Math.max(1, Math.min(Number(e.target.value), produk.stok)) : value)))
+                                      onChange={(e) => {
+                                        setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? Math.max(1, Math.min(Number(e.target.value), produk.stok)) : value)))
+                                        updateLocalStorage("cart", produk.idProduk, Math.max(1, Math.min(Number(e.target.value), produk.stok)) );
+                                      }
                                       } />
+                                    
                                     <button className={s.plus_minus_button}
-                                      onClick={ 
-                                        () => jumlah[index] < produk.stok ? tambahProduk(produk.idProduk) : hapusProduk(produk.idProduk) 
-                                      }>+</button>
+                                      onClick={ () => {
+                                        if(jumlah[index] < produk.stok){
+                                          setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? value + 1 : value)));
+                                          updateLocalStorage("cart", produk.idProduk, jumlah[index]+1);
+                                        }
+                                      }}>+</button>
+
                                   </div>
                                   <button onClick={ () => hapusProduk(produk.idProduk) } class="btn btn-danger btn-sm mb-1 ms-3"><i class="bi bi-trash3" /></button>
                               </td>
@@ -146,8 +156,8 @@ const Keranjang = () => {
           <div className="col-md-2">
             <div className="feuture-box">
               <div class="transaction-card d-flex" className={s.transaction_card3}>
-                  <div class="basket-info" className={s.basket_info}>
-                      <h6>Checkout</h6>
+                  <div class="basket-info p-3">
+                      <h6 className={s.checkout_title}>Checkout</h6>
 
 
                       <div className="container mt-4 pt-3">
@@ -171,7 +181,7 @@ const Keranjang = () => {
                       </div>
                       
                       <div className="container">
-                        { product.length != 0 ? (
+                        { product ? (
                           <button onClick={ checkout } type="button" class="btn btn-success mt-3" style={{minWidth:"100%"}}>Checkout</button>
                         ) : (
                           <button type="button" class="btn btn-secondary mt-3" style={{minWidth:"100%"}}>Checkout</button>

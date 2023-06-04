@@ -63,32 +63,13 @@ export const createDetailAkun = async (req, res) => {
     }
 }
 
-export const updateDetailAkun = async (req, res) => {
-    try {
-        await DetailAkun.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        });
-        res.json({
-            "message": "Detail Account Updated"
-        });
-    } catch (error) {
-        res.json({ message: error.message });
-    }  
-}
- 
-export const deleteDetailAkun = async (req, res) => {
-    try {
-        await DetailAkun.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
-        res.json({
-            "message": "Detail Account Deleted"
-        });
-    } catch (error) {
-        res.json({ message: error.message });
-    }  
+export const getAllDetailAkunByIdAkun = async (req, res) => {
+  try {
+      const detailAkun = await DetailAkun.findAll({
+        where: { idAkun: req.body.idAkun }
+      });
+      res.json(detailAkun);
+  } catch (error) {
+      res.json({ message: error.message });
+  }
 }
