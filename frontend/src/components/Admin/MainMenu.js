@@ -1,7 +1,10 @@
 // import { useState, useEffect } from 'react'
 // import axios from "axios";
 
+import { useNavigate } from "react-router-dom";
+
 const MainMenu = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <style jsx global>{`
@@ -20,11 +23,9 @@ const MainMenu = () => {
       `}</style>
 
       <div className="container">
-        <a href="/admin/produk">
-          <button className="btn btn-primary" id="produkList">
-            Produk List
-          </button>
-        </a>
+        <button onClick={() => navigate('/admin/produk')} className="btn btn-primary" id="produkList">
+          Produk List
+        </button>
       </div>
     </div>
   );

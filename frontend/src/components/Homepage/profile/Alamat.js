@@ -11,7 +11,7 @@ const Alamat = () => {
 
     const [alamat, setAlamat] = useState({});
 
-    const getAlamat = async() => {
+    const getAlamat = async() => { // pake get-param pengganti post
         const res = await axios.post('http://localhost:5000/detailakun/alamat', { idAkun: getLoginCookie() })
         console.log(res.data);
 
