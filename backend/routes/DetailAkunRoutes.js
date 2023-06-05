@@ -2,10 +2,10 @@ import express from "express";
  
 import { 
     createDetailAkun,
-    getAllDetailAkun,
-    getAllDetailAkunByIdAkun,
+    getDetailAkunById,
     getAlamatById,
-    updateAlamat
+    updateAlamat,
+    updateDetailAkun
 
 
 } from "../components/DetailAkun.js";
@@ -13,10 +13,11 @@ import {
 const router = express.Router();
  
 router.post('/create', createDetailAkun);
-router.get('/', getAllDetailAkun);
-router.post('/', getAllDetailAkunByIdAkun);
+router.post('/update', updateDetailAkun);
+router.get('/:id', getDetailAkunById);
 
-router.post('/alamat', getAlamatById);
+// alamat
+router.get('/alamat/:id', getAlamatById);
 router.post('/alamat/update', updateAlamat);
 
 export default router;

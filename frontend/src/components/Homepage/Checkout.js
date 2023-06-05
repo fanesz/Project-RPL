@@ -43,7 +43,7 @@ const Checkout = () => {
     }, []);
 
     const getAlamat = async() => {
-      const res = await axios.post(`http://localhost:5000/detailakun`, { idAkun: getLoginCookie() })
+      const res = await axios.get(`http://localhost:5000/detailakun/${getLoginCookie()}`)
       setUser(res.data);
     }
 

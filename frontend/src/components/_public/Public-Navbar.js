@@ -1,5 +1,6 @@
 import "./Public.css";
 import profile from "../img/default_profile.webp";
+import { unsetLoginCookie } from "../utils/utils";
 
 const PUBLIC_NAVBAR = () => {
 
@@ -34,9 +35,9 @@ const PUBLIC_NAVBAR = () => {
                                     <div className="dropdown_profile">
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <a className="dropdown-item" href="/profile">Profile Kamu</a>
-                                            <a className="dropdown-item" href="/pesanan">Alamat Kamu</a>
-                                            <a className="dropdown-item" href="/pesanan">Setting</a>
-                                            <a className="dropdown-item" href="/pesanan">Logout</a>
+                                            <a className="dropdown-item" href="/alamat">Alamat Kamu</a>
+                                            <a className="dropdown-item" href="/setting">Setting</a>
+                                            <a className="dropdown-item" onClick={unsetLoginCookie} href="/login">Logout</a>
                                         </ul>
                                     </div>
                                 </li>

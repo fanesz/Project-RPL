@@ -9,29 +9,33 @@ import { setLocalStorage, getLocalStorage, getLoginCookie } from "../../utils/ut
 
 const Alamat = () => {
 
-    const [alamat, setAlamat] = useState({});
+  const [alamat, setAlamat] = useState({})
 
-    const getAlamat = async() => { // pake get-param pengganti post
-        const res = await axios.post('http://localhost:5000/detailakun/alamat', { idAkun: getLoginCookie() })
-        console.log(res.data);
+  const getProfile = async() => {
+    const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
+    console.log(res.data[0]);
+    console.log(res.data[0]);
+    setAlamat(res.data[0]);
+  }
 
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const updateAlamat = async() => {
+    const res = await axios.post('http://localhost:5000/detailakun/alamat/update', { datas: alamat, idAkun: getLoginCookie() })
+    if(res.data.status){
+
+    } else {
+      alert(res.data.message);
     }
-
-    useEffect(() => {
-        getAlamat();
-    }, []);
-
-    const updateAlamat = async() => {
-        const res = await axios.post('http://localhost:5000/detailakun/alamat/update', { datas: alamat, idAkun: getLoginCookie() })
-
-    }
+  }
 
 
 
 
     return (
     <div>
-
 
         <div className="container">
         <PUBLIC_NAVBAR />
@@ -50,13 +54,25 @@ const Alamat = () => {
                             <label className="form-control mb-3 mt-2">Nama Penerima</label>
                             <label className="form-control mb-3">Jalan</label>
                             <label className="form-control mb-3">No Telp</label>
+
+
                         </div>
 
                         <div className="col me-3">
-                            <input type="text" className="form-control shadow-none mb-3 mt-2"></input>
-                            <input type="text" className="form-control shadow-none mb-3"></input>
-                            <input type="text" className="form-control shadow-none mb-3"></input>
+                            <input type="text" className="form-control shadow-none mb-3 mt-2" />
+                            <input type="text" className="form-control shadow-none mb-3" />
+                            <input type="text" className="form-control shadow-none mb-3" />
                         </div>
+                    </div>
+                    <div className="row">
+                      <div className="col d-flex">
+                        <label className="form-control mb-3">RT/RW</label>
+                        <input type="text" className="form-control shadow-none w-50" />
+                      </div>
+                      <div className="col d-flex">
+                        <label className="form-control mb-3">Kode Pos</label>
+                        <input type="text" className="form-control shadow-none w-50" />
+                      </div>
                     </div>
                 </form>
             </div>

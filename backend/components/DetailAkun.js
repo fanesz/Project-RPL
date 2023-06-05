@@ -10,7 +10,6 @@ const DetailAkun = db.define('detailAkun',{
     nama:{type: DataTypes.STRING,},
     jabatan:{type: DataTypes.STRING,allowNull: false},
     noTelp:{type: DataTypes.STRING,},
-    alamat:{type: DataTypes.STRING,},
     email:{type: DataTypes.STRING,allowNull: false}
 },{freezeTableName: true});
 
@@ -30,13 +29,14 @@ const Alamat = db.define('alamat',{
 
 //models
 
-export const getAllDetailAkun = async (req, res) => {
+export const getDetailAkunById = async (req, res) => {
     try {
-        const cekDetailAkun = await DetailAkun.findAll({
-            attributes: ['id','idAkun','nama','jabatan','noTelp','alamat','email']
+        const detailAkun = await DetailAkun.findAll({
+          where : { idAkun: req.params.id }
         });
-        res.json(cekDetailAkun);
+        res.json(detailAkun);
     } catch (error) {
+      console.log(error);
         res.json({ message: error.message });
     }
 }
@@ -53,39 +53,42 @@ export const createDetailAkun = async (req, res) => {
     }
 }
 
-export const getAllDetailAkunByIdAkun = async (req, res) => {
+export const updateDetailAkun = async (req, res) => {
   try {
-      const detailAkun = await DetailAkun.findAll({
-        where: { idAkun: req.body.idAkun }
+      await DetailAkun.update(req.body, {
+          where: { idAkun: req.body.idAkun }
       });
-      res.json(detailAkun);
+      res.json({message: "Detail Akun Updated!", status: true});
   } catch (error) {
-      res.json({ message: error.message });
+    console.log(error);
+      res.json({ message: error.message, status: false });
   }
 }
+
+
+
+// alamat
 
 export const getAlamatById = async (req, res) => {
     try {
         const alamat = await Alamat.findAll({
-            where : { idAkun: req.body.idAkun }
+            where : { idAkun: req.params.id }
         });
         res.json(alamat);
     } catch (error) {
-        res.json({ message: error.message });
+      console.log(error);
+      res.json({ message: error.message });
     }
 }
+
 export const updateAlamat = async (req, res) => {
     try {
-        console.log(
-            (await query_select(`SELECT * FROM ALAMAT WHERE idAkun='${req.body.idAkun}'`))
-        );
-
         await Alamat.update(req.body.datas, {
             where: { idAkun: req.body.idAkun }
         });
-          
-        res.json({message: "Alamat Added!", status: true});
+        res.json({message: "Alamat Updated!", status: true});
     } catch (error) {
+      console.log(error);
         res.json({ message: error.message, status: false });
     }
 }
