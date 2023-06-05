@@ -17,7 +17,6 @@ const unsetLoginCookie = () => {
 }
 
 const getLoginCookie = () => {
-    console.log(document.cookie);
     return ((document.cookie).split('='))[1]
 }
 

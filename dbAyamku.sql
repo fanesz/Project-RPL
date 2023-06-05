@@ -3,16 +3,12 @@ drop database dbAyamku;
 use dbAyamku;
 
 
-
-
-
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idAkun` char(36) NOT NULL,
   `nama` VARCHAR(255) NOT NULL,
   `jabatan` VARCHAR(255) NOT NULL,
   `noTelp` VARCHAR(20) NOT NULL,
-  `alamat` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -20,10 +16,28 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hoho','penjual','082131948573','Jl. Beo no. 77','hoho77@gmail.com');
-insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hihi','admin','053059309509','Jl. Merpati no. 456','fanes@gmail.com');
-insert into detailAKun (`idAkun`,`nama`,`jabatan`,`noTelp`,`alamat`,`email`) values (UUID(),'Hehe','pelanggan','024929404304','Jl. Dara no. 788','pratama14.f@gmail.com');
-select * from detailAkun;
+
+drop table alamat;
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`alamat` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idAkun` CHAR(36) NOT NULL,
+  `penerima` varchar(255) NOT NULL,
+  `jalan` varchar(255) NOT NULL,
+  `kodePos` varchar(10) NOT NULL,
+  `rtrw` varchar(10) NOT NULL,
+  `kelurahan` varchar(255) NOT NULL,
+  `kecamatan` varchar(255) NOT NULL,
+  `kota` varchar(255) NOT NULL,
+  `provinsi` varchar(255) NOT NULL,
+  `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `idAkunDiAlamat`
+    FOREIGN KEY (`idAkun`)
+    REFERENCES `dbAyamku`.`detailAkun` (`idAkun`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`akun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -38,19 +52,21 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`akun` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-INSERT INTO akun (`idAkun`, `email`, `password`) VALUES
-((select idAkun from detailAkun where email = 'hoho77@gmail.com'), 'hoho77@gmail.com', 'admin123'),
-((select idAkun from detailAkun where email = 'fanes@gmail.com'), 'fanes@gmail.com', 'admin123'),
-((select idAkun from detailAkun where email = 'pratama14.f@gmail.com'), 'pratama14.f@gmail.com', 'admin123');
-select * from akun;
 
 DELIMITER //
 CREATE PROCEDURE tambahAkun(inp_email varchar(255), inp_password varchar(255), inp_jabatan varchar(255))
 BEGIN
-insert into detailAKun (`idAkun`,`jabatan`,`email`) values (UUID(),inp_jabatan,inp_email);
-insert into akun (idAkun, email, password) values ((select idAkun from detailAkun where email = inp_email), inp_email, inp_password);
+declare generateIdAkun char(36);
+set generateIdAkun = UUID();
+insert into detailAKun (`idAkun`,`jabatan`,`email`) values (generateIdAkun,inp_jabatan,inp_email);
+insert into akun (idAkun, email, password) values (generateIdAkun, inp_email, inp_password);
+insert into alamat (idAkun) values (generateIdAkun);
 END //
 DELIMITER ;
+
+drop procedure tambahAkun;
+
+call tambahAkun("pratama14.f@gmail.com", 'admin123', 'admin');
 
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`produk` (

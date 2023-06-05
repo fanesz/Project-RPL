@@ -5,25 +5,11 @@ import sendMail from "../config/mailer.js"
 const { DataTypes } = Sequelize;
  
 const Akun = db.define('akun',{
-    idAkun:{
-        type: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false
-    },
-    email:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    password:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    changepwCode:{
-        type: DataTypes.STRING,
-    }
-},{
-    freezeTableName: true
-});
+    idAkun:{type: DataTypes.STRING,primaryKey: true,allowNull: false},
+    email:{type: DataTypes.STRING,allowNull: false},
+    password:{type: DataTypes.STRING,allowNull: false},
+    changepwCode:{type: DataTypes.STRING}
+},{freezeTableName: true});
 
 //models
 
@@ -33,22 +19,6 @@ export const getAllUserAccount = async (req, res) => {
             attributes: ['id', 'idAkun', 'email', 'password', 'changepwCode']
         });
         res.json(userAccount);
-    } catch (error) {
-        res.json({ message: error.message, status: false });
-    }
-}
-
-export const createAccount = async (req, res) => {
-    try {
-        
-        await Akun.create({
-            email: res.data.email,
-            password: res.data.password,
-        });
-        res.json({
-            message: "Account Created",
-            status: true
-        });
     } catch (error) {
         res.json({ message: error.message, status: false });
     }

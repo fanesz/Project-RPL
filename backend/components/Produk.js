@@ -76,7 +76,7 @@ export const getProductById = async (req, res) => {
         });
         await readFilePromise;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
 
       product[0]["message"] = "Product Created";
@@ -85,7 +85,7 @@ export const getProductById = async (req, res) => {
       res.json(product[0]);
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.json({
         message: error.message,
         status: false,

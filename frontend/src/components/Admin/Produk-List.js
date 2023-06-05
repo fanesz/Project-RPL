@@ -6,6 +6,7 @@ import { logout } from "../utils/utils";
 import ReactModal from "react-modal";
 import Dropzone from "react-dropzone";
 import gambar from "../img/home-2.png";
+import "./css/Produk-List.module.css";
 
 const ProductList = () => {
   // loginChecker();
@@ -128,6 +129,9 @@ const ProductList = () => {
     console.log(products);
   };
 
+
+  
+
   useEffect(() => {
     getProducts();
   }, []);
@@ -170,7 +174,7 @@ const ProductList = () => {
         `}
       </style>
       <div className={s.container_produk_list}>
-        <ReactModal isOpen={modalTambah} onRequestClose={closeModal.bind(null, "tambah")} className={s.custom_modal}>
+        <ReactModal isOpen={modalTambah} onRequestClose={closeModal.bind(null, "tambah")} className="custom_modal">
           <button className={s.modal_closebutton} onClick={() => closeModal("tambah")}>
             X
           </button>
@@ -267,10 +271,7 @@ const ProductList = () => {
           </div>
         </ReactModal>
 
-        <ReactModal isOpen={modalEdit} onRequestClose={closeModal.bind(null, "edit")} className={s.custom_modal}>
-          <button className={s.modal_closebutton} onClick={() => closeModal("edit")}>
-            X
-          </button>
+        <ReactModal isOpen={modalEdit} onRequestClose={closeModal.bind(null, "edit")} className="custom_modal card card-body p-4  ">
           <div>
             <form onSubmit={updateProduct}>
               <div className="field">

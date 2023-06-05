@@ -9,7 +9,8 @@ import Katalog from "./components/Homepage/Katalog";
 import Produk from "./components/Homepage/Produk";
 import Keranjang from "./components/Homepage/Keranjang";
 import Checkout from "./components/Homepage/Checkout";
-import Profile from "./components/Homepage/Profile";
+import Profile from "./components/Homepage/profile/Profile";
+import Alamat from "./components/Homepage/profile/Alamat";
 
 
 function App() {
@@ -30,7 +31,10 @@ function App() {
             <Route path="/produk/:id" element={<Produk/>} />
             <Route path="/keranjang" element={<Keranjang/>} />
             <Route path="/checkout" element={<Checkout/>} />
+            
+            {/* profile */}
             <Route path="/profile" element={<Profile/>} />
+            <Route path="/alamat" element={<Alamat/>} />
 
 
             {/* admin */}
