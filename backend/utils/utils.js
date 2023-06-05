@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import { UUIDV4 } from 'sequelize';
 import fs from "fs";
-import base64Img from 'base64-img';
 
 const generateVerificationCode = (len) => {
   const code = crypto.randomBytes(len).toString('hex');

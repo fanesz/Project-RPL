@@ -68,9 +68,10 @@ const Checkout = () => {
         return;
       }
       const datas = {};
+      console.log(getLoginCookie());
       for(const data in product){
           datas[data] = { 
-              idAkun:getLoginCookie(), 
+              idAkun: getLoginCookie(), 
               idProduk:product[data].idProduk, 
               jumlah: jumlah[data], 
               harga: product[data].harga,
@@ -174,8 +175,8 @@ const Checkout = () => {
                     <div className="card card-body">
                       <div className={s.alamat_title}><i class="bi bi-house-door me-2" /><strong>Alamat</strong></div>
                       <div className="card card-body p-2 ps-3 mt-1">
-                        <div className="">{user[0].nama} | {user[0].noTelp}</div>
-                        <div className="">{user[0].alamat}</div>
+                        {/* <div className="">{user[0].nama} | {user[0].noTelp}</div>
+                        <div className="">{user[0].alamat}</div> */}
                       </div>
                       <div className="">
                         <button className="btn btn-secondary mt-2">Ubah Alamat</button>

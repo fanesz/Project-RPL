@@ -62,6 +62,7 @@ export const createPesanan = async (req, res) => {
     try {
         const currentIdPesanan = (await query_select("SELECT idPesanan FROM pesanan ORDER BY idPesanan DESC LIMIT 1"))[0];
         const GENERATED_ID_PESANAN = generateIdPesanan(currentIdPesanan == undefined ? "PAA0000000" : currentIdPesanan.idPesanan);
+        
         await Pesanan.create({
             idPesanan: GENERATED_ID_PESANAN,
             idAkun: req.body[0].idAkun,
@@ -85,6 +86,7 @@ export const createPesanan = async (req, res) => {
             status: true,
         });
     } catch (error) {
+      console.log(error);
         res.json({
             message: error.message,
             status: false,

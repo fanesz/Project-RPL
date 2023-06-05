@@ -9,6 +9,7 @@ import Katalog from "./components/Homepage/Katalog";
 import Produk from "./components/Homepage/Produk";
 import Keranjang from "./components/Homepage/Keranjang";
 import Checkout from "./components/Homepage/Checkout";
+import Profile from "./components/Homepage/Profile";
 
 
 function App() {
@@ -22,7 +23,6 @@ function App() {
             {/* login logout */}
             <Route path="/login" element={<Login/>} />
 
-
             {/* home n produk */}
             <Route path="/" element={<Home/>} />
             <Route path="/katalog" element={<Katalog/>} />
@@ -30,6 +30,8 @@ function App() {
             <Route path="/produk/:id" element={<Produk/>} />
             <Route path="/keranjang" element={<Keranjang/>} />
             <Route path="/checkout" element={<Checkout/>} />
+            <Route path="/profile" element={<Profile/>} />
+
 
             {/* admin */}
             <Route path="/admin" element={<MainMenu/>} />
