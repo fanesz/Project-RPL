@@ -47,8 +47,8 @@ const Alamat = () => {
                 <form className="form-control">
                     <div className="row p-2">
                         <div className="col-md-3">
-                            <label className="form-control mb-3 mt-2">Nama</label>
-                            <label className="form-control mb-3">E-mail</label>
+                            <label className="form-control mb-3 mt-2">Nama Penerima</label>
+                            <label className="form-control mb-3">Jalan</label>
                             <label className="form-control mb-3">No Telp</label>
                         </div>
 
