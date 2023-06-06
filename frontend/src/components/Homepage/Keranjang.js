@@ -61,12 +61,12 @@ const Keranjang = () => {
     }
 
 
-    const hapusProduk = (idProduk) => {
+    const hapusProduk = () => {
       let cart = getLocalStorage("cart") || {}; 
-      delete cart[idProduk];
+      delete cart[itemInginDihapus];
       setLocalStorage("cart", cart);
-      setProduct(product.filter(obj => obj.idProduk!== idProduk));
-
+      setProduct(product && product.filter(obj => obj.idProduk !== itemInginDihapus));
+      setModalKonfirmasi(false);
     }
 
 
@@ -74,18 +74,20 @@ const Keranjang = () => {
       
     }
     
-<i class="bi bi-x-lg"></i>
-
     return (
     <div>
 
     <div className="container_keranjang" style={{ backgroundImage: `url(${background})`}}>
     <ReactModal
       isOpen={ modalKonfirmasi }
-      className="custom_modal_notif card card-body bg-light p-3 text-center">
+      onRequestClose={ handleCloseModal }
+      className="custom_modal_notif card card-body bg-light p-4 text-center">
       
-        Apakah kamu ingin menghapus produk {product.filter(obj => obj.idProduk===itemInginDihapus).nama} dari Keranjang?
-
+        Apakah kamu ingin menghapus produk {product && product.filter(obj => obj.idProduk===itemInginDihapus).nama} dari Keranjang?
+        <div className="d-flex justify-content-center mt-4">
+          <button onClick={ handleCloseModal } className="btn btn-success mx-3 w-25">Tidak</button>
+          <button onClick={ hapusProduk } className="btn btn-danger mx-3 w-25">Ya</button>
+        </div>
 
       </ReactModal>
 

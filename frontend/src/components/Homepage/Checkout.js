@@ -10,13 +10,13 @@ import ReactModal from 'react-modal';
 import { setLocalStorage, getLocalStorage, getLoginCookie, unsetLocalStorage } from "../utils/utils";
 
 const Checkout = () => {
-    const [notif, setNotif] = useState(false);
     const [product, setProduct] = useState([]);
-    const [user, setUser] = useState([]);
+    const [alamat, setAlamat] = useState({});
     const [modalBayar, setModalBayar] = useState(false);
     const [atasNama, setAtasNama] = useState('');
 
     const [jumlah, setJumlah] = useState([]);
+    const navigate = useNavigate();
 
     const setShopingCart = (async () => {
       const getBuyNow = getLocalStorage("buynow");
@@ -41,8 +41,8 @@ const Checkout = () => {
     }, []);
 
     const getAlamat = async() => {
-      const res = await axios.get(`http://localhost:5000/detailakun/${getLoginCookie()}`)
-      setUser(res.data);
+      const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
+      setAlamat(res.data[0]);
     }
 
     useEffect(() => {
@@ -55,7 +55,6 @@ const Checkout = () => {
     }
 
     const handleCloseModal = () => {
-      setNotif(false);
       setModalBayar(false);
     }
 
@@ -73,17 +72,17 @@ const Checkout = () => {
               jumlah: jumlah[data], 
               harga: product[data].harga,
               total: parseFloat(jumlah[data])*parseFloat(product[data].harga),
-              atasNama: atasNama
+              atasNama: atasNama,
+              alamat: alamat
           }; 
 
       }
       const res = await axios.post('http://localhost:5000/pesanan/', datas);
       if(res.data.status){
-        console.log("awdawd");
         // selesai bayar
         setLocalStorage("cart", {});
         // setShopingCart();
-        // navigate
+        // navigate ke pesanan
       } else {
         console.log("err");
           alert(res.data.message);
@@ -99,39 +98,37 @@ const Checkout = () => {
     <ReactModal
       isOpen={ modalBayar }
       onRequestClose={ handleCloseModal }
-      className="custom_modal card card-body bg-light">
-      
-      <div className="container-wrapper ms-3">
-        <div className="accordian_title"><strong>Metode Pembayaran</strong></div>
-        <div class="accordion" id="perlu_diproses">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_perlu_diproses" aria-expanded="true" aria-controls="collapseOne">Lihat Detail</button>
-            </h2>
-            <div id="collapse_perlu_diproses" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#perlu_diproses">
-              <div class="accordion-body">
-                <div class="row">
-                  Bank : Rekening <br />
-                  Bank : Rekening
-
-
+      className="custom_modal card card-body bg-light p-4">
+      <div className="modal_close_button_wrapper d-flex justify-content-end">
+        <button onClick={  handleCloseModal } className="modal_close_button"><i className="bi bi-x-lg" /></button>
+      </div>
+      <div className="modal_content_wrapper pe-1">
+        <div className="container-wrapper ms-3">
+          <div className="accordian_title"><strong>Metode Pembayaran</strong></div>
+          <div className="accordion" id="perlu_diproses">
+            <div className="accordion-item">
+              <h2 className="accordion-header" id="headingOne">
+                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_perlu_diproses" aria-expanded="true" aria-controls="collapseOne">Lihat Detail</button>
+              </h2>
+              <div id="collapse_perlu_diproses" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#perlu_diproses">
+                <div className="accordion-body">
+                  <div className="row">
+                    Bank : Rekening <br />
+                    Bank : Rekening
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div className="atas_nama">
+            <form onSubmit={ sudahBayar }>
+              <input className="form-control shadow-none mt-2 mb-3" type="text" placeholder="Atas Nama" value={atasNama} onChange={(e) => setAtasNama(e.target.value)} required/>
+              <button onClick={ sudahBayar } type="button" className="btn btn-success mb-1" style={{minWidth:"100%"}}>Sudah Bayar</button>
+            </form>
+          </div>
         </div>
-        
-        <div className="atas_nama">
-          <form onSubmit={ sudahBayar }>
-            <input className="form-control shadow-none mt-2 mb-3" type="text" placeholder="Atas Nama" value={atasNama} onChange={(e) => setAtasNama(e.target.value)} required/>
-            <button onClick={ sudahBayar } type="button" class="btn btn-success mb-1" style={{minWidth:"100%"}}>Sudah Bayar</button>
-          </form>
-        </div>
+
       </div>
-
-
-
-
     </ReactModal>
 
     <PUBLIC_NAVBAR />
@@ -173,13 +170,18 @@ const Checkout = () => {
                     </div>
 
                     <div className="card card-body">
-                      <div className="alamat_title"><i class="bi bi-house-door me-2" /><strong>Alamat</strong></div>
+                      <div className="alamat_title"><i className="bi bi-house-door me-2" /><strong>Alamat</strong></div>
                       <div className="card card-body p-2 ps-3 mt-1">
-                        {/* <div className="">{user[0].nama} | {user[0].noTelp}</div>
-                        <div className="">{user[0].alamat}</div> */}
+                        { Object.entries(alamat).length != 0 && (
+                          <div>
+                            <div className="">{alamat.penerima} | {alamat.noTelp}</div>
+                            <div className="">{alamat.kecamatan.split('-')[1]}, {alamat.jalan}, {alamat.rtrw}</div>
+                            <div className="">{alamat.kelurahan.split('-')[1]}, {alamat.kota.split('-')[1]}, {alamat.provinsi.split('-')[1]}, {alamat.kodePos}</div>
+                          </div>
+                        )}
                       </div>
                       <div className="">
-                        <button className="btn btn-secondary mt-2">Ubah Alamat</button>
+                        <button onClick={ () => navigate('/alamat') } className="btn btn-secondary mt-2">Ubah Alamat</button>
                       </div>
                     
                     </div>
@@ -191,19 +193,19 @@ const Checkout = () => {
           </div>
           <div className="col-md-2">
             <div className="feuture-box">
-              <div class="transaction-card d-flex" className="transaction_card3">
-                  <div class="basket-info p-3">
+              <div className="transaction-card d-flex transaction_card3" >
+                  <div className="basket-info p-3">
                       <h6 className="checkout_title">Pembayaran</h6>
 
 
                       <div className="container mt-4 pt-3">
                           <div className="row align-items-center">
-                              <div class="col-md-1 mt-2">
+                              <div className="col-md-1 mt-2">
                                   <div className="basket_subtotal_text">
                                       <strong>Subtotal</strong>
                                   </div>
                               </div>
-                              <div class="col d-flex justify-content-end">
+                              <div className="col d-flex justify-content-end">
                                   <div className="basket_subtotal">
                                       <strong>
                                           Rp{ Object.values(product).reduce((acc, curr, index) => {
@@ -217,7 +219,7 @@ const Checkout = () => {
                       </div>
                       
                       <div className="container">
-                      <button onClick={ bayar } type="button" class="btn btn-success mt-3" style={{minWidth:"100%"}}>Bayar</button>
+                      <button onClick={ bayar } type="button" className="btn btn-success mt-3" style={{minWidth:"100%"}}>Bayar</button>
                       </div>
                   </div>
               </div>

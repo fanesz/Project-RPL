@@ -17,6 +17,8 @@ const Alamat = db.define('alamat',{
     idAkun:{type: DataTypes.UUID,defaultValue: DataTypes.UUIDV4,allowNull: false},
     jalan:{type: DataTypes.STRING},
     jalan:{type: DataTypes.STRING},
+    penerima:{type: DataTypes.STRING},
+    noTelp:{type: DataTypes.STRING},
     kodePos:{type: DataTypes.STRING},
     rtrw:{type: DataTypes.STRING},
     provinsi:{type: DataTypes.STRING},
@@ -83,12 +85,13 @@ export const getAlamatById = async (req, res) => {
 
 export const updateAlamat = async (req, res) => {
     try {
-        await Alamat.update(req.body.datas, {
-            where: { idAkun: req.body.idAkun }
+        let update = await Alamat.update(req.body.datas, {
+          where: { idAkun: req.body.idAkun }
         });
+        console.log(update);
         res.json({message: "Alamat Updated!", status: true});
     } catch (error) {
       console.log(error);
-        res.json({ message: error.message, status: false });
+      res.json({ message: error.message, status: false });
     }
 }

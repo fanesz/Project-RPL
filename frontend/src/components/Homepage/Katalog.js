@@ -82,9 +82,9 @@ const Katalog = () => {
                               className="card card-image" />
                             </div>
                             <div class="product-info p-4 pt-3">
-                                <h4 className="product-name"><strong>{product.nama}</strong></h4>
-                                <div className="product-stock">stok : {product.stok}</div>
-                                <h4 className="product-price"><strong>Rp. {parseFloat(product.harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong></h4>
+                                <div className="product_name">{product.nama}</div>
+                                <div className="product_price"><strong>Rp. {parseFloat(product.harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong></div>
+                                <div className="product_stock mt-3 mb-1">stok : {product.stok}</div>
                                 { getCart().hasOwnProperty(product.idProduk) ? (
 
                                   <button className="btn btn-success" onClick={ ()=> navigate('/keranjang') }><i class="bi bi-cart2 me-2" />Cek Keranjang</button>

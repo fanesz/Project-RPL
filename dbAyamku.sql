@@ -16,12 +16,15 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
+select * from akun;
+insert into alamat (idAkun) values ('fcbae759-039e-11ee-8f7d-047c160aa273');
 select * from alamat;
+drop table alamat;
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`alamat` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idAkun` CHAR(36) NOT NULL,
   `penerima` varchar(255) NOT NULL,
+  `noTelp` varchar(20) NOT NULL,
   `jalan` varchar(255) NOT NULL,
   `kodePos` varchar(10) NOT NULL,
   `rtrw` varchar(10) NOT NULL,

@@ -14,6 +14,7 @@ const Produk = () => {
 
   const [notif, setNotif] = useState(false);
   const [modalBayar, setModalBayar] = useState(false);
+  const [modalKonfirmasi, setModalKonfirmasi] = useState(false);
 
   const [products, setProduct] = useState([]);
   const [jumlah, setJumlah] = useState(1);
@@ -40,8 +41,7 @@ const Produk = () => {
     cart[products.idProduk] = cart[products.idProduk] == undefined ? cart[products.idProduk] = 0 : cart[products.idProduk];
     cart[products.idProduk] += jumlah;
     setLocalStorage("cart", cart);
-    // setNotif(true);
-    if (isAlert) alert("Produk Berhasil Ditambahkan!")
+    if (isAlert) setModalKonfirmasi(true);
   }
 
   const buyNow = () => {
@@ -51,7 +51,7 @@ const Produk = () => {
   }
 
   const handleCloseModal = () => {
-    setNotif(false);
+    setModalKonfirmasi(false);
     setModalBayar(false);
   }
 
@@ -59,12 +59,22 @@ const Produk = () => {
     <div>
 
       <div className="container_produk" style={{ backgroundImage: `url(${background})` }}>
-        <ReactModal
-          isOpen={modalBayar}
-          onRequestClose={handleCloseModal}
-          className="custom_modal card card-body bg-light">
+      <ReactModal
+        isOpen={ modalKonfirmasi }
+        onRequestClose={ handleCloseModal }
+        className="custom_modal_notif card card-body bg-light p-4 text-center">
+        <div className="modal_close_button_wrapper d-flex justify-content-end">
+          <button onClick={  handleCloseModal } className="modal_close_button"><i class="bi bi-x-lg" /></button>
+        </div>
+        <div className="modal_content_wrapper pe-1">
+          Berhasil Menambahkan ke Keranjang!
+          <div className="d-flex justify-content-center mt-4">
+            <button onClick={ () => navigate('/katalog') } className="btn btn-secondary mx-3 w-50">Lanjut Belanja</button>
+            <button onClick={ () => navigate('/keranjang') } className="btn btn-success mx-3 w-50">Cek Keranjang</button>
+          </div>
+        </div>
 
-        </ReactModal>
+      </ReactModal>
 
         <PUBLIC_NAVBAR />
 

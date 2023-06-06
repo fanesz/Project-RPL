@@ -15,10 +15,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.modal_closebutton{
-  background-color: red;
-  width: 3rem;
-  float: right;
+.modal_close_button{
+  border: none;
+  background: none;
+  width: 2.5rem;
+  margin-top: -1rem;
+  margin-right: -1rem;
 }
 .custom_modal_notif{
   width: 20%;
@@ -86,32 +88,29 @@ input::-webkit-inner-spin-button {
 
 
 
-.product_name{
+.container_produk .product_name{
     font-size: 1.7rem;
     font-weight: 700;
 }
-
-.product_sold{
+.container_produk .product_sold{
     margin-top: -0.3rem;
     margin-bottom: 0.3rem;
     font-size: 0.9rem;
 }
-
-.product_price{
+.container_produk .product_price{
     color: #212121;
     margin-bottom: 4px;
     font-size: 2rem;
     line-height: 3rem;
     font-weight: 700;
 }
-
-
-.product_detail{
+.container_produk .product_detail{
     color: rgb(31, 150, 31);
     font-weight: 640;
     margin: 0px 0px 4px;
     font-size: 1.5rem;
 }
+
 .line{
     border-bottom: 1px solid rgba(0, 0, 0, 0.089);
     margin-top: 0.5rem;
@@ -165,8 +164,6 @@ input::-webkit-inner-spin-button {
 .keranjang_wrapper{
   width: 50rem;
 }
-
-
 
 
 .keranjang_wrapper table td{
