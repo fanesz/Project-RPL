@@ -1,6 +1,4 @@
 import "./css/Produk.css";
-import anakAyam from "../img/anakayam.jpg";
-import anakAyam2 from "../img/anakayam2.jpg";
 import blank_image from "../img/blank-image.png";
 import PUBLIC_NAVBAR from '../_public/Public-Navbar';
 import PUBLIC_FOOTER from '../_public/Public-Footer';
@@ -96,7 +94,7 @@ const Checkout = () => {
 
     return (
     <div>
-    <div className={s.container_produk} style={{ backgroundImage: `url(${background})`}}>
+    <div className="container_checkout" style={{ backgroundImage: `url(${background})`}}>
 
     <ReactModal
       isOpen={ modalBayar }
@@ -123,7 +121,7 @@ const Checkout = () => {
           </div>
         </div>
         
-        <div className={s.atas_nama}>
+        <div className="atas_nama">
           <form onSubmit={ sudahBayar }>
             <input className="form-control shadow-none mt-2 mb-3" type="text" placeholder="Atas Nama" value={atasNama} onChange={(e) => setAtasNama(e.target.value)} required/>
             <button onClick={ sudahBayar } type="button" class="btn btn-success mb-1" style={{minWidth:"100%"}}>Sudah Bayar</button>
@@ -139,7 +137,7 @@ const Checkout = () => {
     <PUBLIC_NAVBAR />
 
 
-    <main className={s.main}>
+    <main>
 
       <div className="container">
         <div className="row">
@@ -147,9 +145,9 @@ const Checkout = () => {
           <div className="col-md-8 mb-4">
             <div className="feuture-box">
               <div className="container d-flex flex-wrap justify-content-end">
-                <div className={s.keranjang_wrapper}>
+                <div className="keranjang_wrapper">
                 <div className="card card-body">
-                  <div className={s.keranjang_title}><strong>Checkout</strong></div>
+                  <div className="keranjang_title"><strong>Checkout</strong></div>
 
                     <div className="card card-body">
 
@@ -175,7 +173,7 @@ const Checkout = () => {
                     </div>
 
                     <div className="card card-body">
-                      <div className={s.alamat_title}><i class="bi bi-house-door me-2" /><strong>Alamat</strong></div>
+                      <div className="alamat_title"><i class="bi bi-house-door me-2" /><strong>Alamat</strong></div>
                       <div className="card card-body p-2 ps-3 mt-1">
                         {/* <div className="">{user[0].nama} | {user[0].noTelp}</div>
                         <div className="">{user[0].alamat}</div> */}
@@ -193,20 +191,20 @@ const Checkout = () => {
           </div>
           <div className="col-md-2">
             <div className="feuture-box">
-              <div class="transaction-card d-flex" className={s.transaction_card3}>
+              <div class="transaction-card d-flex" className="transaction_card3">
                   <div class="basket-info p-3">
-                      <h6 className={s.checkout_title}>Pembayaran</h6>
+                      <h6 className="checkout_title">Pembayaran</h6>
 
 
                       <div className="container mt-4 pt-3">
                           <div className="row align-items-center">
                               <div class="col-md-1 mt-2">
-                                  <div className={s.basket_subtotal_text}>
+                                  <div className="basket_subtotal_text">
                                       <strong>Subtotal</strong>
                                   </div>
                               </div>
                               <div class="col d-flex justify-content-end">
-                                  <div className={s.basket_subtotal}>
+                                  <div className="basket_subtotal">
                                       <strong>
                                           Rp{ Object.values(product).reduce((acc, curr, index) => {
                                               const hargaFloat = parseFloat(curr.harga);
