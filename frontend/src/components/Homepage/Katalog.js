@@ -1,117 +1,108 @@
-import s from "./css/Katalog.module.css";
+import "./css/Katalog.css";
 import anakAyam from "../img/anakayam.jpg";
+import blank_image from "../img/blank-image.png"
 import PUBLIC_NAVBAR from '../_public/Public-Navbar';
 import PUBLIC_FOOTER from '../_public/Public-Footer';
 import background from "../img/green-farm-blur.jpg";
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { setLocalStorage, getLocalStorage } from "../utils/utils";
 
 const Katalog = () => {
     const [products, setProduct] = useState([]);
+    const [gambar, setGambar] = useState([]);
 
     const navigate = useNavigate();
 
+    const getProducts = async () => {
+      const res = await axios.get('http://localhost:5000/produk');
+      setProduct((res.data).filter(item => item.stok >= 0));
+    }
+
     useEffect(() => {
-        getProducts();
+      getProducts();
     }, []);
 
 
-    const getProducts = async () => {
-        const res = await axios.get('http://localhost:5000/produk')
-        setProduct(res.data);
-    }
-    
-    
-    const addCart = (id) => {
-        navigate(`/produk/${id}`);
+    const getImages = async () => {
 
     }
+
+    useEffect(() => {
+      getImages(); 
+    }, []);
     
+
+
+
+    const addCart = (id) => {
+      navigate(`/produk/${id}`);
+    }
 
     const getCart = () => {
-        return getLocalStorage("cart");
+      return getLocalStorage("cart");
     }
 
     function setButtonName(id){
-        for(let key in getCart()){
-            if(id === key){
-                return "Shopping Cart";
-            }
+      for(let key in getCart()){
+        console.log(id);
+        if(id === key){
+          return "Cek Keranjang";
         }
-        return "Add to Cart";
+      }
+      return "+ Keranjang";
     }
-
-
-
-
-    // const addCartButton = 
-
-
-
-
-
 
 
 
     return (
     <div>
 
-<style jsx global>{`
-
-`}
-</style>
-    <div className={s.container_katalog} style={{ backgroundImage: `url(${background})`}}>
+    <div className="container-katalog" style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}>
 
         <PUBLIC_NAVBAR />
 
-        <main className={s.main}>
+
+        <main className="main">
             <div className="row justify-content-center">
-                <div className="col-md-2"></div>
 
-                <div className="col-md-6">
-                    <section className={s.feature_box}>
+                <div className="col-md-9">
+                  <div className="title feature_box card card-body">
+                    <h4 className="card card-title p-2 ps-3 pe-4 ms-3 mt-2 d-inline-block"><i class="bi bi-cart-fill pe-3" />Katalog</h4>
+                    <section className="pt-4">
                     <div class="container d-flex flex-wrap justify-content-center">
-
-                    { products.map((product, index) => (
-                        <div class="product-card" className={s.product_card}>
-                            <div class="product-image" className={s.product_image}>
-                                <img src={anakAyam} alt="ayam lucuk"/>
+                    { products && products.map((product, index) => (
+                      <div className="product-card mb-5">
+                            <div className="product-image">
+                            <img 
+                              onClick={ () => navigate(`/produk/${product.idProduk}`)}
+                              src={product.gambar === null ? blank_image : product.gambar} 
+                              className="card card-image" />
                             </div>
-                            <div class="product-info" className={s.product_info}>
-                                <h3 class="product-name" className={s.product_name}><strong>{product.nama}</strong></h3>
-                                <p class="product-description" className={s.product_description}>Product description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut sapien euismod, sodales elit a, efficitur velit.</p>
-                                <div class="product-stock" className={s.product_stock}>stok : {product.stok}</div>
-                                <div class="product-price" className={s.product_price}>Rp. {product.harga}</div>
-                                <button 
-                                    id={`cart-button-${product.id}`} 
-                                    className={s.add_to_cart_button} 
-                                    onClick={() => addCart(product.id)}>
-                                    {
-                                        setButtonName(product.id)
-                                    }
-                                </button>
+                            <div class="product-info p-4 pt-3">
+                                <h4 className="product-name"><strong>{product.nama}</strong></h4>
+                                <div className="product-stock">stok : {product.stok}</div>
+                                <h4 className="product-price"><strong>Rp. {parseFloat(product.harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong></h4>
+                                { getCart().hasOwnProperty(product.idProduk) ? (
+
+                                  <button className="btn btn-success" onClick={ ()=> navigate('/keranjang') }><i class="bi bi-cart2 me-2" />Cek Keranjang</button>
+                                  ) : (
+                                      <button className="btn btn-success" onClick={ ()=> addCart(product.idProduk) }>+ Keranjang</button>
+                                      
+                                  )
+                              }
 
                             </div>
                         </div>
                     )) }
                     </div>
                     </section>
+                    </div>
                 </div>
 
-                <div className="col-md-3">
-                    <section className={s.feature_box}>
-                        <div class="container">
-                            Orderan anda:<br />
-                            - ayam <br />
-                            - pakan <br /><br />
-                            <button className="btn btn-primary">Checkout</button>
-                            <button className="btn btn-info" onClick={() => getCart()}>cek</button>
 
-                        </div>
-                    </section>
-                </div>
             </div>
 
 

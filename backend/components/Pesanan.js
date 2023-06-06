@@ -13,7 +13,7 @@ const Pesanan = db.define('pesanan',{
     status:{type: DataTypes.STRING,allowNull: false},
     waktuPesan:{type: DataTypes.DATE,allowNull: false},
     atasNama:{type: DataTypes.STRING,allowNull: false},
-    alamat:{type: DataTypes.STRING,allowNull: false}
+    alamat:{type: DataTypes.JSON,allowNull: false}
 },{freezeTableName: true});
 
 const DetailPesanan = db.define('detailPesanan',{
@@ -60,36 +60,44 @@ export const getPesananById = async (req, res) => {
 
 export const createPesanan = async (req, res) => {
     try {
-        const currentIdPesanan = (await query_select("SELECT idPesanan FROM pesanan ORDER BY idPesanan DESC LIMIT 1"))[0];
-        const GENERATED_ID_PESANAN = generateIdPesanan(currentIdPesanan == undefined ? "PAA0000000" : currentIdPesanan.idPesanan);
-        
-        await Pesanan.create({
-            idPesanan: GENERATED_ID_PESANAN,
-            idAkun: req.body[0].idAkun,
-            total: req.body[0].total,
-            status: "Sudah Bayar",
-            waktuPesan: new Date(),
-            atasNama: req.body[0].atasNama,
-            alamat: (await query_select(`SELECT alamat FROM detailAkun WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0].alamat
-        });
-        for(let data in req.body){
-
-            await DetailPesanan.create({
-                idPesanan: GENERATED_ID_PESANAN,
-                idProduk: req.body[data].idProduk,
-                jumlah: req.body[data].jumlah,
-                harga:  req.body[data].harga
-             });
+      const currentIdPesanan = (await query_select("SELECT idPesanan FROM pesanan ORDER BY idPesanan DESC LIMIT 1"))[0];
+      const GENERATED_ID_PESANAN = generateIdPesanan(currentIdPesanan == undefined ? "PAA0000000" : currentIdPesanan.idPesanan);
+      
+      for(let data in req.body){
+        console.log("no stok!!");
+        if(!(await query_select(`SELECT stok FROM produk WHERE idProduk='${req.body[data].idProduk}'`))[0].stok >= req.body[data].jumlah){
+          res.json({message:"Ada produk yang stoknya kurang!", status: false})
+          return;
         }
-        res.json({
-            message: 'Pesanan Berhasil Dibuat!',
-            status: true,
-        });
+      }
+
+      await Pesanan.create({
+        idPesanan: GENERATED_ID_PESANAN,
+        idAkun: req.body[0].idAkun,
+        total: req.body[0].total,
+        status: "Sudah Bayar",
+        waktuPesan: new Date(),
+        atasNama: req.body[0].atasNama,
+        alamat: [(await query_select(`SELECT * FROM alamat WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0]]
+      });
+
+      for(let data in req.body){
+        await DetailPesanan.create({
+          idPesanan: GENERATED_ID_PESANAN,
+          idProduk: req.body[data].idProduk,
+          jumlah: req.body[data].jumlah,
+          harga:  req.body[data].harga
+          });
+      }
+      res.json({
+        message: 'Pesanan Berhasil Dibuat!',
+        status: true,
+      });
     } catch (error) {
       console.log(error);
         res.json({
-            message: error.message,
-            status: false,
+          message: error.message,
+          status: false,
     });
   }
 };

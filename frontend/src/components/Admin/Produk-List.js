@@ -119,9 +119,7 @@ const ProductList = () => {
     }
   };
 
-  useEffect(() => {
-    getProductById();
-  }, []);
+
 
   const getProducts = async () => {
     const res = await axios.get("http://localhost:5000/produk");
@@ -341,7 +339,7 @@ const ProductList = () => {
                 <td>{product.stok}</td>
                 <td>{product.harga}</td>
                 <td>
-                  <button onClick={() => setModalEditHelper(product.id)}>Edit</button>
+                  <button onClick={() => setModalEditHelper(product.idProduk)}>Edit</button>
                   <button onClick={() => deleteProduct(product.id)} className="button is-small is-danger">
                     Delete
                   </button>

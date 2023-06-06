@@ -1,4 +1,4 @@
-import s from "./css/Produk.module.css";
+import "./css/Produk.css";
 import anakAyam from "../img/anakayam.jpg";
 import anakAyam2 from "../img/anakayam2.jpg";
 import blank_image from "../img/blank-image.png";
@@ -68,7 +68,6 @@ const Checkout = () => {
         return;
       }
       const datas = {};
-      console.log(getLoginCookie());
       for(const data in product){
           datas[data] = { 
               idAkun: getLoginCookie(), 
@@ -82,10 +81,13 @@ const Checkout = () => {
       }
       const res = await axios.post('http://localhost:5000/pesanan/', datas);
       if(res.data.status){
-          // selesai bayar
-          setLocalStorage("cart", {});
-          setShopingCart();
+        console.log("awdawd");
+        // selesai bayar
+        setLocalStorage("cart", {});
+        // setShopingCart();
+        // navigate
       } else {
+        console.log("err");
           alert(res.data.message);
       }
     }

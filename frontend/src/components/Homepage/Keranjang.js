@@ -1,4 +1,4 @@
-import s from "./css/Produk.module.css";
+import "./css/Produk.css";
 import anakAyam from "../img/anakayam.jpg";
 import anakAyam2 from "../img/anakayam2.jpg";
 import blank_image from "../img/blank-image.png";
@@ -12,8 +12,10 @@ import ReactModal from 'react-modal';
 import { setLocalStorage, getLocalStorage, updateLocalStorage } from "../utils/utils";
 
 const Keranjang = () => {
-    const [notif, setNotif] = useState(false);
     const [product, setProduct] = useState([]);
+    const [modalKonfirmasi, setModalKonfirmasi] = useState(false);
+    const [itemInginDihapus, setItemInginDihapus] = useState('');
+
 
     const [idProduk, setIdProduk] = useState([]); 
     const [nama, setName] = useState([]); 
@@ -50,8 +52,14 @@ const Keranjang = () => {
     }
 
     const handleCloseModal = () => {
-        setNotif(false);
+      setModalKonfirmasi(false);
     }
+
+    const konfirmasiHapusProduk = (idProduk) => {
+      setItemInginDihapus(idProduk);
+      setModalKonfirmasi(true);
+    }
+
 
     const hapusProduk = (idProduk) => {
       let cart = getLocalStorage("cart") || {}; 
@@ -66,25 +74,24 @@ const Keranjang = () => {
       
     }
     
-
+<i class="bi bi-x-lg"></i>
 
     return (
     <div>
 
-    <div className={s.container_produk} style={{ backgroundImage: `url(${background})`}}>
-{/* 
-    <ReactModal isOpen={notif} onRequestClose={handleCloseModal} className={s.notif_modal} overlayClassName={s.notif_overlay}> 
+    <div className="container_keranjang" style={{ backgroundImage: `url(${background})`}}>
+    <ReactModal
+      isOpen={ modalKonfirmasi }
+      className="custom_modal_notif card card-body bg-light p-3 text-center">
+      
+        Apakah kamu ingin menghapus produk {product.filter(obj => obj.idProduk===itemInginDihapus).nama} dari Keranjang?
 
-    
-        <div className={s.notif_wrapper}>
-            <div className={s.notif_title}>Berhasil Ditambahkan</div>
-            <button onClick={handleCloseModal}>Yes</button>
-        </div>
-    </ReactModal> */}
+
+      </ReactModal>
 
     <PUBLIC_NAVBAR />
 
-    <main className={s.main}>
+    <main>
 
       <div className="container">
         <div className="row">
@@ -92,9 +99,9 @@ const Keranjang = () => {
           <div className="col-md-8 mb-4">
             <div className="feuture-box">
               <div className="container d-flex flex-wrap justify-content-end">
-                <div className={s.keranjang_wrapper}>
+                <div className="keranjang_wrapper">
                 <div className="card card-body">
-                  <div className={s.keranjang_title}><strong>Keranjang Anda</strong></div>
+                  <div className="keranjang_title"><strong>Keranjang Anda</strong></div>
 
                     <div className="card card-body">
 
@@ -108,26 +115,26 @@ const Keranjang = () => {
                                 <td>{ produk.nama }</td>
                                 <td>Rp { (parseFloat(produk.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 }) }</td>
                                 <td>
-                                  <div className={s.checkout_card}>
+                                  <div className="checkout_card">
 
-                                    <button className={s.plus_minus_button}
+                                    <button className="plus_minus_button"
                                       onClick={ () => {
                                         if(jumlah[index] > 1){
                                           setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? value - 1 : value)));
                                           updateLocalStorage("cart", produk.idProduk, jumlah[index]-1);
                                         } else {
-                                          hapusProduk(produk.idProduk) 
+                                          konfirmasiHapusProduk(produk.idProduk) 
                                         }
                                       }}>-</button>
                                     
-                                    <input type="number" className={s.input_quantity} value={jumlah[index]} 
+                                    <input type="number" className="input_quantity" value={jumlah[index]} 
                                       onChange={(e) => {
                                         setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? Math.max(1, Math.min(Number(e.target.value), produk.stok)) : value)))
                                         updateLocalStorage("cart", produk.idProduk, Math.max(1, Math.min(Number(e.target.value), produk.stok)) );
                                       }
                                       } />
                                     
-                                    <button className={s.plus_minus_button}
+                                    <button className="plus_minus_button"
                                       onClick={ () => {
                                         if(jumlah[index] < produk.stok){
                                           setJumlah(prevJumlah => prevJumlah.map((value, idx) => (idx === index ? value + 1 : value)));
@@ -136,7 +143,7 @@ const Keranjang = () => {
                                       }}>+</button>
 
                                   </div>
-                                  <button onClick={ () => hapusProduk(produk.idProduk) } class="btn btn-danger btn-sm mb-1 ms-3"><i class="bi bi-trash3" /></button>
+                                  <button onClick={ () => konfirmasiHapusProduk(produk.idProduk) } class="btn btn-danger btn-sm mb-1 ms-3"><i class="bi bi-trash3" /></button>
                               </td>
                             </tr>
                         )) }
@@ -156,20 +163,20 @@ const Keranjang = () => {
           </div>
           <div className="col-md-2">
             <div className="feuture-box">
-              <div class="transaction-card d-flex" className={s.transaction_card3}>
+              <div class="transaction-card d-flex" className="transaction_card3">
                   <div class="basket-info p-3">
-                      <h6 className={s.checkout_title}>Checkout</h6>
+                      <h6 className="checkout_title">Checkout</h6>
 
 
                       <div className="container mt-4 pt-3">
                           <div className="row align-items-center">
                               <div class="col-md-1 mt-2">
-                                  <div className={s.basket_subtotal_text}>
+                                  <div className="basket_subtotal_text">
                                       <strong>Subtotal</strong>
                                   </div>
                               </div>
                               <div class="col d-flex justify-content-end">
-                                  <div className={s.basket_subtotal}>
+                                  <div className="basket_subtotal">
                                       <strong>
                                           Rp{ Object.values(product).reduce((acc, curr, index) => {
                                               const hargaFloat = parseFloat(curr.harga);

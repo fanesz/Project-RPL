@@ -43,13 +43,34 @@ const Produk = db.define('produk',{
  
 //models
 export const getAllProducts = async (req, res) => {
+  
     try {
-        const products = await Produk.findAll({
-            attributes: ['id','idProduk','nama','deskripsi','stok','harga','berat']
-        });
+        const products = await Produk.findAll();
+
+        for(let key in products){
+          products[key].dataValues["gambar"] = null
+          try {
+            const imagePath = `./gambar/${products[key].dataValues.idProduk}.png`;
+            const readFilePromise = new Promise((resolve, reject) => {
+              fs.readFile(imagePath, (err, data) => {
+                if (err) {
+                  return reject('Image not found');
+                }
+                const imageBase64 = data.toString('base64');
+                const imageData = `data:image/jpeg;base64,${imageBase64}`;
+                products[key].dataValues["gambar"] = imageData;
+                resolve();
+              });
+            });
+            await readFilePromise;
+          } catch (error) {
+            console.log(error);
+          }
+        }
         res.json(products);
     } catch (error) {
-        res.json({ message: error.message });
+      console.log(error);
+      res.json({ message: error.message });
     }  
 }
 
@@ -57,7 +78,7 @@ export const getProductById = async (req, res) => {
     try {
       const product = await Produk.findAll({
         where: {
-          id: req.params.id
+          idProduk: req.params.id
         }
       });
       product[0].dataValues["gambar"] = null;
@@ -83,9 +104,8 @@ export const getProductById = async (req, res) => {
       product[0]["status"] = true;
       
       res.json(product[0]);
-
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       res.json({
         message: error.message,
         status: false,
@@ -212,4 +232,15 @@ export const deleteProduct = async (req, res) => {
             status: false
         });
     }  
+}
+
+export const getTotalTerjualById = async (req, res) => {
+  try {
+    const query = (await query_select(`SELECT coalesce(SUM(jumlah), 0) as terjual FROM detailPesanan WHERE idProduk = '${req.params.id}'`))[0];
+    console.log(query);
+    res.json(query);
+  } catch (error) {
+    res.json({ message: error.message });
+    console.log(error);
+  }
 }

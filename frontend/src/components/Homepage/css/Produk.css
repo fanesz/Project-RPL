@@ -1,6 +1,10 @@
-.container_produk{
+.container_produk, .container_keranjang{
     background-repeat: no-repeat;
     background-size: cover;
+  }
+  
+  .container_produk main img{
+    height: 15rem;
 }
 
 .custom_modal{

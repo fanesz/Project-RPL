@@ -1,6 +1,6 @@
 import s from "./css/Produk.module.css";
 import anakAyam from "../img/anakayam.jpg";
-import anakAyam2 from "../img/anakayam2.jpg";
+import blank_image from "../img/blank-image.png";
 import PUBLIC_NAVBAR from '../_public/Public-Navbar';
 import PUBLIC_FOOTER from '../_public/Public-Footer';
 import background from "../img/green-farm-blur.jpg";
@@ -11,61 +11,54 @@ import ReactModal from 'react-modal';
 import { setLocalStorage, getLocalStorage } from "../utils/utils";
 
 const Produk = () => {
-    const [products, setProduct] = useState([]);
-    const [notif, setNotif] = useState(false);
-    const [modalBayar, setModalBayar] = useState(false);
+  
+  const [notif, setNotif] = useState(false);
+  const [modalBayar, setModalBayar] = useState(false);
 
-    const [idProduk, setIdProduk] = useState(''); 
-    const [nama, setName] = useState(''); 
-    const [deskripsi, setDeskripsi] = useState(''); 
-    const [stok, setStok] = useState(''); 
-    const [harga, setHarga] = useState(''); 
-    const [berat, setBerat] = useState('');
+  const [products, setProduct] = useState([]);
+  const [jumlah, setJumlah] = useState(1);
+  const [terjual, setTerjual] = useState('');
+  
+  const navigate = useNavigate();
 
-    const [jumlah, setJumlah] = useState(1);
-    
-    const navigate = useNavigate();
+  const { id } = useParams();
 
-    const { id } = useParams();
+  const getProductById = (async () => {
+    const res = await axios.get(`http://localhost:5000/produk/${id}`);
+    const res2 = await axios.get(`http://localhost:5000/produk/terjual/${id}`);
+    setTerjual(res2.data.terjual);
+    setProduct(res.data);
+  });
+  
 
-    const getProductById = (async () => {
-        const response = await axios.get(`http://localhost:5000/produk/${id}`);
-        setIdProduk(response.data.idProduk);
-        setName(response.data.nama);
-        setDeskripsi(response.data.deskripsi);
-        setStok(response.data.stok);
-        setHarga(response.data.harga);
-        setBerat(response.data.berat);
-    });
-
-    useEffect(() => {
-        getProductById();
-    }, []);
+  useEffect(() => {
+    getProductById();
+  }, []);
 
 
-    
-    
-    const addCart = (isAlert=true) => {
-        let cart = getLocalStorage("cart") || {}; 
-        cart[idProduk] = cart[idProduk] == undefined ? cart[idProduk] = 0 : cart[idProduk];
-        cart[idProduk] += jumlah;
-        setLocalStorage("cart", cart);
-        // setNotif(true);
-        if(isAlert) alert("Produk Berhasil Ditambahkan!")
-    }
-    
-    const buyNow = () => {
-      addCart(false);
-      setLocalStorage("buynow", [idProduk, jumlah])
-      navigate('/checkout')
-    }
+  
+  
+  const addCart = (isAlert=true) => {
+      let cart = getLocalStorage("cart") || {}; 
+      cart[products.idProduk] = cart[products.idProduk] == undefined ? cart[products.idProduk] = 0 : cart[products.idProduk];
+      cart[products.idProduk] += jumlah;
+      setLocalStorage("cart", cart);
+      // setNotif(true);
+      if(isAlert) alert("Produk Berhasil Ditambahkan!")
+  }
+  
+  const buyNow = () => {
+    addCart(false);
+    setLocalStorage("buynow", [products.idProduk, jumlah])
+    navigate('/checkout')
+  }
 
 
 
-    const handleCloseModal = () => {
-      setNotif(false);
-      setModalBayar(false);
-    }
+  const handleCloseModal = () => {
+    setNotif(false);
+    setModalBayar(false);
+  }
 
 
 
@@ -91,7 +84,9 @@ const Produk = () => {
 
             <div class="feuture-box" className={s.feuture_box}>
                 <div class="transaction-card d-flex" className={s.transaction_card1}>
-                    <img src={anakAyam2} style={{width:"20rem"}} alt="ayam lucuk" />
+                  <img 
+                    onClick={ () => navigate(`/produk/${products.idProduk}`)}
+                    src={products.gambar === null ? blank_image : products.gambar} />
                 </div>
             </div>
 
@@ -99,14 +94,14 @@ const Produk = () => {
                 <div className="container d-flex flex-wrap justify-content-center">
                     <div className={s.transaction_card2}>
                         <div className={s.product_info}>
-                            <div className={s.product_name}>{nama}</div>
-                            <div className={s.product_sold}>131283 terjual</div>
-                            <div className={s.product_price}>Rp{parseInt(harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</div>
+                            <div className={s.product_name}>{products.nama}</div>
+                            <div className={s.product_sold}>{terjual} terjual</div>
+                            <div className={s.product_price}>Rp{parseInt(products.harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</div>
                             <div className={s.line}/>
                             <div className={s.product_detail}>Detail</div>
                             <div className={s.line}/>
-                            <div className={s.product_berat}>Berat: {berat} gram</div>
-                            <div className={s.product_deskripsi}>{deskripsi}</div>
+                            <div className={s.product_berat}>Berat: {products.berat} gram</div>
+                            <div className={s.product_deskripsi}>{products.deskripsi}</div>
 
                             <div className="mb-4" />
                         </div>
@@ -119,11 +114,18 @@ const Produk = () => {
                         <h6>Set amount</h6>
                         <div className="container d-flex align-items-center mt-4">
                             <div class="checkout-card" className={s.checkout_card}>
+
+
                                 <button onClick={ () => jumlah > 1 ? setJumlah(jumlah-1) : "" } className={s.plus_minus_button}>-</button>
-                                <input type="text" className={s.input_quantity} value={jumlah} />
+                                <input type="number" className={s.input_quantity} value={jumlah} 
+                                  onChange={(e) => { setJumlah(Math.max(1, Math.min(Number(e.target.value), products.stok))) }}/>
+                                
                                 <button onClick={ () => setJumlah(jumlah+1) } className={s.plus_minus_button}>+</button>
+                            
+
+                            
                             </div>
-                            <span className="ms-2">stok: {stok}</span>
+                            <span className="ms-2">stok: {products.stok}</span>
                         </div>
 
                         <div className="container mt-4 pt-3">
@@ -135,7 +137,7 @@ const Produk = () => {
                                 </div>
                                 <div class="col d-flex justify-content-end">
                                     <div className={s.basket_subtotal}>
-                                        <strong>Rp{(jumlah*harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong>
+                                        <strong>Rp{(jumlah*(products.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong>
                                     </div>
                                 </div>
                             </div>

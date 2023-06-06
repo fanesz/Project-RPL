@@ -1,0 +1,48 @@
+
+
+.container-katalog .feature_box {
+  background-color: #f2f2f2ce;
+}
+
+.container-katalog .product-card{
+  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 2rem;
+  background-color: #fdfff7;
+  width: 15rem;
+}
+
+.container-katalog .product-image {
+    height: 10rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.container-katalog .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.container-katalog .add_to_cart_button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.container-katalog .add-to-cart-button:hover {
+  background-color: #3e8e41;
+}
+
+.container-katalog .card-title {
+  width: fit-content;
+}
+
