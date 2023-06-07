@@ -34,9 +34,7 @@ const MainMenu = () => {
   }, []);
 
   const getPesananById = (async (idPesanan) => {
-    const res = await axios.post('http://localhost:5000/pesanan/id', {
-      idPesanan: idPesanan
-    });
+    const res = await axios.get(`http://localhost:5000/pesanan/${idPesanan}`)
     setShowPesanan({ [res.data[0].idPesanan]: res.data })
     setlistPesanan((prevState) => {
       return { ...prevState, [res.data[0].idPesanan]: res.data };
@@ -210,7 +208,7 @@ const MainMenu = () => {
                                 <h5 class="card-title">Pesanan#{data.idPesanan}</h5>
                                 <div class="card-text mb-2">
                                 <div className="idProduk">{data.waktuPesan}</div>
-                                <div className="harga">Rp {(data.total).toLocaleString('en-US', { minimumFractionDigits: 0 })}</div>
+                                <div className="harga">Rp {(data.total).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</div>
                                 </div>
                                 <button onClick={ () => detailPesanan(data.idPesanan) } href="#" class="btn btn-secondary">Detail Pesanan</button>
                             </div>
@@ -243,7 +241,7 @@ const MainMenu = () => {
                                 <h5 class="card-title">Pesanan#{data.idPesanan}</h5>
                                 <div class="card-text mb-2">
                                 <div className="idProduk">{data.waktuPesan}</div>
-                                <div className="harga">Rp {(data.total).toLocaleString('en-US', { minimumFractionDigits: 0 })}</div>
+                                <div className="harga">Rp {(data.total).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</div>
                                 </div>
                                 <button onClick={ () => detailPesanan(data.idPesanan) } href="#" class="btn btn-secondary">Detail Pesanan</button>
                             </div>

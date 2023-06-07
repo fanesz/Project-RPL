@@ -82,12 +82,17 @@ const Keranjang = () => {
       isOpen={ modalKonfirmasi }
       onRequestClose={ handleCloseModal }
       className="custom_modal_notif card card-body bg-light p-4 text-center">
-      
+      <div className="modal_close_button_wrapper d-flex justify-content-end">
+        <button onClick={  handleCloseModal } className="modal_close_button"><i className="bi bi-x-lg" /></button>
+      </div>
+      <div className="modal_content_wrapper pe-1">
         Apakah kamu ingin menghapus produk {product && product.filter(obj => obj.idProduk===itemInginDihapus).nama} dari Keranjang?
         <div className="d-flex justify-content-center mt-4">
           <button onClick={ handleCloseModal } className="btn btn-success mx-3 w-25">Tidak</button>
           <button onClick={ hapusProduk } className="btn btn-danger mx-3 w-25">Ya</button>
         </div>
+      </div>
+      
 
       </ReactModal>
 
@@ -115,7 +120,7 @@ const Keranjang = () => {
                             <tr key={ produk.id }>
                                 <td><img src={produk.gambar === null ? blank_image : produk.gambar} className="card card-image" /></td>
                                 <td>{ produk.nama }</td>
-                                <td>Rp { (parseFloat(produk.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 }) }</td>
+                                <td>Rp { (parseFloat(produk.harga)).toLocaleString('id-ID', { minimumFractionDigits: 0 }) }</td>
                                 <td>
                                   <div className="checkout_card">
 
@@ -183,7 +188,7 @@ const Keranjang = () => {
                                           Rp{ Object.values(product).reduce((acc, curr, index) => {
                                               const hargaFloat = parseFloat(curr.harga);
                                               return parseFloat(acc + hargaFloat * jumlah[index]);
-                                          }, 0).toLocaleString('en-US', { minimumFractionDigits: 0 })}
+                                          }, 0).toLocaleString('id-ID', { minimumFractionDigits: 0 })}
                                       </strong>
                                   </div>
                               </div>

@@ -12,6 +12,8 @@ import { setLocalStorage, getLocalStorage, getLoginCookie, unsetLocalStorage } f
 const Checkout = () => {
     const [product, setProduct] = useState([]);
     const [alamat, setAlamat] = useState({});
+    const [rekening, setRekening] = useState({});
+    const [pembayaran, setPembayaran] = useState({});
     const [modalBayar, setModalBayar] = useState(false);
     const [atasNama, setAtasNama] = useState('');
 
@@ -19,75 +21,90 @@ const Checkout = () => {
     const navigate = useNavigate();
 
     const setShopingCart = (async () => {
-      const getBuyNow = getLocalStorage("buynow");
-      const getCart = getLocalStorage("cart");
+    const getBuyNow = getLocalStorage("buynow");
+    const getCart = getLocalStorage("cart");
 
-      let listProduct;
-      if(getBuyNow) {
-        listProduct = [getBuyNow[0]];
-        setJumlah([getBuyNow[1]])
-      } else {
-        listProduct = Object.keys(getCart);
-        setJumlah(Object.values(getCart))
-      }
-      const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: listProduct });
-      setProduct(res.data);
-      unsetLocalStorage("buynow");
-
-    });
-
-    useEffect(() => {
-        setShopingCart();
-    }, []);
-
-    const getAlamat = async() => {
-      const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
-      setAlamat(res.data[0]);
+    let listProduct;
+    if(getBuyNow) {
+      listProduct = [getBuyNow[0]];
+      setJumlah([getBuyNow[1]])
+    } else {
+      listProduct = Object.keys(getCart);
+      setJumlah(Object.values(getCart))
     }
+    const res = await axios.post(`http://localhost:5000/produk/idProduk`, { idProduk: listProduct });
+    setProduct(res.data);
+    unsetLocalStorage("buynow");
 
-    useEffect(() => {
-      getAlamat();
+  });
+
+  useEffect(() => {
+      setShopingCart();
+  }, []);
+
+  const getAlamat = async() => {
+    const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
+    setAlamat(res.data[0]);
+  }
+
+  useEffect(() => {
+    getAlamat();
   }, []);
 
 
-    const bayar = () => {
-      setModalBayar(true);
+  const getRekening = async() => {
+    const res = await axios.get(`http://localhost:5000/informasi/rekening`);
+    if(res.data.length != 0) {
+      setPembayaran(res.data[0].idRekening);
+      setRekening(res.data);
     }
 
-    const handleCloseModal = () => {
+  }
+
+  useEffect(() => {
+    getRekening();
+  }, []);
+
+
+  const bayar = () => {
+    setModalBayar(true);
+  }
+
+  const handleCloseModal = () => {
+    setModalBayar(false);
+  }
+
+  const sudahBayar = async() => {
+    if(product.length === 0) return;
+    if(atasNama.trim() === ''){
+      document.querySelector("form input").focus();
+      return;
+    }
+
+    const datas = {};
+    for(const data in product){
+        datas[data] = { 
+            idAkun: getLoginCookie(), 
+            idProduk:product[data].idProduk, 
+            jumlah: jumlah[data], 
+            harga: product[data].harga,
+            total: parseFloat(jumlah[data])*parseFloat(product[data].harga),
+            atasNama: atasNama,
+            alamat: alamat,
+            idRekening: pembayaran
+        }; 
+
+    }
+    const res = await axios.post('http://localhost:5000/pesanan/', datas);
+    if(res.data.status){
+      setLocalStorage("cart", {});
+      setProduct([]);
       setModalBayar(false);
+      navigate('/pesanan');
+    } else {
+      alert(res.data.message);
     }
-
-    const sudahBayar = async() => {
-      if(product.length === 0) return;
-      if(atasNama.trim() === ''){
-        document.querySelector("form input").focus();
-        return;
-      }
-      const datas = {};
-      for(const data in product){
-          datas[data] = { 
-              idAkun: getLoginCookie(), 
-              idProduk:product[data].idProduk, 
-              jumlah: jumlah[data], 
-              harga: product[data].harga,
-              total: parseFloat(jumlah[data])*parseFloat(product[data].harga),
-              atasNama: atasNama,
-              alamat: alamat
-          }; 
-
-      }
-      const res = await axios.post('http://localhost:5000/pesanan/', datas);
-      if(res.data.status){
-        // selesai bayar
-        setLocalStorage("cart", {});
-        // setShopingCart();
-        // navigate ke pesanan
-      } else {
-        console.log("err");
-          alert(res.data.message);
-      }
-    }
+  }
 
 
 
@@ -104,26 +121,35 @@ const Checkout = () => {
       </div>
       <div className="modal_content_wrapper pe-1">
         <div className="container-wrapper ms-3">
-          <div className="accordian_title"><strong>Metode Pembayaran</strong></div>
-          <div className="accordion" id="perlu_diproses">
-            <div className="accordion-item">
-              <h2 className="accordion-header" id="headingOne">
-                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_perlu_diproses" aria-expanded="true" aria-controls="collapseOne">Lihat Detail</button>
-              </h2>
-              <div id="collapse_perlu_diproses" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#perlu_diproses">
-                <div className="accordion-body">
-                  <div className="row">
-                    Bank : Rekening <br />
-                    Bank : Rekening
-                  </div>
-                </div>
+          <div className="checkout_title mb-4">Metode Pembayaran</div>
+          <div className="pembayaran-wrapper">
+
+            { Object.entries(rekening).length != 0 ? (rekening.map((data, index) => (
+              <div className={`card card-body mb-2 card-pembayaran ${data.idRekening === pembayaran ? "card-pembayaran-selected" : ""}`} onClick={ () => setPembayaran(data.idRekening) }>
+                <div className=""><strong>{data.bank}</strong></div>
+                <div className="">{data.nomor} | {data.nama}</div>
               </div>
-            </div>
+            ))) : (
+              <div>
+                <div className="card card-body opacity-50">Rekening Tidak Tersedia!</div>
+              </div>
+            ) }
           </div>
           <div className="atas_nama">
+          <div className="line mt-3" />
             <form onSubmit={ sudahBayar }>
-              <input className="form-control shadow-none mt-2 mb-3" type="text" placeholder="Atas Nama" value={atasNama} onChange={(e) => setAtasNama(e.target.value)} required/>
-              <button onClick={ sudahBayar } type="button" className="btn btn-success mb-1" style={{minWidth:"100%"}}>Sudah Bayar</button>
+              <input className="form-control shadow-none mt-3" type="text" placeholder="Atas Nama" value={atasNama} onChange={(e) => setAtasNama(e.target.value)} required/>
+              <h5 className="card card-body mt-3 mb-2 border border-dark "><strong>
+                Total : Rp { Object.values(product).reduce((acc, curr, index) => {
+                  const hargaFloat = parseFloat(curr.harga);
+                  return parseFloat(acc + hargaFloat * jumlah[index]);
+                }, 0).toLocaleString('id-ID', { minimumFractionDigits: 0 })}
+              </strong></h5>
+              { Object.entries(rekening).length != 0 && atasNama != '' ? (
+                <button onClick={ sudahBayar } type="button" className="btn btn-success w-100">Sudah Bayar</button>
+              ) : (
+                <button type="button" className="btn btn-secondary w-100">Sudah Bayar</button>
+              ) }
             </form>
           </div>
         </div>
@@ -156,7 +182,7 @@ const Checkout = () => {
                             <tr key={ produk.id }>
                                 <td><img src={produk.gambar === null ? blank_image : produk.gambar} className="card card-image" /></td>
                                 <td>{ produk.nama }</td>
-                                <td>Rp { (parseFloat(produk.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 }) }</td>
+                                <td>Rp { (parseFloat(produk.harga)).toLocaleString('id-ID', { minimumFractionDigits: 0 }) }</td>
   
                             </tr>
                         )) }
@@ -193,8 +219,8 @@ const Checkout = () => {
           </div>
           <div className="col-md-2">
             <div className="feuture-box">
-              <div className="transaction-card d-flex transaction_card3" >
-                  <div className="basket-info p-3">
+              <div className="transaction-card d-flex transaction_card3 " >
+                  <div className="basket-info p-3 w-100">
                       <h6 className="checkout_title">Pembayaran</h6>
 
 
@@ -211,7 +237,7 @@ const Checkout = () => {
                                           Rp{ Object.values(product).reduce((acc, curr, index) => {
                                               const hargaFloat = parseFloat(curr.harga);
                                               return parseFloat(acc + hargaFloat * jumlah[index]);
-                                          }, 0).toLocaleString('en-US', { minimumFractionDigits: 0 })}
+                                          }, 0).toLocaleString('id-ID', { minimumFractionDigits: 0 })}
                                       </strong>
                                   </div>
                               </div>
@@ -219,7 +245,7 @@ const Checkout = () => {
                       </div>
                       
                       <div className="container">
-                      <button onClick={ bayar } type="button" className="btn btn-success mt-3" style={{minWidth:"100%"}}>Bayar</button>
+                        <button onClick={ bayar } type="button" className="btn btn-success mt-3" style={{minWidth:"100%"}}>Bayar</button>
                       </div>
                   </div>
               </div>

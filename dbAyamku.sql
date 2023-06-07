@@ -115,18 +115,25 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`pesanan` (
   `total` DOUBLE NOT NULL,
   `status` VARCHAR(15) NOT NULL,
   `waktuPesan` TIMESTAMP NOT NULL,
+  `idRekening` CHAR(5) NOT NULL,
   `atasNama` VARCHAR(255) NOT NULL,
-  `alamat` VARCHAR(255),
+  `alamat` JSON,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   unique(`idPesanan`),
   CONSTRAINT `idAkunDiDetailPenjualan`
   FOREIGN KEY (`idAkun`)
-  REFERENCES `dbAyamku`.`akun` (`idAkun`))
+  REFERENCES `dbAyamku`.`akun` (`idAkun`),
+  CONSTRAINT `idRekeningDiPesanan`
+  FOREIGN KEY (`idRekening`)
+  REFERENCES `dbAyamku`.`rekening` (`idRekening`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
+drop table detailpesanan;
+drop table pesanan;
+insert into pesanan(idPesanan, idAkun, idRekening) values('PAA0000001', 'fcbae759-039e-11ee-8f7d-047c160aa273', 'R0001');
+select * from akun;
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPesanan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -154,10 +161,24 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `dbAyamku`.`rekening` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `idRekening` char(5) NOT NULL,
+  `bank` VARCHAR(255) NOT NULL,
+  `nama` VARCHAR(255) NOT NULL,
+  `nomor` VARCHAR(255) NOT NULL,
+  `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE(`idRekening`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
+insert into rekening (idRekening, bank, nama, nomor) values("R0001", 'BCA', 'PT Ayamku', '01234567');
+insert into rekening (idRekening, bank, nama, nomor) values("R0002", 'Mandiri', 'PT Ayamku', '23456789');
+insert into rekening (idRekening, bank, nama, nomor) values("R0003", 'BCA', 'PT Ayamku', '01234567');
 
-
-
+drop table rekening;
 
 
 -- CREATE TABLE IF NOT EXISTS `dbAyamku`.`Pengiriman` (

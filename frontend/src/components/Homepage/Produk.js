@@ -97,7 +97,7 @@ const Produk = () => {
                   <div className="product_info">
                     <div className="product_name">{products.nama}</div>
                     <div className="product_sold">{terjual} terjual</div>
-                    <div className="product_price">Rp{parseInt(products.harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</div>
+                    <div className="product_price">Rp{parseInt(products.harga).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</div>
                     <div className="line" />
                     <div className="product_detail">Detail</div>
                     <div className="line" />
@@ -136,7 +136,7 @@ const Produk = () => {
                       </div>
                       <div class="col d-flex justify-content-end">
                         <div className="basket_subtotal">
-                          <strong>Rp{(jumlah * (products.harga)).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong>
+                          <strong>Rp{(jumlah * (products.harga)).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</strong>
                         </div>
                       </div>
                     </div>

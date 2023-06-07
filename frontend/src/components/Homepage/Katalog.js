@@ -70,7 +70,7 @@ const Katalog = () => {
 
                 <div className="col-md-9">
                   <div className="title feature_box card card-body">
-                    <h4 className="card card-title p-2 ps-3 pe-4 ms-3 mt-2 d-inline-block"><i class="bi bi-cart-fill pe-3" />Katalog</h4>
+                    <div className="keranjang_title"><strong><i class="bi bi-cart-fill pe-3" />Katalog</strong></div>
                     <section className="pt-4">
                     <div class="container d-flex flex-wrap justify-content-center">
                     { products && products.map((product, index) => (
@@ -83,7 +83,7 @@ const Katalog = () => {
                             </div>
                             <div class="product-info p-4 pt-3">
                                 <div className="product_name">{product.nama}</div>
-                                <div className="product_price"><strong>Rp. {parseFloat(product.harga).toLocaleString('en-US', { minimumFractionDigits: 0 })}</strong></div>
+                                <div className="product_price"><strong>Rp. {parseFloat(product.harga).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</strong></div>
                                 <div className="product_stock mt-3 mb-1">stok : {product.stok}</div>
                                 { getCart().hasOwnProperty(product.idProduk) ? (
 

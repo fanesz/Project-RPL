@@ -12,6 +12,7 @@ const Pesanan = db.define('pesanan',{
     total:{type: DataTypes.DOUBLE,allowNull: false},
     status:{type: DataTypes.STRING,allowNull: false},
     waktuPesan:{type: DataTypes.DATE,allowNull: false},
+    idRekening:{type: DataTypes.STRING,allowNull: false},
     atasNama:{type: DataTypes.STRING,allowNull: false},
     alamat:{type: DataTypes.JSON,allowNull: false}
 },{freezeTableName: true});
@@ -40,9 +41,13 @@ export const getAllPesanan = async (req, res) => {
 
 export const getPesananById = async (req, res) => {
     try {
-      const query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.body.idPesanan}';`));
+      let query;
+      if(req.params.id.length === 36){
+        query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idAkun = '${req.params.id}';`));
+      } else if(req.params.id.length === 10){
+        query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah FROM detailpesanan, pesanan, detailAkun, produk WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.params.id}';`));
 
-      // console.log(query);
+      }
 
       let result = []
       const pesanan = query.reduce((acc, detailPesanan) => {
@@ -54,7 +59,7 @@ export const getPesananById = async (req, res) => {
       res.json(pesanan);
     } catch (error) {
       console.log(error);
-        res.json({ message: error.message });
+      res.json({ message: error.message });
     }  
 }
 
@@ -64,19 +69,20 @@ export const createPesanan = async (req, res) => {
       const GENERATED_ID_PESANAN = generateIdPesanan(currentIdPesanan == undefined ? "PAA0000000" : currentIdPesanan.idPesanan);
       
       for(let data in req.body){
-        console.log("no stok!!");
         if(!(await query_select(`SELECT stok FROM produk WHERE idProduk='${req.body[data].idProduk}'`))[0].stok >= req.body[data].jumlah){
           res.json({message:"Ada produk yang stoknya kurang!", status: false})
           return;
         }
       }
 
+      console.log(req.body[0].idRekening);
       await Pesanan.create({
         idPesanan: GENERATED_ID_PESANAN,
         idAkun: req.body[0].idAkun,
         total: req.body[0].total,
         status: "Sudah Bayar",
         waktuPesan: new Date(),
+        idRekening: req.body[0].idRekening,
         atasNama: req.body[0].atasNama,
         alamat: [(await query_select(`SELECT * FROM alamat WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0]]
       });
@@ -94,7 +100,7 @@ export const createPesanan = async (req, res) => {
         status: true,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
         res.json({
           message: error.message,
           status: false,
