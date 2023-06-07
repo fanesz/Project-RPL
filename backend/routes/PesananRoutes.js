@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.get('/', getAllPesanan);
-router.post('/id', getPesananById);
+router.get('/:id', getPesananById);
 router.post('/', createPesanan);
 router.post('/status', changeStatusPesanan);
  

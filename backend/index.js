@@ -7,6 +7,7 @@ import ProdukRoutes from "./routes/ProdukRoutes.js";
 import AkunRoutes from "./routes/AkunRoutes.js"
 import DetailAkunRoutes from "./routes/DetailAkunRoutes.js"
 import PesananRoutes from "./routes/PesananRoutes.js"
+import InformasiRoutes from "./routes/InformasiRoutes.js"
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/produk', ProdukRoutes);
 app.use('/akun', AkunRoutes);
 app.use('/detailakun', DetailAkunRoutes);
 app.use('/pesanan', PesananRoutes);
+app.use('/informasi', InformasiRoutes);
 
 
 

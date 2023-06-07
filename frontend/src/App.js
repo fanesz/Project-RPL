@@ -11,6 +11,7 @@ import Keranjang from "./components/Homepage/Keranjang";
 import Checkout from "./components/Homepage/Checkout";
 import Profile from "./components/Homepage/profile/Profile";
 import Alamat from "./components/Homepage/profile/Alamat";
+import Pesanan from "./components/Homepage/Pesanan";
 
 
 function App() {
@@ -29,8 +30,9 @@ function App() {
             <Route path="/katalog" element={<Katalog/>} />
             <Route path="/produk" element={<Katalog/>} />
             <Route path="/produk/:id" element={<Produk/>} />
-            <Route path="/keranjang" element={<Keranjang/>} />
             <Route path="/checkout" element={<Checkout/>} />
+            <Route path="/keranjang" element={<Keranjang/>} />
+            <Route path="/pesanan" element={<Pesanan/>} />
             
             {/* profile */}
             <Route path="/profile" element={<Profile/>} />
