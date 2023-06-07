@@ -100,10 +100,7 @@ insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
 
 select * from detailakun;
 
-SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama, detailPesanan.harga, detailPesanan.jumlah 
-FROM detailpesanan, pesanan, detailAkun, produk
-WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = 'PAA0000001';
-
+SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah, pesanan.jumlahJenisBarang, rekening.bank, pesanan.atasNama FROM detailpesanan, pesanan, detailAkun, produk, rekening WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND pesanan.idRekening = rekening.idRekening AND detailPesanan.idProduk = produk.idProduk AND pesanan.idAkun = '${req.params.id}';
 
 select * from pesanan;
 select * from detailpesanan;
@@ -112,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`pesanan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `idPesanan` CHAR(10) NOT NULL,
   `idAkun` CHAR(36) NOT NULL,
+  `jumlahJenisBarang` int NOT NULL,
   `total` DOUBLE NOT NULL,
   `status` VARCHAR(15) NOT NULL,
   `waktuPesan` TIMESTAMP NOT NULL,
@@ -176,7 +174,7 @@ DEFAULT CHARACTER SET = utf8;
 
 insert into rekening (idRekening, bank, nama, nomor) values("R0001", 'BCA', 'PT Ayamku', '01234567');
 insert into rekening (idRekening, bank, nama, nomor) values("R0002", 'Mandiri', 'PT Ayamku', '23456789');
-insert into rekening (idRekening, bank, nama, nomor) values("R0003", 'BCA', 'PT Ayamku', '01234567');
+insert into rekening (idRekening, bank, nama, nomor) values("R0003", 'BRI', 'PT Ayamku', '01234567');
 
 drop table rekening;
 

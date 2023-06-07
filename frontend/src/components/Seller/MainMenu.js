@@ -14,9 +14,13 @@ const MainMenu = () => {
 
   const [pesananPerluDiproses, setPesananPerluDiproses] = useState([]);
   const [pesananMenungguKonfirmasi, setPesananMenungguKonfirmasi] = useState([]);
-  const [showPesanan, setShowPesanan] = useState([]);
+  const [pesananDibatalkan, setPesananDibatalkan] = useState([]);
+  const [showDetailPesanan, setShowDetailPesanan] = useState([]);
+  const [showAlamat, setShowAlamat] = useState([]);
   const [listPesanan, setlistPesanan] = useState({});
   const [modalDetailPesanan, setModalDetailPesanan] = useState(false);
+
+  const navigate = useNavigate();
 
   const getPesanan = (async () => {
     const res = await axios.get('http://localhost:5000/pesanan');
@@ -24,9 +28,9 @@ const MainMenu = () => {
 
     setPesananPerluDiproses(data.filter(item => item.status === 'Sudah Bayar'));
     setPesananMenungguKonfirmasi(data.filter(item => item.status === 'Sudah Terkirim'));
+    setPesananDibatalkan(data.filter(item => item.status === 'Dibatalkan'));
     
-    
-    if(res.data.length != 0 && !showPesanan) getPesananById(res.data[0].idPesanan);
+    // if(res.data.length != 0 && !showDetailPesanan) getPesananById(res.data[0].idPesanan);
   })
 
   useEffect(() => {
@@ -35,7 +39,10 @@ const MainMenu = () => {
 
   const getPesananById = (async (idPesanan) => {
     const res = await axios.get(`http://localhost:5000/pesanan/${idPesanan}`)
-    setShowPesanan({ [res.data[0].idPesanan]: res.data })
+    const objPesanan = { [res.data[0].idPesanan]: res.data };
+    setShowAlamat((JSON.parse(objPesanan[Object.keys(objPesanan)][0].alamat))[0]);
+    setShowDetailPesanan(objPesanan[Object.keys(objPesanan)])
+
     setlistPesanan((prevState) => {
       return { ...prevState, [res.data[0].idPesanan]: res.data };
     });
@@ -43,10 +50,10 @@ const MainMenu = () => {
 
   const detailPesanan = (async (idPesanan) => {
     if (!listPesanan[idPesanan]) {
-      console.log("replace");
       await getPesananById(idPesanan);
     } else {
-      setShowPesanan({ [idPesanan]: listPesanan[idPesanan] })
+      setShowDetailPesanan({ [idPesanan]: listPesanan[idPesanan] })
+      setShowAlamat((JSON.parse({ [idPesanan]: listPesanan[idPesanan] }[Object.keys({ [idPesanan]: listPesanan[idPesanan] })][0].alamat))[0]);
     }
     setModalDetailPesanan(true);
 
@@ -65,18 +72,23 @@ const MainMenu = () => {
     if(res.data.status){
       getPesanan(); //refresh semua pesanan
       closeModal();
+      window.location.reload();
     }
   }
 
-  const batalkanPesanan = () => {
-
+  const batalkanPesanan = async(idPesanan) => {
+    const res = await axios.post('http://localhost:5000/pesanan/status', {
+      idPesanan: idPesanan,
+      status: "Dibatalkan"
+    })
+    if(res.data.status){
+      getPesanan(); //refresh semua pesanan
+      closeModal();
+      window.location.reload();
+    }
   }
 
   
-
-  function getCurrentPesanan() { return showPesanan[Object.keys(showPesanan)]; }
-
-
 
 
   return (
@@ -87,11 +99,11 @@ const MainMenu = () => {
       className="custom_modal card card-body bg-light">
       <div className='modal_content'>
         
-      {getCurrentPesanan() && (
+      {showDetailPesanan.length != 0 && (
       <div class="card card-title mb-3 p-2 pb-1 ps-3 pe-3 d-inline-block w-auto">
         <h5 class="card-title">
           <span class="bi bi-cart4 me-2"></span>
-          {getCurrentPesanan()[0].idPesanan}
+          {showDetailPesanan[0].idPesanan}
         </h5>
       </div>
       )}
@@ -104,30 +116,32 @@ const MainMenu = () => {
           <th>Jumlah</th>
           <th>Harga</th>
         </tr>
-      {Object.keys(showPesanan).length > 0 && getCurrentPesanan().map((data, index) => (
+      {showDetailPesanan.length != 0 && showDetailPesanan.map((data, index) => (
           <tr>
             <td>{data.idProduk}</td>
             <td>{data.namaProduk}</td>
             <td>{data.jumlah}</td>
-            <td>{data.harga}</td>
+            <td>{data.harga.toLocaleString('id-ID', { minimumFractionDigits: 0 })}</td>
           </tr>
       ))}
       </table>
       </div>
 
-      {getCurrentPesanan() && (
+      {showAlamat.length != 0 && showDetailPesanan && (
       <div class="card card-body">
         <div className='row g-1'>
           <div className='col'>
             <div class="card_title mb-1"><i class="bi bi-house-door me-2" />Alamat</div>
-              <div className='alamat'>{getCurrentPesanan()[0].nama} | {getCurrentPesanan()[0].noTelp}</div>
-              <div className='alamat'>{getCurrentPesanan()[0].email}</div>
-              <div className='alamat'>{getCurrentPesanan()[0].alamat}</div>
+              <div className="">{showDetailPesanan[0].email}</div>
+              <div className="">{showAlamat.penerima} | {showAlamat.noTelp}</div>
+              <div className="">{showAlamat.kecamatan.split('-')[1]}, {showAlamat.jalan}, {showAlamat.rtrw}</div>
+              <div className="">{showAlamat.kelurahan.split('-')[1]}, {showAlamat.kota.split('-')[1]}, {showAlamat.provinsi.split('-')[1]}, {showAlamat.kodePos}</div>
           </div>
-          <div className='col'>
+          <div className='col-md-4'>
             <div class="card_title mb-1"><i class="bi bi-bank me-2" />Pembayaran</div>
-              <div className='pembayaran'>bank | an</div>
-              <div className='pembayaran'>tgl</div>
+              <div className='pembayaran'>{showDetailPesanan[0].bank} | {showDetailPesanan[0].atasNama}</div>
+              <div className='pembayaran'>{showDetailPesanan[0].waktuPesan}</div>
+              <div className='pembayaran'>Rp {showDetailPesanan[0].total.toLocaleString('id-ID', { minimumFractionDigits: 0 })}</div>
               <div className='pembayaran'></div>
           </div>
         </div>
@@ -135,14 +149,14 @@ const MainMenu = () => {
       )}
 
 
-      { getCurrentPesanan() && getCurrentPesanan()[0].status === "Sudah Bayar" && (
+      { showDetailPesanan.length != 0 && showDetailPesanan[0].status === "Sudah Bayar" && (
         <div class="card card-body mt-3">
           <div className='row'>
             <div className='col d-flex justify-content-center'>
-              <button onClick={ () => pesananSelesai(getCurrentPesanan()[0].idPesanan) } className='btn btn-primary w-100 me-4 ms-4'>Pesanan Selesai</button>
+              <button onClick={ () => pesananSelesai(showDetailPesanan[0].idPesanan) } className='btn btn-primary w-100 me-4 ms-4'>Pesanan Selesai</button>
             </div>
             <div className='col d-flex justify-content-center'>
-              <button onClick={ () => batalkanPesanan } className='btn btn-danger w-100 me-4 ms-4'>Batalkan Pesanan</button>
+              <button onClick={ () => batalkanPesanan(showDetailPesanan[0].idPesanan) } className='btn btn-danger w-100 me-4 ms-4'>Batalkan Pesanan</button>
             </div>
           </div>
         </div>
@@ -223,7 +237,7 @@ const MainMenu = () => {
           </div>
 
           <div className="container-wrapper">
-            <div className="accordian_title"><strong>Menunggu Konfirmasi</strong></div>
+            <div className="accordian_title"><strong>Terkirim</strong></div>
             <div class="accordion" id="menunggu_konfirmasi">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
@@ -234,6 +248,44 @@ const MainMenu = () => {
                     <div class="row">
                       {pesananMenungguKonfirmasi.length === 0 && (<div className='noPesanan'>Tidak ada pesanan yang Menunggu Konfirmasi...</div>)}
                       { pesananMenungguKonfirmasi.map((data, index) => (
+
+                        <div class="col-sm-3 mb-3">
+                            <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Pesanan#{data.idPesanan}</h5>
+                                <div class="card-text mb-2">
+                                <div className="idProduk">{data.waktuPesan}</div>
+                                <div className="harga">Rp {(data.total).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</div>
+                                </div>
+                                <button onClick={ () => detailPesanan(data.idPesanan) } href="#" class="btn btn-secondary">Detail Pesanan</button>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      )) }
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="container-wrapper">
+            <div className="accordian_title"><strong>Dibatalkan</strong></div>
+            <div class="accordion" id="dibatalkan">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_dibatalkan" aria-expanded="true" aria-controls="collapseOne">Lihat Detail</button>
+                </h2>
+                <div id="collapse_dibatalkan" class="accordion-collapse collapse hidden" aria-labelledby="headingOne" data-bs-parent="#dibatalkan">
+                <div class="accordion-body">
+                    <div class="row">
+                      {pesananDibatalkan.length === 0 && (<div className='noPesanan'>Tidak ada pesanan yang Dibatalkan...</div>)}
+                      { pesananDibatalkan.map((data, index) => (
 
                         <div class="col-sm-3 mb-3">
                             <div class="card">

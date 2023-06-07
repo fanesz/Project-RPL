@@ -13,12 +13,14 @@ import { setLocalStorage, getLocalStorage, updateLocalStorage, getLoginCookie } 
 
 const Pesanan = () => {
     // const [product, setProduct] = useState([]);
-    const [modalKonfirmasi, setModalKonfirmasi] = useState(false);
+    const [modalDetailPesanan, setModalDetailPesanan] = useState(false);
     const [itemInginDihapus, setItemInginDihapus] = useState('');
     
     const [filter, setFilter] = useState('');
     
     const [pesanan, setPesanan] = useState([]);
+    const [listPesanan, setlistPesanan] = useState([]);
+    const [detailPesanan, setDetailPesanan] = useState([]);
 
 
     const navigate = useNavigate();
@@ -26,8 +28,15 @@ const Pesanan = () => {
     const getPesanan = (async () => {
       const res = await axios.get(`http://localhost:5000/pesanan/${getLoginCookie()}`);
       setPesanan(res.data)
-      console.log(res.data);
-        
+      let tempPesanan = {}
+      for(let key in res.data){
+        tempPesanan = { ...tempPesanan, [res.data[key].idPesanan]: (res.data).filter((data) => data.idPesanan === res.data[key].idPesanan ) }
+      }
+      let tempPesananArr = [];
+      for(let key in tempPesanan){
+        tempPesananArr.push(tempPesanan[key])
+      }
+      setlistPesanan(tempPesananArr);
     });
 
     useEffect(() => {
@@ -35,14 +44,29 @@ const Pesanan = () => {
       setFilter('semua');
     }, []);
 
-    const handleCloseModal = () => {
+    // console.log(listPesanan);
 
+
+
+    const handleCloseModal = () => {
+      setModalDetailPesanan(false);
     }
 
     const filterProduk = (filter) => {
       setFilter(filter);
       
     }
+    
+    const LihatDetailPesanan = (idPesanan) => {
+      const filteredPesanan = listPesanan.flatMap((arr) =>
+        arr.filter((obj) => obj.idPesanan === idPesanan)
+      );
+      console.log(filteredPesanan);
+      setDetailPesanan(filteredPesanan);
+      setModalDetailPesanan(true);
+      
+    }
+
 
 
     
@@ -50,23 +74,63 @@ const Pesanan = () => {
     <div>
 
     <div className="container_pesanan" style={{ backgroundImage: `url(${background})`}}>
-    {/* <ReactModal
-      isOpen={ modalKonfirmasi }
+    <ReactModal
+      isOpen={ modalDetailPesanan }
       onRequestClose={ handleCloseModal }
-      className="custom_modal_notif card card-body bg-light p-4 text-center">
-      <div className="modal_close_button_wrapper d-flex justify-content-end">
-        <button onClick={  handleCloseModal } className="modal_close_button"><i className="bi bi-x-lg" /></button>
+      className="custom_modal card card-body bg-light">
+      <div className='modal_content'>
+        
+      {Object.keys(detailPesanan).length > 0 && (
+      <div class="card card-title mb-3 p-2 pb-1 ps-3 pe-3 d-inline-block w-auto">
+        <h5 class="card-title">
+          <span class="bi bi-cart4 me-2"></span>
+          {detailPesanan[0].idPesanan}
+        </h5>
       </div>
-      <div className="modal_content_wrapper pe-1">
-        Apakah kamu ingin menghapus produk {product && product.filter(obj => obj.idProduk===itemInginDihapus).nama} dari Keranjang?
-        <div className="d-flex justify-content-center mt-4">
-          <button onClick={ handleCloseModal } className="btn btn-success mx-3 w-25">Tidak</button>
-          <button onClick={ handleCloseModal } className="btn btn-danger mx-3 w-25">Ya</button>
+      )}
+
+      <div class="card card-body mb-2">
+      <table className='table table-striped'>
+        <tr>
+          <th>Kode</th>
+          <th>Nama Produk</th>
+          <th>Jumlah</th>
+          <th>Harga</th>
+        </tr>
+
+      {Object.keys(detailPesanan).length > 0 && detailPesanan.map((data, index) => (
+          <tr>
+            <td>{data.idProduk}</td>
+            <td>{data.namaProduk}</td>
+            <td>{data.jumlah}</td>
+            <td>{data.harga}</td>
+          </tr>
+      ))}
+      </table>
+      </div>
+
+      {detailPesanan && (
+      <div class="card card-body">
+        <div className='row g-1'>
+          <div className='col'>
+            <div class="card_title mb-1"><i class="bi bi-house-door me-2" />Alamat</div>
+              <div className='alamat'>{} | {}</div>
+              <div className='alamat'>{}</div>
+              <div className='alamat'>{}</div>
+          </div>
+          <div className='col'>
+            <div class="card_title mb-1"><i class="bi bi-bank me-2" />Pembayaran</div>
+              <div className='pembayaran'>bank | an</div>
+              <div className='pembayaran'>tgl</div>
+              <div className='pembayaran'></div>
+          </div>
         </div>
       </div>
-      
+      )}
 
-      </ReactModal> */}
+        
+      </div>
+    </ReactModal>
 
     <PUBLIC_NAVBAR />
 
@@ -100,30 +164,49 @@ const Pesanan = () => {
               {filter==='semua' ? (
                 <div className="container pesanan-semua">
 
-                  <div className="card card-body border-0 list_pesanan">
+                  {listPesanan && listPesanan.length != 0 ? (listPesanan.map((data, index) => (
+                  <div className="card card-body border-0 list_pesanan mb-4">
                     <div className="list_pesanan_header ms-3 mb-3">
-                      07 Juni 2023 <span className="berhasil border border-success rounded p-1 py-0 ms-2">Berhasil</span>
+                      {data[0].waktuPesan}
+                      { data[0].status==='Sudah Bayar' ? (
+                        <span className="berlangsung border border-warning rounded p-1 py-0 ms-2">Sedang Berlangsung</span>
+                      ) : data[0].status==='Sudah Terkirim' || data[0].status==='Selesai' ? (
+                        <span className="terkirim border border-success rounded p-1 py-0 ms-2">Terkirim</span>
+                      ) : data[0].status==='Dibatalkan' ? (
+                        <span className="dibatalkan border border-danger rounded p-1 py-0 ms-2">Dibatalkan</span>
+                      ) : ('')}
                     </div>
                     <div className="list_pesanan_produk">
                       <div className="row">
                         <div className="col-md-3">
-                          <img className="card card-image" src={anakAyam}></img>
+                          <img className="card card-image" src={listPesanan[index][0].gambar === null ? blank_image : listPesanan[index][0].gambar}></img>
                         </div>
                         <div className="col align-self-center list_pesanan_produk_nama">
-                          <div className="title">Anak Ayam</div>
-                          <div className="sub-title">dan 3 barang lainnya...</div>
+                          <div className="title">{data[0].namaProduk}</div>
+                          { data[0].jumlahJenisBarang - 1 != 0 ? (
+                            <div className="sub-title">dan {data[0].jumlahJenisBarang - 1} barang lainnya...</div>
+                            ) : (
+                            <div className="sub-title">x {data[0].jumlah} barang</div>
+                          ) }
                         </div>
                         <div className="col-md-3 align-self-center list_pesanan_produk_harga border-start">
                           <div className="sub-title">Total harga</div>
-                          <div className="title">Rp 3.000.000</div>
+                          <div className="title">Rp {(data.reduce((total, current) => total + current.harga, 0)).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</div>
                         </div>
                       </div>
                     </div>
-                    <div className="list_pesanan_footer">
-
-                    </div>
-
+                  <div className="list_pesanan_footer">
+                    <button onClick={ () => LihatDetailPesanan(data[0].idPesanan) } className="btn btn-secondary float-end me-4">&emsp;Lihat Detail&emsp;</button>
                   </div>
+
+                </div>
+                  ))) : (
+                    <div>
+                      tidak ada pesanan!
+                    </div>
+                  )}
+
+
 
 
                 </div>
