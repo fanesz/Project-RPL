@@ -8,9 +8,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { setLocalStorage, getLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, loginChecker } from "../utils/utils";
 
 const Katalog = () => {
+  loginChecker();
     const [products, setProduct] = useState([]);
     const [gambar, setGambar] = useState([]);
 

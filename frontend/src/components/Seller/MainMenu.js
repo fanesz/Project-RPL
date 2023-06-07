@@ -4,6 +4,7 @@ import axios from "axios";
 import ReactModal from 'react-modal';
 import "./css/order.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { getLoginCookie } from '../utils/utils';
 
 
 
@@ -11,6 +12,17 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 const MainMenu = () => {
 
   ReactModal.setAppElement('#root')
+
+  const sellerChecker = async() => {
+    const res = await axios.get(`http://localhost:5000/akun/akses/${getLoginCookie()}`)
+    if(res.data.akses !== 'admin' && res.data.akses !== 'seller'){
+      navigate('/')
+    }
+  }
+
+  useEffect(() => {
+    sellerChecker();
+  },[])
 
   const [pesananPerluDiproses, setPesananPerluDiproses] = useState([]);
   const [pesananMenungguKonfirmasi, setPesananMenungguKonfirmasi] = useState([]);
@@ -200,7 +212,7 @@ const MainMenu = () => {
         </div>
       </div>
       <div className="col me-5 mt-4 col-content">
-        <h1 className="mt-4">Selamat datang, Nama Penjual</h1>
+        <h1 className="mt-4">Halaman Penjual</h1>
         <div class="container mt-4 transaction_card product_info feuture-box">
 
 

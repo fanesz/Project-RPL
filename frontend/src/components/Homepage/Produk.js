@@ -8,10 +8,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, loginChecker } from "../utils/utils";
 
 const Produk = () => {
-
+  loginChecker();
   const [notif, setNotif] = useState(false);
   const [modalBayar, setModalBayar] = useState(false);
   const [modalKonfirmasi, setModalKonfirmasi] = useState(false);

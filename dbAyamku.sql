@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idAkun` char(36) NOT NULL,
   `nama` VARCHAR(255) NOT NULL,
-  `jabatan` VARCHAR(255) NOT NULL,
   `noTelp` VARCHAR(20) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -16,10 +15,7 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-select * from akun;
-insert into alamat (idAkun) values ('fcbae759-039e-11ee-8f7d-047c160aa273');
-select * from alamat;
-drop table alamat;
+
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`alamat` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idAkun` CHAR(36) NOT NULL,
@@ -47,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `dbAyamku`.`akun` (
   `idAkun` CHAR(36) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
+  `akses` VARCHAR(255) NOT NULL,
   `changepwCode` varchar(100),
   `createdat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -57,19 +54,20 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 DELIMITER //
-CREATE PROCEDURE tambahAkun(inp_email varchar(255), inp_password varchar(255), inp_jabatan varchar(255))
+CREATE PROCEDURE tambahAkun(inp_email varchar(255), inp_password varchar(255), inp_akses varchar(255))
 BEGIN
 declare generateIdAkun char(36);
 set generateIdAkun = UUID();
-insert into detailAKun (`idAkun`,`jabatan`,`email`) values (generateIdAkun,inp_jabatan,inp_email);
-insert into akun (idAkun, email, password) values (generateIdAkun, inp_email, inp_password);
+insert into detailAKun (`idAkun`,`email`) values (generateIdAkun,inp_email);
+insert into akun (idAkun, email, password, akses) values (generateIdAkun, inp_email, inp_password, inp_akses);
 insert into alamat (idAkun) values (generateIdAkun);
 END //
 DELIMITER ;
 
-drop procedure tambahAkun;
 
 call tambahAkun("pratama14.f@gmail.com", 'admin123', 'admin');
+call tambahAkun("fanes23.pratama@gmail.com", 'seller123', 'seller');
+call tambahAkun("fanes23.pratama@mhs.mdp.ac.id", 'user123', 'user');
 
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`produk` (
@@ -91,17 +89,17 @@ select*from produk;
 select stok from produk where idProduk = 'P0001' ;
 
 insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
-('P0001','Bibit','Lorem Ipsum',50,40,75000),
-('P0002','Makanan','Lorem Ipsum',10,41,16000),
-('P0003','Bibit','Lorem Ipsum',50,42,75000),
-('P0004','Makanan','Lorem Ipsum',5,43,16000),
-('P0005','Makanan','Lorem Ipsum',15,44,16000);
+('P0001','Bibit Ayam','Bibit Ayam yang masih berumur 5-7 hari dengan kondisi yang sehat!',50,1000,5000),
+('P0002','Pakan Ayam','Pakan Ayam berprotein tinggi sehingga pertumbuhan ayam jadi cepat!',10000,300,16000),
+('P0003','Ayam Petelur','Ayam berumur 4-5 bulan yang sudah bisa menghasilkan telur-telur berkualitas!',1500,40,60000),
+('P0004','Telur','Telur-telur segar dari ayam petelur!',5,1200,50);
 
 
 select * from detailakun;
 
 SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah, pesanan.jumlahJenisBarang, rekening.bank, pesanan.atasNama FROM detailpesanan, pesanan, detailAkun, produk, rekening WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND pesanan.idRekening = rekening.idRekening AND detailPesanan.idProduk = produk.idProduk AND pesanan.idAkun = '${req.params.id}';
 
+select * from akun;
 select * from pesanan;
 select * from detailpesanan;
 
@@ -132,6 +130,8 @@ drop table detailpesanan;
 drop table pesanan;
 insert into pesanan(idPesanan, idAkun, idRekening) values('PAA0000001', 'fcbae759-039e-11ee-8f7d-047c160aa273', 'R0001');
 select * from akun;
+
+SELECT coalesce(SUM(jumlah), 0) as terjual FROM detailPesanan WHERE idProduk = 'P0001';
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailPesanan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

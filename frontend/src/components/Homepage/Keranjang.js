@@ -9,9 +9,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage, updateLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, updateLocalStorage, loginChecker } from "../utils/utils";
 
 const Keranjang = () => {
+  loginChecker();
     const [product, setProduct] = useState([]);
     const [modalKonfirmasi, setModalKonfirmasi] = useState(false);
     const [itemInginDihapus, setItemInginDihapus] = useState('');
@@ -41,10 +42,6 @@ const Keranjang = () => {
     useEffect(() => {
         setShopingCart();
     }, []);
-
-
-    const refreshShopingCart = () => {
-    }
 
 
     const checkout = () => {

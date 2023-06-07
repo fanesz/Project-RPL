@@ -22,8 +22,6 @@ function App() {
         <div className="column is-half is-offset-one-quarter">
           <Routes>
 
-            {/* login logout */}
-            <Route path="/login" element={<Login/>} />
 
             {/* home n produk */}
             <Route path="/" element={<Home/>} />

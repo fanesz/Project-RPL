@@ -8,7 +8,6 @@ const { DataTypes } = Sequelize;
 const DetailAkun = db.define('detailAkun',{
     idAkun:{type: DataTypes.UUID,defaultValue: DataTypes.UUIDV4,allowNull: false},
     nama:{type: DataTypes.STRING,},
-    jabatan:{type: DataTypes.STRING,allowNull: false},
     noTelp:{type: DataTypes.STRING,},
     email:{type: DataTypes.STRING,allowNull: false}
 },{freezeTableName: true});

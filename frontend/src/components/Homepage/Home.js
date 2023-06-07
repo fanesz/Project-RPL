@@ -6,18 +6,16 @@ import home_1 from "../img/home-1.png";
 import home_2 from "../img/home-2.png";
 import home_3 from "../img/home-3.png";
 import background from "../img/green-farm-blur.jpg";
+import { loginChecker } from "../utils/utils";
 
-const Home = () => {
+const Home = () => {  
+  loginChecker();
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
     return (
     <div>
 
-<style jsx global>{`
-
-`}
-</style>
 
     <div className={s.container_main} style={{ backgroundImage: `url(${background})`}}>
 
@@ -47,7 +45,6 @@ const Home = () => {
             <section className={s.cta}>
                 <h2>Order Your Baby Chickens Today!</h2>
                 <button className={s.btn} onClick={() => navigate('/katalog')}>Shop Now</button>
-                <br/>mungkin ganti jadi section buat rating/review daripada double ado button Show Now
             </section>
         </main>
                 

@@ -5,10 +5,10 @@ import gambar from "../img/green-farm-blur.jpg";
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const navigate = useNavigate();
-//   if (isLogin()) {
-//     window.location.href = "/";
-//   }
+  if (isLogin()) {
+    window.location.href = "/";
+  }
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [email2, setEmail2] = useState("");
@@ -26,25 +26,32 @@ const Login = () => {
       password: password,
     });
     if(res.data.status){
-        alert(res.data.message);
-        login();
+      alert(res.data.message);
+      login();
     } else {
-        alert(res.data.message);
+      alert(res.data.message);
     }
   };
 
   const loginAccount = async (e) => {
     e.preventDefault();
     const res = await axios.post("http://localhost:5000/akun/login", {
-        email: email2,
-        password: password2,
+      email: email2,
+      password: password2,
     })
     if(res.data.status){
-        unsetLoginCookie();
-        setLoginCookie(res.data.sessionId);
+      console.log(res.data);
+      unsetLoginCookie();
+      setLoginCookie(res.data.sessionId);
+      if(res.data.akses === 'admin'){
+        navigate('/admin');
+      } else if(res.data.akses === 'seller'){
+        navigate('/seller');
+      } else {
         navigate('/');
+      }
     } else {
-        alert(res.data.message);
+      alert(res.data.message);
     }
   };
 

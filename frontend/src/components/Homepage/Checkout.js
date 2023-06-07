@@ -7,9 +7,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage, getLoginCookie, unsetLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, getLoginCookie, unsetLocalStorage, loginChecker } from "../utils/utils";
 
 const Checkout = () => {
+  loginChecker();
     const [product, setProduct] = useState([]);
     const [alamat, setAlamat] = useState({});
     const [rekening, setRekening] = useState({});
@@ -44,6 +45,12 @@ const Checkout = () => {
 
   const getAlamat = async() => {
     const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
+    for(let key in res.data[0]){
+      if(res.data[0][key].length === 0){
+        navigate('/alamat');
+        break;
+      }
+    }
     setAlamat(res.data[0]);
   }
 
