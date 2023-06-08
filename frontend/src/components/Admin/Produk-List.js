@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
-import s from "./css/Produk-List.module.css";
+import "./css/Produk-List.css";
 import { logout } from "../utils/utils";
 import ReactModal from "react-modal";
 import Dropzone from "react-dropzone";
 import gambar from "../img/home-2.png";
-import "./css/Produk-List.module.css";
+import ADMIN_NAVBAR from "../_public/Admin-Navbar";
 
 const ProductList = () => {
   // loginChecker();
@@ -156,116 +156,119 @@ const ProductList = () => {
     setModalEdit(true);
     getProductById(ids);
   };
+  
 
   return (
     <div>
-      <style jsx global>
-        {`
-          body {
-            background-image: url(${gambar});
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            // padding-top: 15vh;
-          }
-        `}
-      </style>
-      <div className={s.container_produk_list}>
-        <ReactModal isOpen={modalTambah} onRequestClose={closeModal.bind(null, "tambah")} className="custom_modal">
-          <button className={s.modal_closebutton} onClick={() => closeModal("tambah")}>
-            X
-          </button>
-          <div className={s.modal_produk}>
-            <h2 class="text-center mb-5">Tambah Menu</h2>
-            <form onSubmit={saveProduct} class="justify-content-center">
-              <div class="row ">
-                <div class="col-md-6">
-                  <div className="field">
-                    <label className="label" class="p-2">
-                      Kode
-                    </label>
 
-                    <div class="col-md-3">
-                      <input className="input" type="text" placeholder="Title" value={tambah_idProduk} onChange={(e) => tambah_setIdProduk(e.target.value)} />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div className="field">
-                    <label className="label" class="p-2">
-                      Nama
-                    </label>
-                    <div class="col-md-3">
-                      <input className="input" type="text" placeholder="Price" value={tambah_nama} onChange={(e) => tambah_setName(e.target.value)} />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div className="field">
-                    <label className="label" class="p-2">
-                      Deskripsi
-                    </label>
+      <ADMIN_NAVBAR />
+      <div className="container_produk_list">
 
-                    <div class="col-md-3">
-                      <input className="input" type="text" placeholder="Stock" value={tambah_deskripsi} onChange={(e) => tambah_setDeskripsi(e.target.value)} />
+
+        <ReactModal 
+          isOpen={modalTambah} 
+          onRequestClose={closeModal.bind(null, "tambah")} 
+          className="custom_modal card card-body">
+          <div className="modal_close_button_wrapper ">
+            <button onClick={  closeModal.bind(null, "tambah") } className="modal_close_button float-end pt-2 pe-3"><i className="bi bi-x-lg" /></button>
+          </div>
+          <div className="modal_produk p-2">
+            <h3 class="mb-4 ms-3">Tambah Menu</h3>
+            <form className="card card-body">
+
+              <div class="row">
+                <div class="col">
+
+                  <div class="mb-3 row">
+                    <label for="kode" class="col-sm-2 col-form-label">Kode</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control shadow-none" id="kode"/>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="nama" class="col-sm-2 col-form-label">Nama</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control shadow-none" id="nama" />
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="stok" class="col-sm-2 col-form-label">Stok</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control shadow-none" id="stok" />
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="berat" class="col-sm-2 col-form-label">Berat</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control shadow-none" id="berat" />
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="harga" class="col-sm-2 col-form-label">Harga</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control shadow-none" id="harga" />
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control shadow-none" id="deskripsi" />
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div className="field">
-                    <label className="label" class="p-2">
-                      Stok
-                    </label>
-                    <div class="col-md-3">
-                      <input className="input" type="text" placeholder="Stock" value={tambah_stok} onChange={(e) => tambah_setStok(e.target.value)} />
-                    </div>
+                <div class="col-md-4 d-flex">
+                  <div className="dropzone_wrapper w-100">
+                    <Dropzone onDrop={handleDrop}>
+                      {({ getRootProps, getInputProps }) => (
+                        <div className="dropzone card card-body border border-dark p-1 h-50 text-center pt-5" {...getRootProps()} class="p-2">
+                          <input {...getInputProps()} />
+                          {tambah_gambar ? (
+                            <img className="dropzone_img" src={tambah_gambar} alt="Uploaded Image" />
+                          ) : (
+                            <span className="dropzone_text">
+                              <i className="fas fa-upload"></i> Upload Image
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </Dropzone>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div className="field">
-                    <label className="label" class="p-2">
-                      Harga
-                    </label>
-                    <div class="col-md-3">
-                      <input className="input" type="number" placeholder="Stock" value={tambah_harga} onChange={(e) => tambah_setHarga(e.target.value)} />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div className="field">
-                    <label className="label" class="p-2">
-                      Berat
-                    </label>
-                    <div class="col-md-3">
-                      <input className="input" type="text" placeholder="Stock" value={tambah_berat} onChange={(e) => tambah_setBerat(e.target.value)} />
-                    </div>
-                  </div>
-                </div>
-                <div className={s.dropzone_wrapper}>
-                  <Dropzone onDrop={handleDrop}>
-                    {({ getRootProps, getInputProps }) => (
-                      <div className={`${s.dropzone} ${s.dropzone_custom}`} {...getRootProps()} class="p-2">
-                        <input {...getInputProps()} />
-                        {tambah_gambar ? (
-                          <img className={s.dropzone_img} src={tambah_gambar} alt="Uploaded Image" />
-                        ) : (
-                          <span className={`${s.dropzone_text} ${s.upload_text}`}>
-                            <i className="fas fa-upload"></i> Upload Image
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </Dropzone>
+     
                 </div>
               </div>
+              
+{/* 
 
-              <button class="btn btn-success mx-3 my-1 text-left">Upload</button>
+              <div className="row">
+                <div className="col-md-2">
+                  <label className="form-control border-none" class="p-2">Kode</label>
+                  <label className="form-control border-none" class="p-2">Nama</label>
+                  <label className="form-control border-none" class="p-2">Deskripsi</label>
+                  <label className="form-control border-none" class="p-2">Stok</label>
+                  <label className="form-control border-none" class="p-2">Harga</label>
+                  <label className="form-control border-none" class="p-2">Berat</label>
 
-              <div className="field">
-                <button class="btn btn-success mx-3 my-3 text-left">Tambah</button>
-              </div>
+
+                
+
+                </div>
+
+                <div className="col-md-5">
+                  <input className="form-control shadow-none" type="text" placeholder="Title" value={tambah_idProduk} onChange={(e) => tambah_setIdProduk(e.target.value)} />
+                  <input className="form-control shadow-none" type="text" placeholder="Price" value={tambah_nama} onChange={(e) => tambah_setName(e.target.value)} />
+                <input className="form-control shadow-none" type="text" placeholder="Stock" value={tambah_deskripsi} onChange={(e) => tambah_setDeskripsi(e.target.value)} />
+                <input className="form-control shadow-none" type="text" placeholder="Stock" value={tambah_stok} onChange={(e) => tambah_setStok(e.target.value)} />
+                <input className="form-control shadow-none" type="number" placeholder="Stock" value={tambah_harga} onChange={(e) => tambah_setHarga(e.target.value)} />
+                <input className="form-control shadow-none" type="text" placeholder="Stock" value={tambah_berat} onChange={(e) => tambah_setBerat(e.target.value)} />
+
+                </div>
+              </div> */}
+
             </form>
+              <button 
+                onClick={ saveProduct }
+                className="btn btn-success ms-3 my-1 text-left w-25">Tambah</button>
+  
           </div>
         </ReactModal>
 
@@ -297,12 +300,12 @@ const ProductList = () => {
                 <label className="label">Berat</label>
                 <input className="input" type="text" placeholder="Stock" value={edit_berat} onChange={(e) => edit_setBerat(e.target.value)} />
               </div>
-              <div className={s.dropzone_wrapper}>
+              <div className="dropzone_wrapper">
                 <Dropzone onDrop={handleDrop}>
                   {({ getRootProps, getInputProps }) => (
-                    <div className={s.dropzone} {...getRootProps()}>
+                    <div className="dropzone" {...getRootProps()}>
                       <input {...getInputProps()} />
-                      {edit_gambar ? <img className={s.dropzone_img} src={edit_gambar}></img> : <span className={s.dropzone_text}>Upload Image</span>}
+                      {edit_gambar ? <img className="dropzone_img" src={edit_gambar}></img> : <span className="dropzone_text">Upload Image</span>}
                     </div>
                   )}
                 </Dropzone>
@@ -315,11 +318,7 @@ const ProductList = () => {
           </div>
         </ReactModal>
 
-        <br />
 
-        <button class="btn btn-success mb-3" onClick={refreshPage}>
-          Click to reload!
-        </button>
         <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
           <thead>
             <tr class="text-center">

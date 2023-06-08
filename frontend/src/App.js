@@ -40,6 +40,10 @@ function App() {
             {/* admin */}
             <Route path="/admin" element={<MainMenu/>} />
             <Route path="/admin/produk" element={<ProdukList/>} />
+            <Route path="/admin/akun" element={<ProdukList/>} />
+            <Route path="/admin/pesanan" element={<ProdukList/>} />
+            <Route path="/admin/rekening" element={<ProdukList/>} />
+            <Route path="/admin/logout" element={<ProdukList/>} />
 
             {/* seller */}
             <Route path="/seller" element={<MainMenuSeller/>} />

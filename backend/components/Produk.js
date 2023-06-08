@@ -7,39 +7,13 @@ const { DataTypes } = Sequelize;
 
  
 const Produk = db.define('produk',{
-    // id:{
-    //     type: DataTypes.STRING,
-    //     primaryKey: true,
-    //     allowNull: false
-    // },
-    idProduk:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    nama:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    deskripsi:{
-        type: DataTypes.STRING,
-    },
-    berat:{
-        type: DataTypes.DOUBLE,
-    },
-    stok:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    harga:{
-        type: DataTypes.DECIMAL,
-        allowNull: false
-    },
-    // gambar:{
-    //     type: DataTypes.BLOB,
-    // }
-},{
-    freezeTableName: true
-});
+  idProduk:{type: DataTypes.STRING,allowNull: false},
+  nama:{type: DataTypes.STRING,allowNull: false},
+  deskripsi:{type: DataTypes.STRING,},
+  berat:{type: DataTypes.DOUBLE,},
+  stok:{type: DataTypes.STRING,allowNull: false},
+  harga:{type: DataTypes.DECIMAL,allowNull: false},
+},{freezeTableName: true});
  
 //models
 export const getAllProducts = async (req, res) => {

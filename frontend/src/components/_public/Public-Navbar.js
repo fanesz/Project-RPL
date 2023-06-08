@@ -9,7 +9,7 @@ const PUBLIC_NAVBAR = () => {
     return (
         <div>
             <header>
-                <nav className="navbar navbar-expand-lg navbar-dark bg-dark psy-3">
+                <nav className="navbar navbar-publik navbar-expand-lg navbar-dark bg-dark psy-3">
                     <div className="container">
                         <a className="navbar-brand mb-2" href="/">Ayamku</a>
                         <button className="navbar-toggler me-3 mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

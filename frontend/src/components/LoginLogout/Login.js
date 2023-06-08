@@ -98,7 +98,7 @@ const Login = () => {
             padding-top: 15vh;
         }
         .container_login{
-            max-width: 35%;
+            max-width: 35rem;
             margin-left: auto;
             margin-right: auto;
             padding: 4rem;

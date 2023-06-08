@@ -38,8 +38,11 @@ const MainMenu = () => {
       `}</style>
 
       <div className="container">
-        <button onClick={() => navigate('/admin/produk')} className="btn btn-primary" id="produkList">
+        <button onClick={() => navigate('/admin/produk')} className="btn btn-primary me-5" id="produkList">
           Produk List
+        </button>
+        <button onClick={() => navigate('/admin/akun')} className="btn btn-primary" id="produkList">
+          Akun List
         </button>
       </div>
     </div>

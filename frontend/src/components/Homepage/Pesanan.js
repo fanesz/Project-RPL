@@ -57,6 +57,7 @@ const Pesanan = () => {
     }
 
     const filterProduk = (filter) => {
+      setFilter(filter);
       if(filter === 'semua') {
         setFilteredPesanan(listPesanan);
         return;
@@ -69,8 +70,13 @@ const Pesanan = () => {
 
     const LihatDetailPesanan = (idPesanan) => {
       const filteredPesanan = listPesanan.flatMap((arr) =>
-        arr.filter((obj) => obj.idPesanan === idPesanan)
+        arr.filter((obj) => obj.idPesanan === idPesanan )
       );
+      const filteredDetailPesanan = listPesanan.flatMap((arr) => {
+        const filteredArr = arr.filter((obj) => obj.idPesanan === idPesanan );
+        return filteredArr.length > 0 ? [filteredArr[0]] : [];
+      });
+      
       console.log(filteredPesanan);
       setDetailPesanan(filteredPesanan);
       setAlamat(JSON.parse(filteredPesanan[0].alamat)[0]);
@@ -117,12 +123,12 @@ const Pesanan = () => {
       </table>
       </div>
 
-      {Object.keys(detailPesanan).length > 0 && alamat.length != 0 && detailPesanan.map((data, index) => (
+      {Object.keys(detailPesanan).length > 0 && alamat.length != 0 && (
       <div class="card card-body">
         <div className='row g-1'>
           <div className='col'>
             <div class="card_title mb-1"><i class="bi bi-house-door me-2" />Alamat</div>
-              <div className="">{data.email}</div>
+              <div className="">{detailPesanan.email}</div>
               <div className="">{alamat.penerima} | {alamat.noTelp}</div>
               <div className="">{alamat.kecamatan.split('-')[1]}, {alamat.jalan}, {alamat.rtrw}</div>
               <div className="">{alamat.kelurahan.split('-')[1]}, {alamat.kota.split('-')[1]}, {alamat.provinsi.split('-')[1]}, {alamat.kodePos}</div>
@@ -136,7 +142,7 @@ const Pesanan = () => {
           </div>
         </div>
       </div>
-      ))}
+      )}
 
         
       </div>
@@ -157,13 +163,13 @@ const Pesanan = () => {
               <button className={`btn btn-light border me-3 mb-2 ` + (filter==='semua'?'border-dark':'')}
                 onClick={ () => filterProduk('semua') }>Semua</button>
        
-              <button className={`btn btn-light border me-3 mb-2 ` + (filter==='berlangsung'?'border-dark':'')}
+              <button className={`btn btn-light border me-3 mb-2 ` + (filter==='Sudah Bayar'?'border-dark':'')}
                 onClick={ () => filterProduk('Sudah Bayar') }>Berlangsung</button>
        
-              <button className={`btn btn-light border me-3 mb-2 ` + (filter==='terkirim'?'border-dark':'')}
+              <button className={`btn btn-light border me-3 mb-2 ` + (filter==='Sudah Terkirim'?'border-dark':'')}
                 onClick={ () => filterProduk('Sudah Terkirim') }>Terkirim</button>
 
-              <button className={`btn btn-light border me-3 mb-2 ` + (filter==='tidakberhasil'?'border-dark':'')}
+              <button className={`btn btn-light border me-3 mb-2 ` + (filter==='Dibatalkan'?'border-dark':'')}
                 onClick={ () => filterProduk('Dibatalkan') }>Dibatalkan</button>
             </div>
 
@@ -206,8 +212,8 @@ const Pesanan = () => {
                   </div>
                 </div>
                   ))) : (
-                    <div>
-                      tidak ada pesanan!
+                    <div className="opacity-50">
+                      tidak ada pesanan~
                     </div>
                   )}
               </div>
