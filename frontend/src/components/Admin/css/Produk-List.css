@@ -8,25 +8,43 @@
   border-radius: 4em;
 }
 
-.custom_modal {
+.admin_custom_modal {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80% !important;
+  width: 70%;
 
   transform: translate(-50%, -50%);
 }
 
 .dropzone {
-
+  min-height: 25vh;
+  min-width: 20rem;
 }
 .dropzone_img {
-  width: 100%;
+  width: 20rem;
   height: 100%;
+  object-fit: cover;
 }
 .dropzone_text {
   padding-left: auto;
   padding-right: auto;
   font-size: 1.2rem;
   margin-left: 13px;
+}
+
+
+.admin-title{
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+}
+
+.container_produk_list table .nomor{
+  width: 2rem;
+}
+
+.container_produk_list table .email{
+  max-width: 2rem !important;
 }

@@ -1,7 +1,6 @@
-drop database dbAyamku;
+drop database if exists dbAyamku;
 create database dbAyamku;
 use dbAyamku;
-
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -63,11 +62,9 @@ insert into alamat (idAkun) values (generateIdAkun);
 END //
 DELIMITER ;
 
-
 call tambahAkun("pratama14.f@gmail.com", 'admin123', 'admin');
 call tambahAkun("fanes23.pratama@gmail.com", 'seller123', 'seller');
 call tambahAkun("fanes23.pratama@mhs.mdp.ac.id", 'user123', 'user');
-
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`produk` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -86,7 +83,8 @@ insert into produk (idProduk,nama,deskripsi,berat,stok,harga) values
 ('P0001','Bibit Ayam','Bibit Ayam yang masih berumur 5-7 hari dengan kondisi yang sehat!',50,1000,5000),
 ('P0002','Pakan Ayam','Pakan Ayam berprotein tinggi sehingga pertumbuhan ayam jadi cepat!',10000,300,16000),
 ('P0003','Ayam Petelur','Ayam berumur 4-5 bulan yang sudah bisa menghasilkan telur-telur berkualitas!',1500,40,60000),
-('P0004','Telur','Telur-telur segar dari ayam petelur!',5,1200,50);
+('P0004','Telur','Telur-telur segar dari ayam petelur!',5,1200,2000);
+
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`rekening` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

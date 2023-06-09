@@ -32,17 +32,21 @@ const generateUUID = () => {
 }
 
 const saveImage = (base64Data, outputPath) => {
+  try{
     const base64Image = base64Data.split(';base64,').pop();
     const imageBuffer = Buffer.from(base64Image, 'base64');
-  
-    fs.writeFile('./gambar/'+outputPath, imageBuffer, (err) => {
+    
+    fs.writeFile('./'+outputPath, imageBuffer, (err) => {
       if (err) {
         console.error(err);
         return false;
       } else {
         return true;
-    }
+      }
     });
+  } catch(err) {
+    console.log(err);
+  }
 };
 
 const deleteImage = (file) => {

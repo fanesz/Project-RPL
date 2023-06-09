@@ -12,6 +12,7 @@ import Checkout from "./components/Homepage/Checkout";
 import Profile from "./components/Homepage/profile/Profile";
 import Alamat from "./components/Homepage/profile/Alamat";
 import Pesanan from "./components/Homepage/Pesanan";
+import AkunList from "./components/Admin/Akun-List";
 
 
 function App() {
@@ -40,10 +41,7 @@ function App() {
             {/* admin */}
             <Route path="/admin" element={<MainMenu/>} />
             <Route path="/admin/produk" element={<ProdukList/>} />
-            <Route path="/admin/akun" element={<ProdukList/>} />
-            <Route path="/admin/pesanan" element={<ProdukList/>} />
-            <Route path="/admin/rekening" element={<ProdukList/>} />
-            <Route path="/admin/logout" element={<ProdukList/>} />
+            <Route path="/admin/akun" element={<AkunList/>} />
 
             {/* seller */}
             <Route path="/seller" element={<MainMenuSeller/>} />

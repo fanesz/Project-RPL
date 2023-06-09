@@ -5,9 +5,11 @@ import gambar from "../img/green-farm-blur.jpg";
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+
   if (isLogin()) {
     window.location.href = "/";
   }
+  console.log(isLogin());
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +42,6 @@ const Login = () => {
       password: password2,
     })
     if(res.data.status){
-      console.log(res.data);
       unsetLoginCookie();
       setLoginCookie(res.data.sessionId);
       if(res.data.akses === 'admin'){

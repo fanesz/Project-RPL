@@ -6,9 +6,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from "react-modal";
-import { setLocalStorage, getLocalStorage, getLoginCookie } from "../../utils/utils";
+import { setLocalStorage, getLocalStorage, getLoginCookie, isLogin, loginChecker } from "../../utils/utils";
 
 const Alamat = () => {
+  loginChecker();
 
   const [alamat, setAlamat] = useState({})
   const [oldAlamat, setOldAlamat] = useState({})

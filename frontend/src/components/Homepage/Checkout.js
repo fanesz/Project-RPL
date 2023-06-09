@@ -43,15 +43,24 @@ const Checkout = () => {
       setShopingCart();
   }, []);
 
-  const getAlamat = async() => {
-    const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
-    for(let key in res.data[0]){
-      if(res.data[0][key].length === 0){
-        navigate('/alamat');
-        break;
+  function hasNullValue(obj) {
+    for (let key in obj) {
+      if (obj[key] === null) {
+        return true;
       }
     }
-    setAlamat(res.data[0]);
+    return false;
+  }
+  
+  const getAlamat = async() => {
+    const res = await axios.get(`http://localhost:5000/detailakun/alamat/${getLoginCookie()}`)
+    console.log(res.data);
+    
+    if(hasNullValue(res.data[0])){
+      navigate('/alamat')
+    } else {
+      setAlamat(res.data[0]);
+    }
   }
 
   useEffect(() => {
@@ -205,7 +214,7 @@ const Checkout = () => {
                     <div className="card card-body">
                       <div className="alamat_title"><i className="bi bi-house-door me-2" /><strong>Alamat</strong></div>
                       <div className="card card-body p-2 ps-3 mt-1">
-                        { Object.entries(alamat).length != 0 && (
+                        { alamat && Object.entries(alamat).length != 0 && (
                           <div>
                             <div className="">{alamat.penerima} | {alamat.noTelp}</div>
                             <div className="">{alamat.kecamatan.split('-')[1]}, {alamat.jalan}, {alamat.rtrw}</div>

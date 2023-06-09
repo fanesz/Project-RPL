@@ -44,25 +44,26 @@ export const getDetailAkunById = async (req, res) => {
 
 export const createDetailAkun = async (req, res) => {
     try {
-        let query = await query_call(`call tambahAkun("${req.body.email}", "${req.body.password}", "user")`)
-        res.json({
-            message: query ? "Account Created!" : "Email Already Registered!",
-            status: true
-        });
+      let akses = req.body.akses;
+      let query = await query_call(`call tambahAkun("${req.body.email}", "${req.body.password}", "${akses===undefined?'user':akses}")`)
+      res.json({
+          message: query ? "Account Created!" : "Email Already Registered!",
+          status: true
+      });
     } catch (error) {
-        res.json({ message: error.message, "status": false });
+      res.json({ message: error.message, "status": false });
     }
 }
 
 export const updateDetailAkun = async (req, res) => {
   try {
-      await DetailAkun.update(req.body, {
-          where: { idAkun: req.body.idAkun }
-      });
-      res.json({message: "Detail Akun Updated!", status: true});
+    await DetailAkun.update(req.body, {
+      where: { idAkun: req.body.idAkun }
+    });
+    res.json({message: "Detail Akun Updated!", status: true});
   } catch (error) {
     console.log(error);
-      res.json({ message: error.message, status: false });
+    res.json({ message: error.message, status: false });
   }
 }
 

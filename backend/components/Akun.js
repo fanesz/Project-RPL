@@ -16,14 +16,24 @@ const Akun = db.define('akun',{
 
 export const getAllUserAccount = async (req, res) => {
     try {
-        const userAccount = await Akun.findAll({
-            attributes: ['id', 'idAkun', 'email', 'password', 'changepwCode']
-        });
-        res.json(userAccount);
+        const akun = await Akun.findAll();
+        res.json(akun);
     } catch (error) {
         res.json({ message: error.message, status: false });
     }
 }
+
+export const getUserById = async (req, res) => {
+  try {
+      const akun = await Akun.findAll({
+        where: { idAkun: req.params.id }
+      });
+      res.json(akun);
+  } catch (error) {
+      res.json({ message: error.message, status: false });
+  }
+}
+
 
 export const loginAccount = async (req, res) => {
     try {
@@ -33,7 +43,6 @@ export const loginAccount = async (req, res) => {
             email: req.body.email
           }
         });
-        console.log(userPassword);
         if(userPassword.length == 0) {
             res.json({
                 message: "Failed Login, Wrong Email!",
@@ -54,7 +63,6 @@ export const loginAccount = async (req, res) => {
         }
 
     } catch (error) {
-      console.log(error);
       res.json({ message: error.message });
     }
 }
@@ -96,7 +104,6 @@ export const sendVerificationCode = async (req, res) => {
             });
         }
     } catch (error) {
-        // console.log(error);
         res.json({
             message: "Error Occured!",
             status: false
@@ -151,13 +158,13 @@ export const changePassword = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
         res.json({
             message: "Error Occured!",
             status: false
         });
     }
 }
+
 
 export const aksesChecker = async (req, res) => {
   const result = await Akun.findAll({
@@ -168,5 +175,41 @@ export const aksesChecker = async (req, res) => {
       akses: result[0].dataValues.akses,
     });
   }
+}
 
+ 
+export const updateAkun = async (req, res) => {
+  try {
+    await Akun.update({
+      email: req.body.email,
+      password: req.body.password,
+      akses: req.body.akses,
+      changepwCode: req.body.changepwCode,
+    }, {
+      where: {
+        idAkun: req.params.id
+      }
+    });
+    res.json({
+      message: "Account Updated",
+      status: true
+    });
+  } catch (error) {
+    res.json({ message: error.message });
+  }  
+}
+
+export const akunChecker = async (req, res) => {
+  try {
+    const isRegistered = await Akun.findAll({
+      where: { idAkun: req.params.id }
+    })
+    console.log(isRegistered);
+    res.json({
+      message: "Account Updated",
+      status: true
+    });
+  } catch (error) {
+    res.json({ message: error.message });
+  }  
 }

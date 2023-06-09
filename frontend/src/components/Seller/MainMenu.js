@@ -41,8 +41,6 @@ const MainMenu = () => {
     setPesananPerluDiproses(data.filter(item => item.status === 'Sudah Bayar'));
     setPesananMenungguKonfirmasi(data.filter(item => item.status === 'Sudah Terkirim'));
     setPesananDibatalkan(data.filter(item => item.status === 'Dibatalkan'));
-    
-    // if(res.data.length != 0 && !showDetailPesanan) getPesananById(res.data[0].idPesanan);
   })
 
   useEffect(() => {
@@ -64,8 +62,8 @@ const MainMenu = () => {
     if (!listPesanan[idPesanan]) {
       await getPesananById(idPesanan);
     } else {
-      setShowDetailPesanan({ [idPesanan]: listPesanan[idPesanan] })
       setShowAlamat((JSON.parse({ [idPesanan]: listPesanan[idPesanan] }[Object.keys({ [idPesanan]: listPesanan[idPesanan] })][0].alamat))[0]);
+      setShowDetailPesanan({ [idPesanan]: listPesanan[idPesanan] }[Object.keys({ [idPesanan]: listPesanan[idPesanan] })])
     }
     setModalDetailPesanan(true);
 

@@ -6,10 +6,11 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ReactModal from "react-modal";
-import { setLocalStorage, getLocalStorage, getLoginCookie } from "../../utils/utils";
+import { setLocalStorage, getLocalStorage, getLoginCookie, isLogin, loginChecker } from "../../utils/utils";
 
 const Profile = () => {
-  
+  loginChecker();
+
   const [profile, setProfile] = useState({});
   const [email, setEmail] = useState("");
   const [nama, setNama] = useState("");

@@ -85,7 +85,7 @@ const Produk = () => {
 
             <div class="feuture-box">
               <div class="transaction-card d-flex">
-                <img
+                <img className="card card-image"
                   onClick={() => navigate(`/produk/${products.idProduk}`)}
                   src={products.gambar === null ? blank_image : products.gambar} />
               </div>

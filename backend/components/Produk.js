@@ -38,12 +38,10 @@ export const getAllProducts = async (req, res) => {
             });
             await readFilePromise;
           } catch (error) {
-            console.log(error);
           }
         }
         res.json(products);
     } catch (error) {
-      console.log(error);
       res.json({ message: error.message });
     }  
 }
@@ -71,7 +69,6 @@ export const getProductById = async (req, res) => {
         });
         await readFilePromise;
       } catch (error) {
-        // console.log(error);
       }
 
       product[0]["message"] = "Product Created";
@@ -79,7 +76,6 @@ export const getProductById = async (req, res) => {
       
       res.json(product[0]);
     } catch (error) {
-      console.log(error);
       res.json({
         message: error.message,
         status: false,
@@ -112,14 +108,12 @@ export const getProductByIdProduk = async (req, res) => {
           });
           await readFilePromise;
         } catch (error) {
-          // console.log(error);
         }
       }
 
       res.json(product);
 
     } catch (error) {
-      console.log(error);
       res.json({
         message: error.message,
         status: false,
@@ -145,7 +139,6 @@ export const createProduct = async (req, res) => {
             status: true,
         });
     } catch (error) {
-        console.log(error);
         res.json({
             message: error.message,
             status: false,
@@ -165,10 +158,10 @@ export const updateProduct = async (req, res) => {
             berat: req.body.berat
         }, {
             where: {
-                id: req.params.id
+              id: req.params.id
             }
         });
-        saveImage(req.body.gambar, `${req.body.idProduk}.png`);
+        saveImage(req.body.gambar, `./gambar/${req.body.idProduk}.png`);
         
 
         res.json({
@@ -177,7 +170,6 @@ export const updateProduct = async (req, res) => {
         });
     } catch (error) {
         res.json({ message: error.message });
-        console.log(error);
     }  
 }
   
@@ -200,7 +192,6 @@ export const deleteProduct = async (req, res) => {
             status: true
         });
     } catch (error) {
-        console.log(error);
         res.json({ 
             message: error.message ,
             status: false
@@ -210,11 +201,9 @@ export const deleteProduct = async (req, res) => {
 
 export const getTotalTerjualById = async (req, res) => {
   try {
-    const query = (await query_select(`SELECT coalesce(SUM(jumlah), 0) as terjual FROM detailPesanan WHERE idProduk = '${req.params.id}'`))[0];
-    console.log(query);
+    const query = (await query_select(`SELECT coalesce(SUM(jumlah), 0) as terjual FROM detailPesanan, pesanan WHERE detailPesanan.idPesanan = pesanan.idPesanan AND idProduk = '${req.params.id}' and status = 'Sudah Terkirim'`))[0];
     res.json(query);
   } catch (error) {
     res.json({ message: error.message });
-    console.log(error);
   }
 }
