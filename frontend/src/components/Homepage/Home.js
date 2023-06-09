@@ -9,7 +9,7 @@ import background from "../img/green-farm-blur.jpg";
 import { loginChecker } from "../utils/utils";
 
 const Home = () => {  
-  loginChecker();
+  // loginChecker();
 
   const navigate = useNavigate();
 

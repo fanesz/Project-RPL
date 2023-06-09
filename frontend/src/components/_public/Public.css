@@ -93,18 +93,11 @@ nav ul li:first-child {
 	margin-left: 0;
 }
 
-.navbar-publik nav ul li button {
-    background: none;
-    border: none;
-    width: 8rem;
-    height: 3rem;
-    font-size: 1.4rem;
-}
 
-.navbar-publik nav ul li  {
-    color: #333;
+.navbar-publik ul li  {
+  color: #333;
 	padding: 1rem;
-    transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
 }
 
 nav ul li button:hover {

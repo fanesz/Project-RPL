@@ -11,7 +11,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { setLocalStorage, getLocalStorage, loginChecker } from "../utils/utils";
 
 const Katalog = () => {
-  loginChecker();
+  // loginChecker();
     const [products, setProduct] = useState([]);
     const [gambar, setGambar] = useState([]);
 

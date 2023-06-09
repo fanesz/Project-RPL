@@ -163,8 +163,10 @@ export const aksesChecker = async (req, res) => {
   const result = await Akun.findAll({
     where: { idAkun : req.params.id }
   });
-  res.json({
-    akses: result[0].dataValues.akses,
-  });
+  if(result.length != 0){
+    res.json({
+      akses: result[0].dataValues.akses,
+    });
+  }
 
 }

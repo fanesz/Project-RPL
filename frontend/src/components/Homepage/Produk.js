@@ -11,7 +11,7 @@ import ReactModal from 'react-modal';
 import { setLocalStorage, getLocalStorage, loginChecker } from "../utils/utils";
 
 const Produk = () => {
-  loginChecker();
+  // loginChecker();
   const [notif, setNotif] = useState(false);
   const [modalBayar, setModalBayar] = useState(false);
   const [modalKonfirmasi, setModalKonfirmasi] = useState(false);
