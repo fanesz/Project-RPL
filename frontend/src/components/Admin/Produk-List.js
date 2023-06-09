@@ -321,19 +321,20 @@ const ProductList = () => {
         <button class="btn btn-success mb-3" onClick={refreshPage}>
           Click to reload!
         </button>
-        <table className="table is-striped is-fullwidth" border="1px" cellspacing="0" cellpadding="10px">
-          <thead>
-            <tr class="text-center">
+        <table className="table table-secondary table-striped is-fullwidth " border="1px" cellspacing="0" cellpadding="10px">
+          <thead class="thead-dark">
+            <tr class="text-center ">
               <th>No</th>
               <th>idProduk</th>
               <th>Nama</th>
               <th>Stok</th>
               <th>Harga</th>
+              <th>Opsi</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product, index) => (
-              <tr key={product.id}>
+              <tr key={product.id} class="text-center">
                 <td>{index + 1}</td>
                 <td>{product.idProduk}</td>
                 <td>{product.nama}</td>
