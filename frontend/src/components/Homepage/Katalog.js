@@ -1,5 +1,4 @@
 import "./css/Katalog.css";
-import anakAyam from "../img/anakayam.jpg";
 import blank_image from "../img/blank-image.png"
 import PUBLIC_NAVBAR from '../_public/Public-Navbar';
 import PUBLIC_FOOTER from '../_public/Public-Footer';
@@ -8,54 +7,27 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { setLocalStorage, getLocalStorage, loginChecker } from "../utils/utils";
+import { getLocalStorage } from "../utils/utils";
 
 const Katalog = () => {
-  // loginChecker();
-    const [products, setProduct] = useState([]);
-    const [gambar, setGambar] = useState([]);
+  const navigate = useNavigate();
+  const [products, setProduct] = useState([]);
 
-    const navigate = useNavigate();
+  const getProducts = async () => {
+    const res = await axios.get('http://localhost:5000/produk');
+    setProduct((res.data).filter(item => item.stok >= 0));
+  }
+  useEffect(() => {
+    getProducts();
+  }, []);
 
-    const getProducts = async () => {
-      const res = await axios.get('http://localhost:5000/produk');
-      setProduct((res.data).filter(item => item.stok >= 0));
-    }
+  const addCart = (id) => {
+    navigate(`/produk/${id}`);
+  }
 
-    useEffect(() => {
-      getProducts();
-    }, []);
-
-
-    const getImages = async () => {
-
-    }
-
-    useEffect(() => {
-      getImages(); 
-    }, []);
-    
-
-
-
-    const addCart = (id) => {
-      navigate(`/produk/${id}`);
-    }
-
-    const getCart = () => {
-      return getLocalStorage("cart");
-    }
-
-    function setButtonName(id){
-      for(let key in getCart()){
-        console.log(id);
-        if(id === key){
-          return "Cek Keranjang";
-        }
-      }
-      return "+ Keranjang";
-    }
-
+  const getCart = () => {
+    return getLocalStorage("cart");
+  }
 
 
     return (
@@ -77,7 +49,7 @@ const Katalog = () => {
                     { products && products.map((product, index) => (
                       <div className="product-card mb-5">
                             <div className="product-image">
-                            <img 
+                            <img alt={product.nama}
                               onClick={ () => navigate(`/produk/${product.idProduk}`)}
                               src={product.gambar === null ? blank_image : product.gambar} 
                               className="card card-image" />
@@ -86,7 +58,7 @@ const Katalog = () => {
                                 <div className="product_name">{product.nama}</div>
                                 <div className="product_price"><strong>Rp. {parseFloat(product.harga).toLocaleString('id-ID', { minimumFractionDigits: 0 })}</strong></div>
                                 <div className="product_stock mt-3 mb-1">stok : {product.stok}</div>
-                                { getCart().hasOwnProperty(product.idProduk) ? (
+                                { getCart() && getCart().hasOwnProperty(product.idProduk) ? (
 
                                   <button className="btn btn-success" onClick={ ()=> navigate('/keranjang') }><i class="bi bi-cart2 me-2" />Cek Keranjang</button>
                                   ) : (

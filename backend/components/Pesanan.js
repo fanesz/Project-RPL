@@ -67,7 +67,6 @@ export const getPesananById = async (req, res) => {
           });
           await readFilePromise;
         } catch (error) {
-          console.log(error);
         }
       }
 
@@ -82,7 +81,6 @@ export const getPesananById = async (req, res) => {
 
       res.json(pesanan);
     } catch (error) {
-      console.log(error);
       res.json({ message: error.message });
     }  
 }
@@ -123,7 +121,6 @@ export const createPesanan = async (req, res) => {
         status: true,
       });
     } catch (error) {
-      console.log(error);
         res.json({
           message: error.message,
           status: false,
@@ -145,7 +142,6 @@ export const changeStatusPesanan = async (req, res) => {
         status: true,
     });
   } catch (error) {
-    console.log(error);
     res.json({
       message: error.message,
       status: false,

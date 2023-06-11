@@ -2,6 +2,8 @@ drop database if exists dbAyamku;
 create database dbAyamku;
 use dbAyamku;
 
+
+
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idAkun` char(36) NOT NULL,
@@ -149,5 +151,4 @@ BEGIN
     UPDATE produk SET stok = stok - NEW.jumlah WHERE idProduk = NEW.idProduk;
 END//
 DELIMITER ;
-
 

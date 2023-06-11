@@ -1,7 +1,5 @@
 import { Sequelize } from "sequelize";
 import db from "../config/database.js";
-import { generateUUID } from "../utils/utils.js";
-import sendMail from "../config/mailer.js"
 import { query_call, query_select } from "../utils/query.js";
 const { DataTypes } = Sequelize;
  
@@ -37,7 +35,6 @@ export const getDetailAkunById = async (req, res) => {
         });
         res.json(detailAkun);
     } catch (error) {
-      console.log(error);
         res.json({ message: error.message });
     }
 }
@@ -62,7 +59,6 @@ export const updateDetailAkun = async (req, res) => {
     });
     res.json({message: "Detail Akun Updated!", status: true});
   } catch (error) {
-    console.log(error);
     res.json({ message: error.message, status: false });
   }
 }
@@ -78,7 +74,6 @@ export const getAlamatById = async (req, res) => {
         });
         res.json(alamat);
     } catch (error) {
-      console.log(error);
       res.json({ message: error.message });
     }
 }
@@ -88,10 +83,8 @@ export const updateAlamat = async (req, res) => {
         let update = await Alamat.update(req.body.datas, {
           where: { idAkun: req.body.idAkun }
         });
-        console.log(update);
         res.json({message: "Alamat Updated!", status: true});
     } catch (error) {
-      console.log(error);
       res.json({ message: error.message, status: false });
     }
 }

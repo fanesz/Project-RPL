@@ -1,4 +1,4 @@
-import { Sequelize, where } from "sequelize";
+import { Sequelize } from "sequelize";
 import db from "../config/database.js";
 import { generateVerificationCode } from "../utils/utils.js";
 import sendMail from "../config/mailer.js"
@@ -82,7 +82,7 @@ export const sendVerificationCode = async (req, res) => {
             });
         } else if(code[0].dataValues.changepwCode != null) {
             const changepwCode = generateVerificationCode(15);
-            sendMail(req.body.email, changepwCode);
+            sendMail(req.body.email, `http://localhost:3000/akun/forgetpass/${changepwCode}`);
             await Akun.update(
                 { changepwCode: changepwCode },
                 { where: { email: req.body.email } }
@@ -204,7 +204,6 @@ export const akunChecker = async (req, res) => {
     const isRegistered = await Akun.findAll({
       where: { idAkun: req.params.id }
     })
-    console.log(isRegistered);
     res.json({
       message: "Account Updated",
       status: true

@@ -6,7 +6,6 @@ import home_1 from "../img/home-1.png";
 import home_2 from "../img/home-2.png";
 import home_3 from "../img/home-3.png";
 import background from "../img/green-farm-blur.jpg";
-import { loginChecker } from "../utils/utils";
 
 const Home = () => {  
   // loginChecker();
@@ -25,7 +24,7 @@ const Home = () => {
             <section className={s.main}>
                 <h1>Welcome to Ayamku Shop</h1>
                 <p>Buy the healthiest baby chickens!</p>
-                {/* <a href="#/" className="btn">Shop Now</a> */}
+
                 <button className={s.btn} onClick={() => navigate('/katalog')}>Shop Now</button>
             </section>
             <section className={s.features}>

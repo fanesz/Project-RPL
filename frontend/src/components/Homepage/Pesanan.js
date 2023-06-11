@@ -1,24 +1,17 @@
 import "./css/Produk.css";
-import anakAyam from "../img/anakayam.jpg";
-import anakAyam2 from "../img/anakayam2.jpg";
 import blank_image from "../img/blank-image.png";
 import PUBLIC_NAVBAR from '../_public/Public-Navbar';
 import PUBLIC_FOOTER from '../_public/Public-Footer';
 import background from "../img/green-farm-blur.jpg";
 import { useState, useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactModal from 'react-modal';
-import { setLocalStorage, getLocalStorage, updateLocalStorage, getLoginCookie, loginChecker } from "../utils/utils";
+import { getLoginCookie, loginChecker } from "../utils/utils";
 
 const Pesanan = () => {
   loginChecker();
     const [modalDetailPesanan, setModalDetailPesanan] = useState(false);
-    const [itemInginDihapus, setItemInginDihapus] = useState('');
-    
     const [filter, setFilter] = useState('');
-    
-    const [pesanan, setPesanan] = useState([]);
     const [alamat, setAlamat] = useState({});
     const [listPesanan, setlistPesanan] = useState([]);
     const [filteredPesanan, setFilteredPesanan] = useState([]);
@@ -26,7 +19,6 @@ const Pesanan = () => {
 
     const getPesanan = (async () => {
       const res = await axios.get(`http://localhost:5000/pesanan/${getLoginCookie()}`);
-      setPesanan(res.data)
       let tempPesanan = {}
       for(let key in res.data){
         tempPesanan = { ...tempPesanan, [res.data[key].idPesanan]: (res.data).filter((data) => data.idPesanan === res.data[key].idPesanan ) }
@@ -72,12 +64,6 @@ const Pesanan = () => {
       const filteredPesanan = listPesanan.flatMap((arr) =>
         arr.filter((obj) => obj.idPesanan === idPesanan )
       );
-      const filteredDetailPesanan = listPesanan.flatMap((arr) => {
-        const filteredArr = arr.filter((obj) => obj.idPesanan === idPesanan );
-        return filteredArr.length > 0 ? [filteredArr[0]] : [];
-      });
-      
-      console.log(filteredPesanan);
       setDetailPesanan(filteredPesanan);
       setAlamat(JSON.parse(filteredPesanan[0].alamat)[0]);
       setModalDetailPesanan(true);
@@ -123,7 +109,7 @@ const Pesanan = () => {
       </table>
       </div>
 
-      {Object.keys(detailPesanan).length > 0 && alamat.length != 0 && (
+      {Object.keys(detailPesanan).length > 0 && alamat.length !== 0 && (
       <div class="card card-body">
         <div className='row g-1'>
           <div className='col'>
@@ -173,11 +159,11 @@ const Pesanan = () => {
                 onClick={ () => filterProduk('Dibatalkan') }>Dibatalkan</button>
             </div>
 
-            <div className="list_pesanan_wrapper d-flex mt-5 mb-3">
+            <div className="list_pesanan_wrapper d-flex mb-3">
 
                 <div className="container pesanan-semua">
-                  {filteredPesanan.length != 0 ? (filteredPesanan.map((data, index) => (
-                  <div className="card card-body border-0 list_pesanan mb-4">
+                  {filteredPesanan.length !== 0 ? (filteredPesanan.map((data, index) => (
+                  <div className="card card-body border-0 list_pesanan mb-4 mt-5">
                     <div className="list_pesanan_header ms-3 mb-3">
                       {data[0].waktuPesan}
                       { data[0].status==='Sudah Bayar' ? (
@@ -191,11 +177,11 @@ const Pesanan = () => {
                     <div className="list_pesanan_produk">
                       <div className="row">
                         <div className="col-md-3">
-                          <img className="card card-image" src={filteredPesanan[index][0].gambar === null ? blank_image : filteredPesanan[index][0].gambar}></img>
+                          <img alt={data[0].namaProduk} className="card card-image" src={filteredPesanan[index][0].gambar === null ? blank_image : filteredPesanan[index][0].gambar}></img>
                         </div>
                         <div className="col align-self-center list_pesanan_produk_nama">
                           <div className="title">{data[0].namaProduk}</div>
-                          { data[0].jumlahJenisBarang - 1 != 0 ? (
+                          { data[0].jumlahJenisBarang - 1 !== 0 ? (
                             <div className="sub-title">dan {data[0].jumlahJenisBarang - 1} barang lainnya...</div>
                             ) : (
                             <div className="sub-title">x {data[0].jumlah} barang</div>
@@ -212,7 +198,7 @@ const Pesanan = () => {
                   </div>
                 </div>
                   ))) : (
-                    <div className="opacity-50">
+                    <div className="opacity-50 mt-4">
                       tidak ada pesanan~
                     </div>
                   )}

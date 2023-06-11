@@ -62,7 +62,7 @@ const Login = () => {
     const res = await axios.post("http://localhost:5000/akun/forgetpass", data)
     if(res.data.status){
         alert(res.data.message);
-        navigate('/');
+        navigate('/login');
     } else {
         alert(res.data.message);
     }

@@ -16,7 +16,7 @@ import AkunList from "./components/Admin/Akun-List";
 
 
 function App() {
-    return (
+  return (
     <Router>
     <div className="container">
       <div className="columns">
