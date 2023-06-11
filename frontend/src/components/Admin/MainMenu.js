@@ -10,7 +10,7 @@ import ADMIN_NAVBAR from "../_public/Admin-Navbar";
 const MainMenu = () => {
   const navigate = useNavigate();
   if(getLoginCookie() === undefined){
-    window.location.href = '/';
+    navigate('/');
   }
   const adminChecker = async() => {
     const res = await axios.get(`http://localhost:5000/akun/akses/${getLoginCookie()}`)

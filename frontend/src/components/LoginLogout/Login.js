@@ -23,6 +23,7 @@ const Login = () => {
 
   const createAccount = async (e) => {
     e.preventDefault();
+    if(!email.includes('@') || password.length < 8) return;
     const res = await axios.post("http://localhost:5000/detailakun/create", {
       email: email,
       password: password,

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 const ProductList = () => {
   const navigate = useNavigate();
   if(getLoginCookie() === undefined){
-    window.location.href = '/';
+    navigate('/');
   }
   const adminChecker = async() => {
     const res = await axios.get(`http://localhost:5000/akun/akses/${getLoginCookie()}`)

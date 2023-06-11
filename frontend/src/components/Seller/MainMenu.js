@@ -4,7 +4,7 @@ import axios from "axios";
 import ReactModal from 'react-modal';
 import "./css/order.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { getLoginCookie } from '../utils/utils';
+import { getLoginCookie, logout } from '../utils/utils';
 
 
 
@@ -14,9 +14,12 @@ const MainMenu = () => {
   ReactModal.setAppElement('#root')
 
   const sellerChecker = async() => {
+    if(getLoginCookie() === undefined){
+      navigate('/');
+    }
     const res = await axios.get(`http://localhost:5000/akun/akses/${getLoginCookie()}`)
     if(res.data.akses !== 'admin' && res.data.akses !== 'seller'){
-      navigate('/')
+      navigate('/');
     }
   }
 
@@ -205,6 +208,9 @@ const MainMenu = () => {
               <span class="judul">Tokoku</span><br />
               <span class="text2">Beranda</span>
               <span class="text2">Profil Toko</span>
+            </li>
+            <li>
+              <span onClick={ logout } className="text border btn btn-secondary p-1 px-3">Logout</span>
             </li>
           </ul>
         </div>
