@@ -2,7 +2,7 @@ drop database if exists dbAyamku;
 create database dbAyamku;
 use dbAyamku;
 
-
+select * from pesanan;
 
 CREATE TABLE IF NOT EXISTS `dbAyamku`.`detailAkun` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,

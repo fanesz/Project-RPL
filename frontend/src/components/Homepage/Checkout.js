@@ -101,7 +101,8 @@ const Checkout = () => {
     for(const data in product){
         datas[data] = { 
             idAkun: getLoginCookie(), 
-            idProduk:product[data].idProduk, 
+            idProduk:product[data].idProduk,
+            namaProduk: product[data].nama,
             jumlah: jumlah[data], 
             harga: product[data].harga,
             total: parseFloat(jumlah[data])*parseFloat(product[data].harga),
@@ -112,14 +113,14 @@ const Checkout = () => {
 
     }
     const res = await axios.post('http://localhost:5000/pesanan/', datas);
-    if(res.data.status){
-      setLocalStorage("cart", {});
-      setProduct([]);
-      setModalBayar(false);
-      navigate('/pesanan');
-    } else {
-      alert(res.data.message);
-    }
+    // if(res.data.status){
+    //   setLocalStorage("cart", {});
+    //   setProduct([]);
+    //   setModalBayar(false);
+    //   navigate('/pesanan');
+    // } else {
+    //   alert(res.data.message);
+    // }
   }
 
 

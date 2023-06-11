@@ -82,7 +82,7 @@ export const sendVerificationCode = async (req, res) => {
             });
         } else if(code[0].dataValues.changepwCode != null) {
             const changepwCode = generateVerificationCode(15);
-            sendMail(req.body.email, `http://localhost:3000/akun/forgetpass/${changepwCode}`);
+            sendMail(req.body.email, `http://localhost:3000/akun/forgetpass/${changepwCode}`, 'sendVerificationCode');
             await Akun.update(
                 { changepwCode: changepwCode },
                 { where: { email: req.body.email } }

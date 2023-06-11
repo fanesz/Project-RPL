@@ -3,6 +3,7 @@ import db from "../config/database.js";
 import { saveImage, deleteImage, generateIdPesanan, convertTimestamp } from "../utils/utils.js";
 import fs from "fs";
 import { query_select } from "../utils/query.js";
+import sendMail from "../config/mailer.js";
 const { DataTypes } = Sequelize;
 
  
@@ -47,9 +48,7 @@ export const getPesananById = async (req, res) => {
         query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah, pesanan.jumlahJenisBarang, rekening.bank, pesanan.atasNama, pesanan.total FROM detailpesanan, pesanan, detailAkun, produk, rekening WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND pesanan.idRekening = rekening.idRekening AND detailPesanan.idProduk = produk.idProduk AND pesanan.idAkun = '${req.params.id}';`));
       } else if(req.params.id.length === 10){
         query = (await query_select(`SELECT pesanan.idPesanan, detailAkun.nama, pesanan.alamat, detailAkun.email, detailAkun.noTelp, pesanan.waktuPesan, pesanan.status, detailPesanan.idProduk, produk.nama as namaProduk, detailPesanan.harga, detailPesanan.jumlah, pesanan.jumlahJenisBarang, rekening.bank, pesanan.atasNama, pesanan.total FROM detailpesanan, pesanan, detailAkun, produk, rekening WHERE pesanan.idPesanan = detailpesanan.idPesanan and pesanan.idAkun = detailAkun.idAkun AND pesanan.idRekening = rekening.idRekening AND detailPesanan.idProduk = produk.idProduk AND pesanan.idPesanan = '${req.params.id}';`));
-
       }
-
       for(let key in query){
         query[key]["gambar"] = null
         try {
@@ -69,9 +68,6 @@ export const getPesananById = async (req, res) => {
         } catch (error) {
         }
       }
-
-
-
       let result = []
       const pesanan = query.reduce((acc, detailPesanan) => {
         detailPesanan.waktuPesan = convertTimestamp(detailPesanan.waktuPesan);
@@ -96,6 +92,9 @@ export const createPesanan = async (req, res) => {
         }
       }
 
+      const getAlamat = [(await query_select(`SELECT * FROM alamat WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0]]
+      const getEmail = (await query_select(`SELECT email FROM akun WHERE idAkun="${req.body[0].idAkun}"`))[0].email
+
       await Pesanan.create({
         idPesanan: GENERATED_ID_PESANAN,
         idAkun: req.body[0].idAkun,
@@ -105,7 +104,7 @@ export const createPesanan = async (req, res) => {
         waktuPesan: new Date(),
         idRekening: req.body[0].idRekening,
         atasNama: req.body[0].atasNama,
-        alamat: [(await query_select(`SELECT * FROM alamat WHERE idAkun="${req.body[0].idAkun}" LIMIT 1`))[0]]
+        alamat: getAlamat
       });
 
       for(let data in req.body){
@@ -116,6 +115,8 @@ export const createPesanan = async (req, res) => {
           harga:  req.body[data].harga
           });
       }
+      sendMail(getEmail, [GENERATED_ID_PESANAN, req.body], 'pesanan');
+
       res.json({
         message: 'Pesanan Berhasil Dibuat!',
         status: true,
