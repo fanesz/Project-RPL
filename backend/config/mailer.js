@@ -54,10 +54,6 @@ export default function sendMail(target, text, purpose){
       total += text[1][key].harga * text[1][key].jumlah
     }
 
-
-
-    console.log(text[1]);
-
     message.html = 
     `<table style="max-width: 600px; margin: 0 auto; font-family: 'Poppins', sans-serif;">
       <tr>
@@ -97,10 +93,9 @@ export default function sendMail(target, text, purpose){
 
   transporter.sendMail(message, (error, info) => {
     if (error) {
-      console.log("Error sending email:", error);
+      console.log(error);
       return false;
     } else {
-      console.log("Email sent to: ", target);
       return true;
     }
   });
