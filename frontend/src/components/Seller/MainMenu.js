@@ -190,35 +190,35 @@ const MainMenu = () => {
       <div className="container">
         <div className="row g-1">
           <div className="col-sm-2">
-            <div class="sidebar">
-              <ul class="sidebar-content">
-                <div class="align-items-center">
+            <div className="sidebar">
+              <ul className="sidebar-content">
+                <div className="align-items-center">
                   <div className="title mb-3">
                     <strong>Ayamku</strong>
                   </div>
                 </div>
-                <li class="non">
-                  <span class="text">Review</span>
-                  <span class="kanan">0</span>
-                </li>
-                <li class="non">
-                  <span class="text">Rating Toko</span>
-                  <span class="kanan">4.5/5</span>
+                <li>
+                  <span className="text">Review</span>
+                  <span className="kanan">0</span>
                 </li>
                 <li>
-                  <span class="text">Transaksi Sukses</span>
-                  <span class="kanan">97%</span>
+                  <span className="text">Toko Rating</span>
+                  <span className="kanan">4.5/5</span>
                 </li>
                 <li>
-                  <span class="text">Omset bulan Desember</span>
-                  <span class="kanan">Rp. 32.500.000</span>
+                  <span className="text">Transaksi Sukses</span>
+                  <span className="kanan">97%</span>
                 </li>
                 <li>
-                  <i class="bi bi-box-seam me-2" />
-                  <span class="judul">Tokoku</span>
+                  <span className="text">Omset bulan Desember</span>
+                  <span className="kanan">Rp. 32.500.000</span>
+                </li>
+                <li>
+                  <i className="bi bi-box-seam me-2"></i>
+                  <a className="judul" href="/">
+                    Toko Ayamku
+                  </a>
                   <br />
-                  <span class="text2">Beranda</span>
-                  <span class="text2">Profil Toko</span>
                 </li>
                 <li>
                   <button onClick={logout} className="btn btn-secondary rounded text-light py-3 px-3 me-4 opacity-75">
