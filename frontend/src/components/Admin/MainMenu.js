@@ -58,7 +58,7 @@ const MainMenu = () => {
               <div className="card-body">
                 <h5 className="card-title pb-4">Menuju Landing Page</h5>
                 <a href="/" className="btn btn-primary">
-                  Daftar Produk
+                  Landing Page
                 </a>
               </div>
             </div>
@@ -68,8 +68,8 @@ const MainMenu = () => {
               <div className="card-body">
                 <h5 className="card-title pb-4">Menuju Halaman Seller</h5>
 
-                <a href="seller" className="btn btn-primary">
-                  Daftar Produk
+                <a href="/seller" className="btn btn-primary">
+                  Seller
                 </a>
               </div>
             </div>
