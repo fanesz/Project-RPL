@@ -11,7 +11,7 @@ import { getLoginCookie, loginChecker } from "../utils/utils";
 const Pesanan = () => {
   loginChecker();
     const [modalDetailPesanan, setModalDetailPesanan] = useState(false);
-    const [filter, setFilter] = useState('');
+    const [filter, setFilter] = useState('semua');
     const [alamat, setAlamat] = useState({});
     const [listPesanan, setlistPesanan] = useState([]);
     const [filteredPesanan, setFilteredPesanan] = useState([]);
