@@ -14,7 +14,7 @@ const query_select = async(sql) => {
 }
 
 const query_call = async(sql) => {
-    let res;
+    let res = false;
     await db.query(sql, { type: Sequelize.QueryTypes.CALL })
     .then((results) => {
         res = true;

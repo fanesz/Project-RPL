@@ -1,24 +1,17 @@
 .container_produk_list {
   margin: 3rem;
 }
-.modal_closebutton {
-  background-color: rgb(219, 102, 102);
-  width: 3rem;
-  float: right;
-  border-radius: 4em;
-}
 
 .admin_custom_modal {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 70%;
-
+  width: 70rem;
   transform: translate(-50%, -50%);
 }
 
 .dropzone {
-  min-height: 25vh;
+  min-height: 15vh;
   min-width: 20rem;
 }
 .dropzone_img {

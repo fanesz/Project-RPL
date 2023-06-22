@@ -29,16 +29,6 @@
   width: 10rem;
 }
 
-.custom_modal_notif{
-  width: 25rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
 
 @media screen and (max-width: 1000px) {
 

@@ -45,7 +45,7 @@ export const createDetailAkun = async (req, res) => {
       let query = await query_call(`call tambahAkun("${req.body.email}", "${req.body.password}", "${akses===undefined?'user':akses}")`)
       res.json({
           message: query ? "Account Created!" : "Email Already Registered!",
-          status: true
+          status: query ? true : false
       });
     } catch (error) {
       res.json({ message: error.message, "status": false });

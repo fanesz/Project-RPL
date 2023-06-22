@@ -261,11 +261,11 @@ const ProductList = () => {
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 d-flex">
+              <div class="col-md-4 d-flex me-3">
                 <div className="dropzone_wrapper">
                   <Dropzone onDrop={handleDrop}>
                     {({ getRootProps, getInputProps }) => (
-                      <div className="dropzone card card-body border border-dark p-1 text-center pt-5" {...getRootProps()}>
+                      <div className="dropzone card card-body border border-dark p-1 text-center" {...getRootProps()}>
                         <input {...getInputProps()} />
                         {tambah_gambar ? (
                           <img className="dropzone_img" src={tambah_gambar} alt="Uploaded Image" />
@@ -284,20 +284,20 @@ const ProductList = () => {
           </form>
           <button 
             onClick={ saveProduct }
-            className="btn btn-success ms-3 my-1 text-left w-25">Tambah</button>
+            className="btn btn-success ms-3 my-1 text-left w-25 mt-4">Tambah</button>
         </div>
       </ReactModal>
 
       <ReactModal 
         isOpen={modalEdit} 
         onRequestClose={closeModal.bind(null, "edit")} 
-        className="custom_modal card card-body">
+        className="admin_custom_modal card card-body">
         <div className="modal_close_button_wrapper ">
           <button onClick={  closeModal.bind(null, "tambah") } className="modal_close_button float-end pt-2 pe-3"><i className="bi bi-x-lg" /></button>
         </div>
         <div className="modal_produk p-2">
           <h3 class="mb-4 ms-3">Tambah Menu</h3>
-          <form onSubmit={updateProduct}>
+          <form className="card card-body" onSubmit={updateProduct}>
 
             
           <div class="row">
@@ -315,31 +315,31 @@ const ProductList = () => {
                     <input className="form-control shadow-none" type="text" placeholder="Price" value={edit_nama} onChange={(e) => edit_setName(e.target.value)} />                  </div>
                 </div>
                 <div class="mb-3 row">
-                  <label for="stok" class="col-sm-2 col-form-label">Stok</label>
+                  <label for="stok" class="col-sm-2 col-form-label">Berat</label>
                   <div class="col-sm-10">
-                    <input className="form-control shadow-none" type="text" placeholder="Stock" value={edit_deskripsi} onChange={(e) => edit_setDeskripsi(e.target.value)} />                  </div>
+                    <input className="form-control shadow-none" type="number" placeholder="berat" value={edit_berat} onChange={(e) => edit_setBerat(e.target.value)} />                  </div>
                 </div>
                 <div class="mb-3 row">
-                  <label for="berat" class="col-sm-2 col-form-label">Berat</label>
+                  <label for="berat" class="col-sm-2 col-form-label">Stok</label>
                   <div class="col-sm-10">
-                    <input className="form-control shadow-none" type="text" placeholder="Stock" value={edit_stok} onChange={(e) => edit_setStok(e.target.value)} />                  </div>
+                    <input className="form-control shadow-none" type="number" placeholder="stok" value={edit_stok} onChange={(e) => edit_setStok(e.target.value)} />                  </div>
                 </div>
                 <div class="mb-3 row">
                   <label for="harga" class="col-sm-2 col-form-label">Harga</label>
                   <div class="col-sm-10">
-                    <input className="form-control shadow-none" type="number" placeholder="Stock" value={edit_harga} onChange={(e) => edit_setHarga(e.target.value)} />                  </div>
+                    <input className="form-control shadow-none" type="number" placeholder="harga" value={edit_harga} onChange={(e) => edit_setHarga(e.target.value)} />                  </div>
                 </div>
                 <div class="mb-3 row">
                   <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
                   <div class="col-sm-10">
-                    <input className="form-control shadow-none" type="text" placeholder="Stock" value={edit_berat} onChange={(e) => edit_setBerat(e.target.value)} />                  </div>
+                    <input className="form-control shadow-none" type="text" placeholder="deskripsi" value={edit_deskripsi} onChange={(e) => edit_setDeskripsi(e.target.value)} />                  </div>
                 </div>
               </div>
-              <div class="col-md-3 d-flex">
+              <div class="col-md-4 d-flex me-3">
                 <div className="dropzone_wrapper">
                   <Dropzone onDrop={handleDrop}>
                     {({ getRootProps, getInputProps }) => (
-                      <div className="dropzone card card-body border border-dark p-1 text-center pt-5" {...getRootProps()}>
+                      <div className="dropzone card card-body border border-dark p-1 text-center" {...getRootProps()}>
                         <input {...getInputProps()} />
                         {edit_gambar ? (
                           <img className="dropzone_img" src={edit_gambar} alt="Uploaded Image" />
@@ -358,7 +358,7 @@ const ProductList = () => {
           </form>
           <button 
             onClick={ updateProduct }
-            className="btn btn-success ms-3 my-1 text-left w-25">Update</button>
+            className="btn btn-success ms-3 my-1 text-left w-25 mt-4">Update</button>
         </div>
       </ReactModal>
 

@@ -113,14 +113,14 @@ const Checkout = () => {
 
     }
     const res = await axios.post('http://localhost:5000/pesanan/', datas);
-    // if(res.data.status){
-    //   setLocalStorage("cart", {});
-    //   setProduct([]);
-    //   setModalBayar(false);
-    //   navigate('/pesanan');
-    // } else {
-    //   alert(res.data.message);
-    // }
+    if(res.data.status){
+      setLocalStorage("cart", {});
+      setProduct([]);
+      setModalBayar(false);
+      navigate('/pesanan');
+    } else {
+      alert(res.data.message);
+    }
   }
 
 

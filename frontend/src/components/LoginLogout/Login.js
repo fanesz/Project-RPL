@@ -9,7 +9,6 @@ const Login = () => {
   if (isLogin()) {
     window.location.href = "/";
   }
-  console.log(isLogin());
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +22,7 @@ const Login = () => {
 
   const createAccount = async (e) => {
     e.preventDefault();
-    if(!email.includes('@') || password.length < 8) return;
+    if(!email.includes('@') || password.length < 6) { alert('Masukkan inputan dengan benar!'); };
     const res = await axios.post("http://localhost:5000/detailakun/create", {
       email: email,
       password: password,
