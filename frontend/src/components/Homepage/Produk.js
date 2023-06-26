@@ -110,7 +110,7 @@ const Produk = () => {
               </div>
             </div>
             <div className="feuture-box">
-              <div class="transaction_card d-flex p-4">
+              <div class="transaction_card p-4">
                 <div class="basket-info">
                   <h6 className="checkout_title">Jumlah</h6>
                   <div className="container d-flex align-items-center mt-4">
